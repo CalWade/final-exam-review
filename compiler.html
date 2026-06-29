@@ -1,0 +1,2879 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>编译原理 · 从零到期末 · 深度学习文档</title>
+<style>
+:root{
+  --bg:#fafbfc; --bg-card:#ffffff; --bg-code:#f6f8fa;
+  --text:#1f2328; --text-mute:#57606a; --text-light:#8c959f;
+  --primary:#0969da; --primary-light:#ddf4ff;
+  --accent:#1f883d; --accent-light:#dafbe1;
+  --warn:#9a6700; --warn-light:#fff8c5;
+  --danger:#cf222e; --danger-light:#ffebe9;
+  --purple:#8250df; --purple-light:#fbefff;
+  --border:#d0d7de; --border-light:#eaeef2;
+  --shadow:0 1px 3px rgba(0,0,0,0.04),0 8px 24px rgba(0,0,0,0.04);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; padding:0;
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:15px; line-height:1.75; color:var(--text); background:var(--bg);
+}
+/* ---------- 布局 ---------- */
+.layout{display:flex; max-width:1500px; margin:0 auto;}
+.sidebar{
+  width:280px; flex-shrink:0; position:sticky; top:0;
+  height:100vh; overflow-y:auto;
+  background:var(--bg-card); border-right:1px solid var(--border-light);
+  padding:24px 16px;
+}
+.content{flex:1; padding:32px 48px 80px; min-width:0; max-width:1180px;}
+/* ---------- 侧边栏 ---------- */
+.sidebar h1{font-size:18px; margin:0 0 4px; color:var(--text);}
+.sidebar .subtitle{font-size:12px; color:var(--text-mute); margin-bottom:20px;}
+.sidebar nav ol{margin:0; padding-left:18px;}
+.sidebar nav li{margin:6px 0;}
+.sidebar nav a{
+  color:var(--text-mute); text-decoration:none; font-size:13px;
+  display:block; padding:4px 8px; border-radius:6px; transition:all .15s;
+}
+.sidebar nav a:hover{background:var(--primary-light); color:var(--primary);}
+.sidebar nav > ol > li > a{font-weight:600; color:var(--text);}
+.sidebar nav ol ol{margin:2px 0 2px 12px;}
+/* ---------- 标题 ---------- */
+h1.page-title{
+  font-size:32px; font-weight:700; margin:0 0 8px;
+  background:linear-gradient(135deg,#0969da 0%,#8250df 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.subtitle-big{font-size:15px; color:var(--text-mute); margin-bottom:32px; padding-bottom:24px; border-bottom:2px solid var(--border-light);}
+h2{
+  font-size:26px; font-weight:700; margin:48px 0 16px;
+  padding:12px 16px; background:linear-gradient(90deg,var(--primary-light) 0%,transparent 60%);
+  border-left:4px solid var(--primary); border-radius:0 8px 8px 0;
+  scroll-margin-top:20px;
+}
+h3{
+  font-size:19px; font-weight:600; margin:32px 0 12px; color:var(--text);
+  display:flex; align-items:center; gap:8px; scroll-margin-top:20px;
+}
+h3::before{content:""; width:4px; height:18px; background:var(--accent); border-radius:2px;}
+h4{font-size:16px; font-weight:600; margin:20px 0 8px; color:var(--text);}
+h4::before{content:"▸"; color:var(--accent); margin-right:6px;}
+p{margin:8px 0;}
+/* ---------- 代码块 ---------- */
+pre{
+  background:var(--bg-code); border:1px solid var(--border-light);
+  border-radius:8px; padding:14px 18px; overflow-x:auto;
+  font-family:"SF Mono",Monaco,"Cascadia Code",Consolas,monospace;
+  font-size:13px; line-height:1.6; margin:12px 0;
+}
+code{font-family:"SF Mono",Monaco,Consolas,monospace; background:var(--bg-code); padding:2px 6px; border-radius:4px; font-size:0.9em; color:var(--danger);}
+pre code{background:transparent; padding:0; color:var(--text);}
+/* ---------- 表格 ---------- */
+table{
+  border-collapse:collapse; width:100%; margin:12px 0; font-size:14px;
+  background:var(--bg-card); box-shadow:var(--shadow); border-radius:8px; overflow:hidden;
+}
+th{background:#f1f5f9; padding:10px 14px; text-align:left; font-weight:600; border-bottom:2px solid var(--border); white-space:nowrap;}
+td{padding:10px 14px; border-bottom:1px solid var(--border-light); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#f9fafb;}
+/* ---------- 提示框 ---------- */
+.callout{
+  border-radius:8px; padding:14px 18px; margin:16px 0;
+  border-left:4px solid; font-size:14px;
+}
+.callout-title{font-weight:600; margin-bottom:6px; display:flex; align-items:center; gap:6px;}
+.callout.primary{background:var(--primary-light); border-color:var(--primary);}
+.callout.accent{background:var(--accent-light); border-color:var(--accent);}
+.callout.warn{background:var(--warn-light); border-color:var(--warn);}
+.callout.danger{background:var(--danger-light); border-color:var(--danger);}
+.callout.purple{background:var(--purple-light); border-color:var(--purple);}
+/* ---------- 算法框 ---------- */
+.algo-box{
+  border:2px solid var(--primary); border-radius:8px; padding:16px 20px; margin:16px 0;
+  background:linear-gradient(135deg,#f8fbff 0%,#fff 100%);
+}
+.algo-box-title{font-weight:700; color:var(--primary); margin-bottom:8px; font-size:15px;}
+.algo-box ol{margin:8px 0 0; padding-left:22px;}
+.algo-box li{margin:4px 0;}
+/* ---------- SVG 容器 ---------- */
+.svg-box{
+  background:var(--bg-card); border:1px solid var(--border-light); border-radius:8px;
+  padding:24px; margin:16px 0; text-align:center; box-shadow:var(--shadow);
+}
+.svg-box svg{max-width:100%; height:auto;}
+.svg-caption{font-size:13px; color:var(--text-mute); margin-top:8px; font-style:italic;}
+/* ---------- 标签 ---------- */
+.tag{
+  display:inline-block; padding:2px 10px; border-radius:12px;
+  font-size:12px; font-weight:600; margin:0 4px 4px 0;
+}
+.tag.must{background:var(--danger-light); color:var(--danger);}
+.tag.important{background:var(--warn-light); color:var(--warn);}
+.tag.normal{background:var(--primary-light); color:var(--primary);}
+.tag.points{background:var(--accent-light); color:var(--accent);}
+/* ---------- 分隔线 ---------- */
+hr{border:none; border-top:2px dashed var(--border-light); margin:32px 0;}
+/* ---------- 高亮 ---------- */
+.hl-primary{color:var(--primary); font-weight:600;}
+.hl-accent{color:var(--accent); font-weight:600;}
+.hl-danger{color:var(--danger); font-weight:600;}
+.hl-purple{color:var(--purple); font-weight:600;}
+mark{background:#fff8c5; padding:2px 4px; border-radius:3px;}
+kbd{
+  background:#f6f8fa; border:1px solid var(--border); border-radius:4px;
+  padding:1px 6px; font-size:12px; font-family:monospace;
+  box-shadow:0 1px 0 var(--border);
+}
+/* ---------- 步骤号 ---------- */
+.step{display:flex; gap:12px; margin:12px 0;}
+.step-num{
+  flex-shrink:0; width:32px; height:32px; border-radius:50%;
+  background:var(--primary); color:#fff; font-weight:700;
+  display:flex; align-items:center; justify-content:center; font-size:14px;
+}
+.step-body{flex:1; padding-top:6px;}
+/* ---------- 响应式 ---------- */
+@media (max-width:1024px){
+  .sidebar{display:none;}
+  .content{padding:24px;}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ========== 侧边栏 ========== -->
+<aside class="sidebar">
+  <h1>📚 编译原理</h1>
+  <div class="subtitle">从零到期末 · 深度学习</div>
+  <nav>
+    <ol>
+      <li><a href="#ch1">一、整体认知</a></li>
+      <li><a href="#ch2">二、第一章 绪论</a></li>
+      <li><a href="#ch3">三、第二章 词法分析</a>
+        <ol>
+          <li><a href="#ch3-1">3.1 词法分析器设计</a></li>
+          <li><a href="#ch3-2">3.2 正规式与有限自动机</a></li>
+          <li><a href="#ch3-3">3.3 NFA → DFA 子集构造</a></li>
+          <li><a href="#ch3-4">3.4 DFA 最小化</a></li>
+          <li><a href="#ch3-5">3.5 Thompson 构造</a></li>
+          <li><a href="#ch3-6">3.7 综合题套路</a></li>
+        </ol>
+      </li>
+      <li><a href="#ch4">四、第三章 语法分析</a>
+        <ol>
+          <li><a href="#ch4-1">4.1 文法与语言</a></li>
+          <li><a href="#ch4-2">4.2 推导与语法树</a></li>
+          <li><a href="#ch4-3">4.3 LL(1) 分析</a></li>
+          <li><a href="#ch4-4">4.4 LR 分析</a></li>
+        </ol>
+      </li>
+      <li><a href="#ch5">五、第四章 语义分析</a></li>
+      <li><a href="#ch6">六、第五章 代码优化</a></li>
+      <li><a href="#ch7">七、第六章 运行时存储</a></li>
+      <li><a href="#ch8">八、第七章 目标代码生成</a></li>
+      <li><a href="#ch9">九、第八章 符号表与错误</a></li>
+      <li><a href="#ch10">十、期末综合冲刺</a>
+        <ol>
+          <li><a href="#ch10-1">6 道大题套路</a></li>
+          <li><a href="#ch10-2">大模型时代映射</a></li>
+          <li><a href="#ch10-3">高频面试题</a></li>
+        </ol>
+      </li>
+    </ol>
+  </nav>
+</aside>
+
+<!-- ========== 主内容 ========== -->
+<main class="content">
+
+<h1 class="page-title">编译原理 · 从零到期末 · 深度学习文档</h1>
+<div class="subtitle-big">
+  视角:大厂资深架构师 + 技术面试官 · 每个知识点讲透:<strong>渊源 / 本质 / 现代技术栈映射 / 期末考点 / 面试高频</strong><br>
+  综合题 60 分集中在第 2/3/4/5 章 · 简答题 20 分出自第 1/6/7/8 章
+</div>
+
+<!-- ============================================================ -->
+<!-- 第一章 整体认知 -->
+<!-- ============================================================ -->
+<h2 id="ch1">一、整体认知:编译原理到底在研究什么</h2>
+
+<h3>1.1 一个最朴素的问题</h3>
+<p>你写了一行 <code>a = b + c * 2</code>,CPU 只认识 <code>mov / add / imul</code> 这种指令。<span class="hl-danger">中间发生了什么?</span></p>
+<p>这就是编译器要解决的事。但编译原理的真正价值,远不止"写一个编译器"。它本质上是<strong>如何把一个高维抽象(人类语言)逐层降维到机器可执行的物理表示(机器码)</strong>的方法论。这套方法论渗透在现代技术栈的方方面面:</p>
+
+<table>
+<thead><tr><th width="32%">编译原理概念</th><th>现代技术栈映射(含 LLM/Agent 视角)</th></tr></thead>
+<tbody>
+<tr><td>词法分析(NFA/DFA)</td><td>正则引擎、grep、Nginx 配置解析、SQL 解析、<span class="hl-purple">LLM Tokenizer(BPE/WordPiece 本质是确定性分词自动机)</span></td></tr>
+<tr><td>语法分析(LL/LR)</td><td>ANTLR、Babel、TypeScript、SQL Parser、<span class="hl-purple">grammar-constrained decoding(Outlines/LMQL/llama.cpp GBNF)</span></td></tr>
+<tr><td>中间表示(四元式/三地址码)</td><td>LLVM IR、Java Bytecode、WebAssembly、<span class="hl-purple">Agent DSL 中间表示(ReAct 的 Thought/Action/Observation)</span></td></tr>
+<tr><td>语义分析(属性文法)</td><td>TypeScript 类型检查、Rust borrow checker、<span class="hl-purple">Agent 工具调用参数 schema 校验</span></td></tr>
+<tr><td>代码优化(局部/循环)</td><td>LLVM Pass、JVM C1/C2、V8 TurboFan、<span class="hl-purple">KV Cache 复用、Prefix Caching、推理图优化</span></td></tr>
+<tr><td>寄存器分配</td><td>图着色、线性扫描、<span class="hl-purple">GPU 显存调度(KV Block 分配,PagedAttention)</span></td></tr>
+<tr><td>运行时存储组织</td><td>JVM 栈帧、Go goroutine 栈、<span class="hl-purple">Agent Runtime 上下文管理</span></td></tr>
+<tr><td>符号表</td><td>IDE 跳转、LSP、<span class="hl-purple">MCP Server 工具注册表、Agent 工具发现</span></td></tr>
+<tr><td>错误处理(panic mode)</td><td>Rust/TS/Babel 错误恢复、<span class="hl-purple">Agent Self-Correction、LLM JSON 输出失败重试</span></td></tr>
+</tbody>
+</table>
+
+<h3>1.2 编译器的五个阶段<span class="tag must">必背</span></h3>
+
+<div class="svg-box">
+<svg viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ddf4ff"/><stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+    <marker id="arrow1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0969da"/>
+    </marker>
+  </defs>
+  <!-- 源程序 -->
+  <rect x="320" y="20" width="160" height="44" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="2"/>
+  <text x="400" y="48" text-anchor="middle" font-size="16" font-weight="700">源程序</text>
+  <!-- 五个阶段 -->
+  <g>
+    <rect x="200" y="100" width="400" height="50" rx="6" fill="url(#grad1)" stroke="#0969da" stroke-width="1.5"/>
+    <text x="230" y="125" font-size="14" font-weight="700" fill="#0969da">① 词法分析</text>
+    <text x="230" y="143" font-size="12" fill="#57606a">Lexical Analysis → Token 流</text>
+    <circle cx="560" cy="125" r="14" fill="#0969da"/>
+    <text x="560" y="129" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">T</text>
+  </g>
+  <g>
+    <rect x="200" y="170" width="400" height="50" rx="6" fill="url(#grad1)" stroke="#0969da" stroke-width="1.5"/>
+    <text x="230" y="195" font-size="14" font-weight="700" fill="#0969da">② 语法分析</text>
+    <text x="230" y="213" font-size="12" fill="#57606a">Syntax Parsing → AST 语法树</text>
+    <circle cx="560" cy="195" r="14" fill="#0969da"/>
+    <text x="560" y="199" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">AST</text>
+  </g>
+  <g>
+    <rect x="200" y="240" width="400" height="50" rx="6" fill="url(#grad1)" stroke="#0969da" stroke-width="1.5"/>
+    <text x="230" y="265" font-size="14" font-weight="700" fill="#0969da">③ 语义分析 + 中间代码生成</text>
+    <text x="230" y="283" font-size="12" fill="#57606a">Semantic Analysis → 四元式 / IR</text>
+    <circle cx="560" cy="265" r="14" fill="#0969da"/>
+    <text x="560" y="269" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">IR</text>
+  </g>
+  <g>
+    <rect x="200" y="310" width="400" height="50" rx="6" fill="url(#grad1)" stroke="#0969da" stroke-width="1.5"/>
+    <text x="230" y="335" font-size="14" font-weight="700" fill="#0969da">④ 代码优化</text>
+    <text x="230" y="353" font-size="12" fill="#57606a">Optimization → 优化后的中间代码</text>
+    <circle cx="560" cy="335" r="14" fill="#0969da"/>
+    <text x="560" y="339" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">+</text>
+  </g>
+  <g>
+    <rect x="200" y="380" width="400" height="50" rx="6" fill="url(#grad1)" stroke="#0969da" stroke-width="1.5"/>
+    <text x="230" y="405" font-size="14" font-weight="700" fill="#0969da">⑤ 目标代码生成</text>
+    <text x="230" y="423" font-size="12" fill="#57606a">Code Generation → 目标代码</text>
+    <circle cx="560" cy="405" r="14" fill="#0969da"/>
+    <text x="560" y="409" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">.o</text>
+  </g>
+  <!-- 箭头 -->
+  <line x1="400" y1="64" x2="400" y2="100" stroke="#0969da" stroke-width="2" marker-end="url(#arrow1)"/>
+  <line x1="400" y1="150" x2="400" y2="170" stroke="#0969da" stroke-width="2" marker-end="url(#arrow1)"/>
+  <line x1="400" y1="220" x2="400" y2="240" stroke="#0969da" stroke-width="2" marker-end="url(#arrow1)"/>
+  <line x1="400" y1="290" x2="400" y2="310" stroke="#0969da" stroke-width="2" marker-end="url(#arrow1)"/>
+  <line x1="400" y1="360" x2="400" y2="380" stroke="#0969da" stroke-width="2" marker-end="url(#arrow1)"/>
+  <!-- 侧边符号表/错误处理 -->
+  <rect x="640" y="100" width="120" height="330" rx="8" fill="#fbefff" stroke="#8250df" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="700" y="125" text-anchor="middle" font-size="13" font-weight="700" fill="#8250df">符号表</text>
+  <text x="700" y="145" text-anchor="middle" font-size="11" fill="#8250df">Symbol Table</text>
+  <text x="700" y="180" text-anchor="middle" font-size="13" font-weight="700" fill="#8250df">错误处理</text>
+  <text x="700" y="200" text-anchor="middle" font-size="11" fill="#8250df">Error Handler</text>
+  <text x="700" y="240" text-anchor="middle" font-size="11" fill="#8250df">贯穿全程</text>
+  <text x="700" y="258" text-anchor="middle" font-size="11" fill="#8250df">支持所有阶段</text>
+  <line x1="600" y1="195" x2="640" y2="195" stroke="#8250df" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="600" y1="265" x2="640" y2="265" stroke="#8250df" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="600" y1="335" x2="640" y2="335" stroke="#8250df" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="600" y1="405" x2="640" y2="405" stroke="#8250df" stroke-width="1.5" stroke-dasharray="3,2"/>
+</svg>
+<div class="svg-caption">图 1-1 · 编译器五阶段流水线:每阶段独立、配套符号表与错误处理贯穿全程</div>
+</div>
+
+<div class="callout primary">
+  <div class="callout-title">💡 架师视角</div>
+  这种"分阶段 + 中间表示 + 多遍 pass"的设计,是软件工程中<strong>关注点分离(SoC)</strong>和<strong>管道-过滤器架构</strong>的经典范例。Spark SQL → Catalyst → RBO/CBO → RDD,以及 prompt → DSL → AST → 执行计划,完全是同一套思想。
+</div>
+
+<h3>1.3 期末考试重点一览</h3>
+<table>
+<thead><tr><th>题型</th><th>题数</th><th>分值</th><th>来源章节</th></tr></thead>
+<tbody>
+<tr><td><span class="tag normal">单选</span></td><td>10</td><td>20</td><td>覆盖 1~8 章</td></tr>
+<tr><td><span class="tag normal">简答</span></td><td>4</td><td>20</td><td>第 1/6/7/8 章各一题</td></tr>
+<tr><td><span class="tag must">综合</span></td><td>6</td><td>60</td><td>第 2/3/4/5/7 章</td></tr>
+</tbody>
+</table>
+
+<div class="callout danger">
+  <div class="callout-title">🎯 6 道综合题固定题型(必练)</div>
+  <ol style="margin:6px 0 0 18px;">
+    <li>NFA → DFA → 最小化<span class="tag points">第 2 章 12 分</span></li>
+    <li>句型语法树、直接短语、句柄<span class="tag points">第 3 章 5 分</span></li>
+    <li>FIRST/FOLLOW 集 + LL(1) 分析表<span class="tag points">第 3 章 15 分</span></li>
+    <li>拓广文法 + 识别活前缀 DFA + LR(0) 分析表<span class="tag points">第 3 章 12 分</span></li>
+    <li>程序段 → 四元式<span class="tag points">第 4+7 章 8 分</span></li>
+    <li>四元式序列 → DAG 局部优化<span class="tag points">第 5 章 8 分</span></li>
+  </ol>
+</div>
+
+<div class="callout accent">
+  <div class="callout-title">⭐ 复习策略</div>
+  把综合题 6 个题型刷到肌肉记忆(占 60 分),简答题背 1/6/7/8 章核心概念(占 20 分),单选靠刷题(占 20 分)。<strong>性价比最高的是综合题 3、4(LL(1) 和 LR(0)),15+12=27 分,纯套路。</strong>
+</div>
+
+<!-- ============================================================ -->
+<!-- 第二章 绪论 -->
+<!-- ============================================================ -->
+<h2 id="ch2">二、第一章 绪论</h2>
+
+<h3>2.1 编译程序 vs 解释程序 vs 混合模式</h3>
+<table>
+<thead><tr><th>类型</th><th>代表语言</th><th>工作方式</th><th>执行速度</th><th>启动速度</th><th>调试</th></tr></thead>
+<tbody>
+<tr><td>编译型</td><td>C/C++/Rust/Go</td><td>源码整体翻译成机器码</td><td>极快</td><td>慢</td><td>难</td></tr>
+<tr><td>解释型</td><td>Python/Ruby/JS 早期</td><td>逐行翻译执行</td><td>慢</td><td>极快</td><td>容易</td></tr>
+<tr><td>混合型</td><td>Java/C#/JS(V8)</td><td>源码→字节码→JIT→机器码</td><td>快</td><td>中等</td><td>中等</td></tr>
+</tbody>
+</table>
+
+<div class="callout purple">
+  <div class="callout-title">📜 渊源</div>
+  早期计算机内存稀缺,只能整块编译(FORTRAN 1957)。Lisp(1958) 开创解释执行,带来交互式 REPL。90 年代 Java 提出"一次编写,处处运行",把编译拆成"源码 → 字节码 → JVM 解释/JIT"两段,既跨平台又有性能。现代 V8 更进一步:Ignition 解释器 + TurboFan JIT + Sparkplug 优化编译器,多层编译。
+</div>
+
+<div class="callout warn">
+  <div class="callout-title">🎤 面试考点</div>
+  为什么 Java 叫"半编译半解释"?——因为 javac 把源码编译成字节码,但字节码由 JVM 解释执行(或 JIT 热点编译)。
+</div>
+
+<h3>2.2 编译过程与编译程序结构<span class="tag must">必背五阶段</span></h3>
+<p>编译过程从源程序到目标代码,经过五个阶段,每个阶段有明确的输入输出和任务:</p>
+
+<table>
+<thead><tr><th width="14%">阶段</th><th width="40%">任务</th><th width="28%">输入 → 输出</th><th width="18%">现代对应</th></tr></thead>
+<tbody>
+<tr><td><strong>① 词法分析</strong></td><td>识别单词符号,过滤空格注释,输出 Token 流;同时建立符号表</td><td>源程序字符流 → Token 流</td><td>Scanner / Lexer</td></tr>
+<tr><td><strong>② 语法分析</strong></td><td>根据文法规则,把 Token 串归约为语法单位,生成语法树/AST;检查语法错误</td><td>Token 流 → AST / 语法树</td><td>Parser</td></tr>
+<tr><td><strong>③ 语义分析 + 中间代码生成</strong></td><td>类型检查、作用域检查、控制流检查;将 AST 翻译成中间代码(四元式/三地址码)</td><td>AST → 中间代码 IR</td><td>Semantic Analyzer</td></tr>
+<tr><td><strong>④ 代码优化</strong></td><td>对中间代码进行等价变换:局部优化(DAG)、循环优化、全局优化</td><td>中间代码 → 优化后的中间代码</td><td>Optimization Pass</td></tr>
+<tr><td><strong>⑤ 目标代码生成</strong></td><td>把优化后的中间代码翻译为目标机器指令;寄存器分配、指令调度</td><td>优化后的 IR → 目标代码</td><td>Code Generator</td></tr>
+</tbody>
+</table>
+
+<div class="callout primary">
+  <div class="callout-title">💡 编译程序结构 = 五阶段 + 两大配套</div>
+  五个阶段构成<strong>前端 + 中端 + 后端</strong>的三段式结构:
+  <ul style="margin:6px 0 0 18px;">
+    <li><strong>前端(Front-end)</strong>:词法分析 + 语法分析 + 语义分析,与源语言相关,与目标机器无关</li>
+    <li><strong>中端(Middle-end)</strong>:中间代码优化,与源语言和目标机器都无关(IR 层)</li>
+    <li><strong>后端(Back-end)</strong>:目标代码生成,与目标机器相关</li>
+  </ul>
+  LLVM 是这种结构的最典型实现:Clang(前端)→ LLVM IR(中端)→ x86/ARM/RISC-V 后端。
+</div>
+
+<h4>两大配套组件(贯穿全程)</h4>
+<table>
+<thead><tr><th width="20%">组件</th><th width="40%">作用</th><th width="40%">业务映射</th></tr></thead>
+<tbody>
+<tr><td><strong>符号表(Symbol Table)</strong></td><td>记录所有标识符的类型、作用域、内存位置;贯穿编译全过程,所有阶段共享</td><td>IDE 的"跳转定义"、"自动补全"本质就是查符号表;LSP 协议;MCP 工具注册表(LLM 时代)</td></tr>
+<tr><td><strong>错误处理(Error Handler)</strong></td><td>词法错(非法字符)、语法错(缺分号)、语义错(类型不匹配);现代编译器追求"错误恢复",尽量一次性报多个错</td><td>Rust/TS 友好错误信息;Babel 错误恢复;Agent Self-Correction(LLM 时代)</td></tr>
+</tbody>
+</table>
+
+<div class="callout warn">
+  <div class="callout-title">⚠️ 错误处理的两种策略</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li><strong>错误恢复</strong>:尽可能继续编译,一次发现多个错误(主流策略)</li>
+    <li><strong>错误校正</strong>:尝试自动修正错误(实际很少做,容易误导用户)</li>
+  </ul>
+  详见第八章错误处理章节。
+</div>
+
+<h3>2.3 遍(pass)的概念</h3>
+<p>"一遍"指从头到尾扫描一次源码(或中间代码)。一遍编译器把多个阶段交织在一起(典型如 Pascal 早期编译器),内存友好但难优化。多遍编译器(LLVM)把每遍独立,可并行、可复用。</p>
+<div class="callout primary">
+  <div class="callout-title">💡 架构师视角</div>
+  遍的本质就是"数据流水线"。MapReduce、Spark、Flink 都是这种模型。编译器的"中间表示 IR"对应大数据的"DataFrame/DataSet",都是为了在阶段间传递不可变数据。
+</div>
+
+<h3>2.4 构造编译程序所需的知识</h3>
+<p>构造一个编译程序需要以下理论基础:</p>
+<table>
+<thead><tr><th width="28%">理论基础</th><th width="42%">作用</th><th width="30%">应用阶段</th></tr></thead>
+<tbody>
+<tr><td><strong>形式语言理论</strong>(Chomsky 文法分类)</td><td>定义语法的数学工具,0/1/2/3 型文法对应不同表达能力</td><td>语法分析</td></tr>
+<tr><td><strong>自动机理论</strong>(NFA/DFA/PDA)</td><td>实现词法和语法分析的核心模型</td><td>词法分析、语法分析</td></tr>
+<tr><td><strong>图论</strong></td><td>用于寄存器分配(图着色)、控制流分析(CFG)、数据流分析</td><td>代码优化、目标代码生成</td></tr>
+<tr><td><strong>拓扑学/格论</strong></td><td>用于数据流分析(抽象解释、不动点计算)</td><td>全局优化</td></tr>
+</tbody>
+</table>
+<div class="callout warn">
+  <div class="callout-title">📌 Chomsky 文法分类(必考选择题)</div>
+  0/1/2/3 型文法是核心考点,详见第三章 4.1.3 节。<strong>程序语言的词法用 3 型(正则),语法用 2 型(CFG)</strong>。
+</div>
+
+<h3>2.5 简答题可能考点<span class="tag important">5 分</span></h3>
+<div class="callout warn">
+  <div class="callout-title">📝 标准答案要点</div>
+  <ol style="margin:6px 0 0 18px;">
+    <li>五阶段:词法分析、语法分析、语义分析和中间代码生成、代码优化、目标代码生成。</li>
+    <li>编译程序生成目标程序后执行,解释程序边翻译边执行不产生目标程序。</li>
+    <li>一遍编译器将多个阶段合并,多遍编译器分阶段处理;多遍编译器易于模块化、优化,但内存消耗大、速度慢。</li>
+  </ol>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- 第三章 词法分析 -->
+<!-- ============================================================ -->
+<h2 id="ch3">三、第二章 词法分析<span class="tag must">综合题 12 分</span></h2>
+
+<h3 id="ch3-1">3.1 词法分析器的设计方法</h3>
+
+<h4>3.1.1 单词符号的分类与输出形式</h4>
+<p><strong>单词符号(Token)</strong> 是源程序中具有独立意义的最小语法单位。分为五大类:</p>
+<table>
+<thead><tr><th width="20%">类别</th><th>示例</th></tr></thead>
+<tbody>
+<tr><td>关键字(保留字)</td><td><code>if</code>、<code>while</code>、<code>int</code></td></tr>
+<tr><td>标识符</td><td>变量名、函数名,如 <code>count</code>、<code>getUserInfo</code></td></tr>
+<tr><td>常数(字面量)</td><td><code>42</code>、<code>3.14</code>、<code>"hello"</code>、<code>true</code></td></tr>
+<tr><td>运算符</td><td><code>+</code>、<code>==</code>、<code>&amp;&amp;</code>、<code>&lt;&lt;=</code></td></tr>
+<tr><td>界符</td><td><code>;</code>、<code>{</code>、<code>}</code>、<code>(</code>、<code>)</code>、<code>,</code></td></tr>
+</tbody>
+</table>
+
+<p><strong>输出形式二元组</strong>:<code>(单词种别, 属性值)</code>。例如 <code>a = 10</code> 输出:</p>
+<pre><code>(ID, "a")  (=, -)  (INT, 10)</code></pre>
+
+<div class="callout primary">
+  <div class="callout-title">💼 业务场景</div>
+  你写一个 SQL 审计系统,要识别 <code>SELECT * FROM users WHERE id=1</code> 中的表名、列名。第一步就是词法分析。ShardingSphere、Druid 连接池都内置了 SQL Lexer。V8 的 Scanner 也是输出 Token 流给 Parser。
+</div>
+
+<h4>3.1.2 状态转换图<span class="tag important">必懂</span></h4>
+<p>状态转换图是词法分析器实现的核心工具。它是一个<strong>有向图</strong>,有有限个状态:节点=状态,边=字符,双圈=终态,<code>*</code>=回退一个字符。</p>
+
+<div class="svg-box">
+<svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+  <!-- 起点 -->
+  <circle cx="40" cy="90" r="6" fill="#333"/>
+  <line x1="46" y1="90" x2="100" y2="90" stroke="#333" stroke-width="2" marker-end="url(#arr2)"/>
+  <!-- 状态 0 -->
+  <circle cx="120" cy="90" r="28" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+  <text x="120" y="95" text-anchor="middle" font-size="14" font-weight="700">0</text>
+  <!-- 字母 -->
+  <text x="160" y="84" font-size="13" fill="#1f883d" font-weight="600">字母</text>
+  <line x1="148" y1="90" x2="240" y2="90" stroke="#1f883d" stroke-width="2" marker-end="url(#arr2)"/>
+  <!-- 状态 1 -->
+  <circle cx="270" cy="90" r="28" fill="#dafbe1" stroke="#1f883d" stroke-width="2.5"/>
+  <circle cx="270" cy="90" r="23" fill="none" stroke="#1f883d" stroke-width="2.5"/>
+  <text x="270" y="95" text-anchor="middle" font-size="14" font-weight="700">1</text>
+  <!-- 自环 -->
+  <path d="M 290 70 Q 360 30 320 70" stroke="#1f883d" stroke-width="2" fill="none" marker-end="url(#arr2)"/>
+  <text x="370" y="55" font-size="12" fill="#1f883d">字母/数字</text>
+  <!-- 非字母数字回退 -->
+  <line x1="298" y1="90" x2="400" y2="90" stroke="#cf222e" stroke-width="2" marker-end="url(#arr2)"/>
+  <text x="310" y="84" font-size="12" fill="#cf222e">非字母数字 *</text>
+  <rect x="400" y="75" width="100" height="32" rx="6" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+  <text x="450" y="95" text-anchor="middle" font-size="12" font-weight="600">识别成功</text>
+</svg>
+<div class="svg-caption">图 3-1 · 识别标识符的状态转换图(双圈=终态,* =指针回退)</div>
+</div>
+
+<h3 id="ch3-2">3.2 正规表达式与有限自动机<span class="tag must">本章核心</span></h3>
+
+<h4>3.2.1 为什么需要正规式?</h4>
+<p>人写规则用正规式直观,但代码实现要自动机。所以工作流是:</p>
+
+<div class="svg-box">
+<svg viewBox="0 0 900 100" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0969da"/></marker></defs>
+  <rect x="20" y="30" width="160" height="40" rx="6" fill="#fff8c5" stroke="#9a6700" stroke-width="2"/>
+  <text x="100" y="55" text-anchor="middle" font-size="14" font-weight="700">正规式</text>
+  <text x="200" y="40" font-size="11" fill="#57606a">Thompson</text>
+  <line x1="180" y1="50" x2="240" y2="50" stroke="#0969da" stroke-width="2" marker-end="url(#arr3)"/>
+  <rect x="240" y="30" width="120" height="40" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+  <text x="300" y="55" text-anchor="middle" font-size="14" font-weight="700">NFA</text>
+  <text x="375" y="40" font-size="11" fill="#57606a">子集构造</text>
+  <line x1="360" y1="50" x2="420" y2="50" stroke="#0969da" stroke-width="2" marker-end="url(#arr3)"/>
+  <rect x="420" y="30" width="120" height="40" rx="6" fill="#dafbe1" stroke="#1f883d" stroke-width="2"/>
+  <text x="480" y="55" text-anchor="middle" font-size="14" font-weight="700">DFA</text>
+  <text x="555" y="40" font-size="11" fill="#57606a">Hopcroft</text>
+  <line x1="540" y1="50" x2="600" y2="50" stroke="#0969da" stroke-width="2" marker-end="url(#arr3)"/>
+  <rect x="600" y="30" width="160" height="40" rx="6" fill="#fbefff" stroke="#8250df" stroke-width="2"/>
+  <text x="680" y="55" text-anchor="middle" font-size="14" font-weight="700">最小 DFA</text>
+  <text x="780" y="55" font-size="13" font-weight="700" fill="#cf222e">← 期末综合题 1</text>
+</svg>
+<div class="svg-caption">图 3-2 · 词法分析完整工作流:正规式 → NFA → DFA → 最小化</div>
+</div>
+
+<h4>3.2.2 正规式(正则表达式)基础</h4>
+<p>运算符(优先级从低到高):<code>|</code>(或)、<code>·</code>(连接,可省略)、<code>*</code>(闭包 Kleene star)、<code>+</code>(正闭包)、<code>?</code>(可选)、<code>()</code> 分组。</p>
+<p><strong>重要等价式</strong>:<code>r** = r*</code>、<code>(r|s)* = (r*s*)*</code>、<code>r(s|t) = rs|rt</code></p>
+
+<table>
+<thead><tr><th>正则引擎类型</th><th>代表实现</th><th>特点</th></tr></thead>
+<tbody>
+<tr><td>NFA 引擎(回溯)</td><td>PCRE、Python re、Java、JavaScript</td><td>支持反向引用,最坏 O(2^n)</td></tr>
+<tr><td>DFA 引擎</td><td>grep、re2、Rust regex</td><td>无回溯 O(n),但不支持反向引用</td></tr>
+</tbody>
+</table>
+
+<div class="callout primary">
+  <div class="callout-title">💼 Google RE2</div>
+  Google RE2 就是为了避免正则爆炸而设计的 DFA 引擎,广泛用于 Chrome、Go 标准库、Kubernetes 资源校验。
+</div>
+
+<h4>3.2.3 有限自动机(FA)</h4>
+<p><strong>定义</strong>:五元组 <code>M = (Q, Σ, δ, q0, F)</code></p>
+<ul>
+  <li><code>Q</code>:有限状态集</li>
+  <li><code>Σ</code>:输入字母表</li>
+  <li><code>δ</code>:转移函数</li>
+  <li><code>q0</code>:初态</li>
+  <li><code>F</code>:终态集</li>
+</ul>
+
+<table>
+<thead><tr><th>维度</th><th>DFA</th><th>NFA</th></tr></thead>
+<tbody>
+<tr><td>转移函数</td><td><code>δ(q,a) = 一个状态</code></td><td><code>δ(q,a) = 状态集合(可空)</code></td></tr>
+<tr><td>ε 转移</td><td>不允许</td><td>允许(空字符跳转)</td></tr>
+<tr><td>状态数</td><td>多(通常)</td><td>少(通常)</td></tr>
+<tr><td>匹配速度</td><td>O(n),无需回溯</td><td>最坏 O(2^n),需回溯</td></tr>
+<tr><td>实现复杂度</td><td>跳转表,简单</td><td>跳转表+回溯,复杂</td></tr>
+</tbody>
+</table>
+
+<div class="callout danger">
+  <div class="callout-title">⚠️ 重要定理(必背)</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li><strong>L(NFA) = L(DFA)</strong>:NFA 和 DFA 表达能力相同,都识别正规语言(3 型语言)</li>
+    <li><strong>NFA → DFA 的状态数最坏 2^n</strong>(指数爆炸,实际很少触发)</li>
+  </ul>
+</div>
+
+<h3 id="ch3-3">3.3 NFA → DFA:NFA 的确定化<span class="tag must">子集构造法 必考</span></h3>
+
+<h4>3.3.1 三个核心概念</h4>
+<div class="algo-box">
+  <div class="algo-box-title">📐 子集构造三件套</div>
+  <ol>
+    <li><strong>ε-closure(q)</strong>:状态 q 通过 ε 转移能到达的所有状态(<strong>包含 q 本身</strong>)。不动点迭代求。</li>
+    <li><strong>move(I, a)</strong>:状态集 I 通过输入字符 a 能直接到达的状态集。</li>
+    <li><strong>Ia = ε-closure(move(I, a))</strong>:状态集 I 通过 a 能到达的所有状态(再 ε 闭包)。</li>
+  </ol>
+</div>
+
+<h4>3.3.2 子集构造算法</h4>
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ 算法步骤</div>
+  <pre style="background:transparent; border:none; padding:0; margin:0;"><code>1. 求初态 I0 = ε-closure(q0)
+2. 把 I0 加入未标记集合 C = {I0}
+3. while C 中有未标记的子集 I:
+     标记 I
+     for 每个输入字符 a:
+         U = ε-closure(move(I, a))
+         if U 不在 C 中: 把 U 加入 C
+         建立转移 δ(I, a) = U
+4. C 中所有包含 NFA 终态的子集 = DFA 终态</code></pre>
+</div>
+
+<h4>3.3.3 完整示例<span class="tag must">必练</span></h4>
+<p><strong>题目</strong>:已知正规式 <code>(a|b)*abb</code> 的 NFA,求等价 DFA。</p>
+
+<div class="callout primary">
+  <div class="callout-title">📐 子集构造过程</div>
+  <pre style="margin-top:8px;"><code>1. I0 = ε-closure(0) = {0,1,2,4,7}
+2. 从 I0 看 a: move(I0,a) = {3,8}
+   ε-closure({3,8}) = {1,2,3,4,6,7,8} = I1
+3. 从 I0 看 b: move(I0,b) = {5}
+   ε-closure({5}) = {1,2,4,5,6,7} = I2
+4. 从 I1 看 a: ε-closure(move(I1,a)) = I1 (自环)
+5. 从 I1 看 b: move(I1,b) = {5,9}
+   ε-closure({5,9}) = {1,2,4,5,6,7,9} = I3
+6. 从 I2 看 a: 同 I1
+7. 从 I2 看 b: 同 I2
+8. 从 I3 看 a: 同 I1
+9. 从 I3 看 b: move(I3,b) = {5,9,10}
+   ε-closure({5,9,10}) = {1,2,4,5,6,7,9,10} = I4 (终态,含 10)
+10. 从 I4 看 a: 同 I1
+11. 从 I4 看 b: 同 I2</code></pre>
+</div>
+
+<p><strong>DFA 状态表</strong>:</p>
+<table>
+<thead><tr><th>状态</th><th>a</th><th>b</th></tr></thead>
+<tbody>
+<tr><td>→ I0</td><td>I1</td><td>I2</td></tr>
+<tr><td>I1</td><td>I1</td><td>I3</td></tr>
+<tr><td>I2</td><td>I1</td><td>I2</td></tr>
+<tr><td>I3</td><td>I1</td><td><strong>I4</strong></td></tr>
+<tr><td>* I4</td><td>I1</td><td>I2</td></tr>
+</tbody>
+</table>
+<p>I4 包含 NFA 终态 10,所以 I4 是 DFA 终态。</p>
+
+<h3 id="ch3-4">3.4 DFA 的化简<span class="tag must">Hopcroft 最小化算法</span></h3>
+
+<h4>3.4.1 算法思想</h4>
+<div class="callout primary">
+  <div class="callout-title">🔑 核心:等价状态合并</div>
+  两个状态等价,当且仅当:<strong>(1) 都是终态或都是非终态</strong> + <strong>(2) 对所有输入字符,转移到的状态也等价</strong>。
+</div>
+
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ Hopcroft 算法</div>
+  <pre style="background:transparent; border:none; padding:0; margin:0;"><code>1. 划分 Π = {终态集, 非终态集}
+2. repeat:
+     Π_new = ∅
+     for 每个组 G ∈ Π:
+         把 G 拆成子组:子组内每个状态对每个输入字符都转移到同一个组
+         Π_new += 所有子组
+     Π = Π_new
+  until Π 不再变化
+3. 每组选一个代表状态,合并等价状态</code></pre>
+</div>
+
+<h4>3.4.2 上例最小化</h4>
+<p>初始划分:<code>Π = {{I0,I1,I2,I3}, {I4}}</code>(终态只有 I4)</p>
+<div class="callout warn">
+  <div class="callout-title">🔄 迭代过程</div>
+  <pre style="margin-top:8px;"><code>第一轮:
+- 看 {I0,I1,I2,I3}:
+  - 输入 a:都到 I1(同组)→ 不分裂
+  - 输入 b:I0→I2, I1→I3, I2→I2, I3→I4,转移到不同组! → 按 b 的转移目标分组
+    - I0(b→I2)、I2(b→I2):组内
+    - I1(b→I3):单独
+    - I3(b→I4):单独(因为 I4 在另一组)
+- 拆成 {I0,I2}、{I1}、{I3},加上 {I4}
+
+第二轮:
+- {I0,I2}:输入 a 都到 I1(同组);输入 b 都到 I2(同组)→ 不分裂
+- 其他组已单元素
+
+最终 4 个状态:{I0,I2}、{I1}、{I3}、{I4}</code></pre>
+</div>
+
+<p>重命名:<code>A={I0,I2}</code>,<code>B={I1}</code>,<code>C={I3}</code>,<code>D={I4}</code></p>
+
+<table>
+<thead><tr><th>状态</th><th>a</th><th>b</th></tr></thead>
+<tbody>
+<tr><td>→ A</td><td>B</td><td>A</td></tr>
+<tr><td>B</td><td>B</td><td>C</td></tr>
+<tr><td>C</td><td>B</td><td>D</td></tr>
+<tr><td>* D</td><td>B</td><td>A</td></tr>
+</tbody>
+</table>
+
+<h3 id="ch3-5">3.5 正规式 → NFA:Thompson 构造法<span class="tag must">必考</span></h3>
+<table>
+<thead><tr><th>结构</th><th>规则</th></tr></thead>
+<tbody>
+<tr><td>空串 ε</td><td>→ (q0) ──ε──> ((q1))</td></tr>
+<tr><td>单字符 a</td><td>→ (q0) ──a──> ((q1))</td></tr>
+<tr><td>r|s(或)</td><td>新建初态 q0,通过 ε 分别指向 r 和 s 的初态;r、s 终态通过 ε 指向新建终态 qf</td></tr>
+<tr><td>rs(连接)</td><td>r 的终态通过 ε 指向 s 的初态</td></tr>
+<tr><td>r*(闭包)</td><td>新建初态 q0 和终态 qf,ε 指向 r 初态;r 终态 ε 回到 r 初态和指向 qf;q0 ε 指向 qf(允许 0 次)</td></tr>
+</tbody>
+</table>
+
+<h3>3.6 现代词法分析器自动生成</h3>
+<table>
+<thead><tr><th>工具</th><th>语言</th><th>特点</th></tr></thead>
+<tbody>
+<tr><td>Lex / Flex</td><td>C</td><td>用 C 写 action,通过 <code>yylex()</code> 调用</td></tr>
+<tr><td>ANTLR</td><td>Java/Python/Go</td><td>既能生成 lexer 也能生成 parser</td></tr>
+<tr><td>re2c</td><td>PHP/HHVM</td><td>生成最小 DFA,速度极快</td></tr>
+<tr><td>logos</td><td>Rust</td><td>过程宏,编译期生成 DFA</td></tr>
+</tbody>
+</table>
+
+<h3 id="ch3-6">3.7 第二章综合题解题套路<span class="tag points">12 分必练</span></h3>
+<div class="algo-box">
+  <div class="algo-box-title">🎯 题型:已知 NFA 状态转换图,构造等价 DFA 并最小化</div>
+  <div class="step"><div class="step-num">1</div><div class="step-body"><strong>求 ε-closure(q0)</strong> 作为 DFA 初态 I0</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body"><strong>子集构造</strong>:对每个状态集,对每个输入字符求 <code>Ia = ε-closure(move(I,a))</code>,直到不产生新状态</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body"><strong>建表</strong>:列出所有状态集及其转移</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body"><strong>定终态</strong>:包含 NFA 终态的状态集 = DFA 终态</div></div>
+  <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Hopcroft 最小化</strong>:先按终态/非终态划分,再迭代细分</div></div>
+</div>
+
+<div class="callout danger">
+  <div class="callout-title">⚠️ 易错点</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li>ε-closure 一定要<strong>包含起点本身</strong></li>
+    <li>子集构造时,每个新状态集都要对每个字符都求一遍,不能漏</li>
+    <li>最小化时,要看"<strong>转移到不同组</strong>",而不是"转移到不同状态"</li>
+    <li>初态也是终态的情况(识别 ε 的自动机)</li>
+  </ul>
+</div>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 LLM 视角</div>
+  LLM Tokenizer 的 BPE/WordPiece 算法本质就是 DFA。BPE 合并规则构建一棵确定性合并树,推理时按规则贪心切分字节流,与 DFA 状态转移完全同构。tiktoken、HuggingFace tokenizers 的核心都是高速 DFA。
+</div>
+
+<h3>3.8 面试高频题</h3>
+<div class="callout warn">
+  <p><strong>Q1</strong>:正则表达式引擎为什么会有 ReDoS(正则灾难)?<br>
+  <strong>A</strong>:NFA 回溯引擎在嵌套量词(<code>(a+)+b</code>)、重叠分支上会指数级回溯。可以用 RE2(DFA 引擎)避免,或者用原子组 <code>(?&gt;...)</code>、占有量词 <code>a++</code> 减少回溯。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q2</strong>:为什么 DFA 比 NFA 快但状态数多?<br>
+  <strong>A</strong>:DFA 每个状态对每个字符只有一条出路,无需回溯,O(n);但 NFA → DFA 最坏指数爆炸(2^n)。RE2 的策略是惰性构造 DFA,只对真正用到的子集构造。</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- 第四章 语法分析 -->
+<!-- ============================================================ -->
+<h2 id="ch4">四、第三章 语法分析<span class="tag must">综合题 32 分,重头戏</span></h2>
+
+<div class="callout danger">
+  <div class="callout-title">🎯 本章分值</div>
+  综合题 2(语法树 5 分)+ 综合题 3(LL(1) 15 分)+ 综合题 4(LR(0) 12 分)= <strong>32 分</strong>,全在此章。LL(1) 和 LR(0) 必考大题。
+</div>
+
+<h3 id="ch4-1">4.1 文法和语言<span class="tag normal">基础概念</span></h3>
+
+<h4>4.1.1 基本概念</h4>
+<ul>
+  <li><strong>字母表 Σ</strong>:有限符号集合,如 <code>{a, b}</code></li>
+  <li><strong>符号串</strong>:字母表上的符号序列,如 <code>abab</code></li>
+  <li><strong>空串 ε</strong>:长度为 0 的串</li>
+  <li><strong>Σ*</strong>:所有有限符号串(含 ε)的集合</li>
+  <li><strong>语言 L</strong>:Σ* 的子集</li>
+</ul>
+<p><strong>文法 G</strong> 是一个四元组:<code>G = (V, T, P, S)</code></p>
+<table>
+<thead><tr><th>符号</th><th>含义</th></tr></thead>
+<tbody>
+<tr><td>V</td><td>非终结符集合(Non-terminal,大写字母)</td></tr>
+<tr><td>T</td><td>终结符集合(Terminal,小写字母/符号)</td></tr>
+<tr><td>P</td><td>产生式集合,形如 <code>A → α</code></td></tr>
+<tr><td>S</td><td>开始符号(必须属于 V)</td></tr>
+</tbody>
+</table>
+
+<h4>4.1.2 推导(Derivation)</h4>
+<table>
+<thead><tr><th>符号</th><th>含义</th></tr></thead>
+<tbody>
+<tr><td><code>⇒</code></td><td>直接推导(用产生式替换一个非终结符)</td></tr>
+<tr><td><code>⇒+</code></td><td>至少一步推导</td></tr>
+<tr><td><code>⇒*</code></td><td>0 步或多步推导</td></tr>
+<tr><td>最左推导</td><td>每步替换最左非终结符(<strong>自顶向下分析用</strong>)</td></tr>
+<tr><td>最右推导</td><td>每步替换最右非终结符(<strong>自底向上分析用</strong>,又叫规范推导)</td></tr>
+</tbody>
+</table>
+
+<h4>4.1.3 Chomsky 文法分类<span class="tag must">必考选择题</span></h4>
+<table>
+<thead><tr><th>类型</th><th>别名</th><th>产生式限制</th><th>对应自动机</th><th>代表语言</th></tr></thead>
+<tbody>
+<tr><td>0 型</td><td>短语结构 PSG</td><td>α → β(α 含非终结符)</td><td>图灵机</td><td>任意可计算</td></tr>
+<tr><td>1 型</td><td>上下文有关 CSG</td><td>αAβ → αγβ(γ≠ε)</td><td>线性有界自动机 LBA</td><td>部分自然语言</td></tr>
+<tr><td><strong>2 型</strong></td><td><strong>上下文无关 CFG</strong></td><td><strong>A → γ</strong></td><td><strong>下推自动机 PDA</strong></td><td><strong>程序语言语法</strong></td></tr>
+<tr><td><strong>3 型</strong></td><td><strong>正规 RG</strong></td><td><strong>A → aB 或 A → a</strong></td><td><strong>有限自动机 FA</strong></td><td><strong>程序语言词法</strong></td></tr>
+</tbody>
+</table>
+
+<div class="callout accent">
+  <div class="callout-title">🔑 关键结论</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li><strong>3 型 ⊂ 2 型 ⊂ 1 型 ⊂ 0 型</strong>(层层包含)</li>
+    <li><strong>程序语言的词法用 3 型(正则)描述,语法用 2 型(CFG)描述</strong></li>
+    <li>为什么不用 1 型?太复杂,且 2 型已足够。为什么不用 3 型描述语法?因为正规文法不能表达递归嵌套结构(如括号配对)。</li>
+  </ul>
+</div>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 LLM 视角</div>
+  这就是为什么 SQL 注入不能用正则防——SQL 语法是 CFG,正则(3 型)表达不了嵌套子查询。要防注入必须用 SQL Parser 把 SQL 解析成 AST 再检查。JSON 解析器也必须用 CFG。
+</div>
+
+<h4>4.1.4 正规式与上下文无关文法的关系</h4>
+<p>正规式 = 3 型文法 = NFA/DFA。但有些结构 CFG 能表达、正规式不能:</p>
+<div class="callout warn">
+  <div class="callout-title">📚 经典反例:括号配对 L = {aⁿbⁿ | n ≥ 1}</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li>CFG 表达:<code>S → aSb | ab</code></li>
+    <li>正规式:无法表达(自动机没有"无限计数"能力)</li>
+  </ul>
+</div>
+
+<h3 id="ch4-2">4.2 推导与语法树<span class="tag points">综合题第 2 题 5 分</span></h3>
+
+<h4>4.2.1 语法树(分析树)的画法</h4>
+<p><strong>语法树</strong>是推导过程的图形化表示:根=S,内部节点=非终结符,叶子=终结符或 ε,子树=一次产生式应用。</p>
+<p><strong>例</strong>:文法 <code>G(E): E → E+E | E*E | (E) | i</code>,推导 <code>i+i*i</code></p>
+
+<div class="svg-box">
+<svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#57606a"/></marker></defs>
+  <!-- 根 E -->
+  <circle cx="250" cy="30" r="22" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+  <text x="250" y="35" text-anchor="middle" font-size="14" font-weight="700">E</text>
+  <!-- 三分支 E + E -->
+  <line x1="250" y1="52" x2="100" y2="100" stroke="#57606a" stroke-width="1.5"/>
+  <line x1="250" y1="52" x2="250" y2="100" stroke="#57606a" stroke-width="1.5"/>
+  <line x1="250" y1="52" x2="400" y2="100" stroke="#57606a" stroke-width="1.5"/>
+  <!-- 左 E -->
+  <circle cx="100" cy="120" r="22" fill="#dafbe1" stroke="#1f883d" stroke-width="2"/>
+  <text x="100" y="125" text-anchor="middle" font-size="14" font-weight="700">E</text>
+  <line x1="100" y1="142" x2="100" y2="180" stroke="#57606a" stroke-width="1.5"/>
+  <rect x="80" y="180" width="40" height="28" rx="4" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+  <text x="100" y="199" text-anchor="middle" font-size="13" font-weight="700">i</text>
+  <!-- 中间 + -->
+  <rect x="232" y="100" width="36" height="36" rx="4" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+  <text x="250" y="124" text-anchor="middle" font-size="18" font-weight="700">+</text>
+  <!-- 右 E -->
+  <circle cx="400" cy="120" r="22" fill="#dafbe1" stroke="#1f883d" stroke-width="2"/>
+  <text x="400" y="125" text-anchor="middle" font-size="14" font-weight="700">E</text>
+  <!-- 右 E 三分支 E * E -->
+  <line x1="400" y1="142" x2="320" y2="180" stroke="#57606a" stroke-width="1.5"/>
+  <line x1="400" y1="142" x2="400" y2="180" stroke="#57606a" stroke-width="1.5"/>
+  <line x1="400" y1="142" x2="480" y2="180" stroke="#57606a" stroke-width="1.5"/>
+  <circle cx="320" cy="200" r="22" fill="#dafbe1" stroke="#1f883d" stroke-width="2"/>
+  <text x="320" y="205" text-anchor="middle" font-size="14" font-weight="700">E</text>
+  <line x1="320" y1="222" x2="320" y2="250" stroke="#57606a" stroke-width="1.5"/>
+  <rect x="300" y="250" width="40" height="28" rx="4" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+  <text x="320" y="269" text-anchor="middle" font-size="13" font-weight="700">i</text>
+  <rect x="382" y="180" width="36" height="36" rx="4" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+  <text x="400" y="204" text-anchor="middle" font-size="18" font-weight="700">*</text>
+  <circle cx="480" cy="200" r="22" fill="#dafbe1" stroke="#1f883d" stroke-width="2"/>
+  <text x="480" y="205" text-anchor="middle" font-size="14" font-weight="700">E</text>
+  <line x1="480" y1="222" x2="480" y2="250" stroke="#57606a" stroke-width="1.5"/>
+  <rect x="460" y="250" width="40" height="28" rx="4" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+  <text x="480" y="269" text-anchor="middle" font-size="13" font-weight="700">i</text>
+</svg>
+<div class="svg-caption">图 4-1 · i+i*i 的语法树(消除二义后的形式)</div>
+</div>
+
+<h4>4.2.2 短语、直接短语、句柄<span class="tag must">必考概念</span></h4>
+<div class="algo-box">
+  <div class="algo-box-title">📐 定义</div>
+  <p>设 <code>S ⇒* αAβ ⇒+ αγβ</code>(γ 至少一步推导出),则:</p>
+  <ul style="margin:6px 0 0 18px;">
+    <li><strong>短语(Phrase)</strong>:γ 是句型 αγβ 相对于 A 的短语<br>
+    <span style="color:#57606a;">直观:语法树中<strong>每棵子树的叶子序列</strong></span></li>
+    <li><strong>直接短语(Direct Phrase)</strong>:<code>S ⇒* αAβ ⇒ αγβ</code>(一步推导)<br>
+    <span style="color:#57606a;">直观:<strong>只有父子两层的子树</strong>的叶子序列</span></li>
+    <li><strong>句柄(Handle)</strong>:<strong>最左直接短语</strong>(自底向上分析的关键)</li>
+  </ul>
+</div>
+
+<div class="callout primary">
+  <div class="callout-title">📝 上例分析(i+i*i)</div>
+  <p><strong>短语</strong>(每棵子树的叶子序列):</p>
+  <ul style="margin:6px 0 0 18px;">
+    <li>整棵树:<code>i+i*i</code></li>
+    <li>右子树(E*E):<code>i*i</code></li>
+    <li>三个叶子:<code>i</code>、<code>i</code>、<code>i</code></li>
+  </ul>
+  <p><strong>直接短语</strong>(只有两层):<code>i</code>、<code>i</code>、<code>i</code>(三个叶子)</p>
+  <p><strong>句柄</strong>(最左直接短语):<code>i</code>(第一个 i)</p>
+</div>
+
+<div class="callout warn">
+  <div class="callout-title">🚫 二义性(Ambiguity)</div>
+  如果一个文法存在某个句子有两棵不同的语法树,则文法二义。<br>
+  <strong>消除二义性</strong>:改写文法,引入优先级层次:
+  <pre style="margin-top:8px;"><code>E → E+T | T       (低优先级)
+T → T*F | F       (高优先级)
+F → (E) | i       (最高,原子)</code></pre>
+</div>
+
+<h4>4.2.3 综合题第 2 题解题套路<span class="tag points">5 分</span></h4>
+<div class="algo-box">
+  <div class="step"><div class="step-num">1</div><div class="step-body">用<strong>最左推导</strong>从 S 推到目标句型</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body"><strong>画出语法树</strong></div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body">找所有子树 → 列出<strong>短语</strong></div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body">找两层子树 → 列出<strong>直接短语</strong></div></div>
+  <div class="step"><div class="step-num">5</div><div class="step-body">最左直接短语 = <strong>句柄</strong></div></div>
+</div>
+
+<div class="callout danger">
+  <div class="callout-title">⚠️ 易错点</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li>短语是"子树叶子序列",<strong>不是任意子串</strong></li>
+    <li>句柄是最左<strong>直接短语</strong>,不是最左短语</li>
+    <li>句型本身也算短语(整棵树)</li>
+  </ul>
+</div>
+
+<h3 id="ch4-3">4.3 自顶向下语法分析:LL(1) 分析法<span class="tag must">综合题第 3 题 15 分</span></h3>
+
+<h4>4.3.1 自顶向下分析的思想</h4>
+<p>从开始符号 S 出发,<strong>最左推导</strong>,尝试推出输入串。问题:每步推导可能有多条产生式可选,选错了要回溯。</p>
+
+<div class="callout primary">
+  <div class="callout-title">💡 LL(1) 含义</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li>第一个 L:从左到右扫描输入</li>
+    <li>第二个 L:最左推导</li>
+    <li>1:向前看 1 个符号决定产生式</li>
+  </ul>
+</div>
+
+<h4>4.3.2 三个核心问题</h4>
+<div class="callout warn">
+  要无回溯,文法必须满足:
+  <ol style="margin:6px 0 0 18px;">
+    <li><strong>无左递归</strong>:<code>A → Aα</code> 会导致死循环</li>
+    <li><strong>无回溯</strong>:每步选择产生式唯一确定</li>
+    <li><strong>无公共左因子</strong>:<code>A → αβ | αγ</code> 需要提取左因子</li>
+  </ol>
+</div>
+
+<h4>4.3.3 消除左递归<span class="tag must">必考</span></h4>
+<div class="algo-box">
+  <div class="algo-box-title">📐 直接左递归消除</div>
+  <pre style="background:transparent; border:none; padding:0; margin:0;"><code>原: A → Aα | β
+改: A → βA'
+     A' → αA' | ε</code></pre>
+</div>
+<p><strong>例</strong>:<code>E → E+T | T</code> 改为 <code>E → TE'</code>,<code>E' → +TE' | ε</code></p>
+
+<h4>4.3.4 提取左因子</h4>
+<pre><code>原: A → αβ1 | αβ2
+改: A → αA'
+     A' → β1 | β2</code></pre>
+
+<h4>4.3.5 FIRST 集<span class="tag must">必考,15 分核心</span></h4>
+<p><strong>定义</strong>:<code>FIRST(α) = {a | α ⇒* a..., a ∈ T}</code> ∪ (若 α ⇒* ε,则加 ε)</p>
+<p><span class="hl-primary">直观理解</span>:α 能推出的所有"开头终结符"集合。</p>
+
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ FIRST 集计算算法</div>
+  <ol>
+    <li>若 <code>X ∈ T</code>:<code>FIRST(X) = {X}</code></li>
+    <li>若 <code>X → ε</code> 是产生式:加 ε</li>
+    <li>若 <code>X → Y1Y2...Yk</code>:
+      <ul>
+        <li>把 <code>FIRST(Y1) \ {ε}</code> 加入 FIRST(X)</li>
+        <li>若 ε ∈ FIRST(Y1),把 <code>FIRST(Y2) \ {ε}</code> 加入;以此类推</li>
+        <li>若所有 Yi 都能推 ε,加 ε</li>
+      </ul>
+    </li>
+  </ol>
+</div>
+
+<p><strong>例</strong>:文法</p>
+<pre><code>E  → TE'
+E' → +TE' | ε
+T  → FT'
+T' → *FT' | ε
+F  → (E) | i</code></pre>
+<table>
+<thead><tr><th>非终结符</th><th>FIRST 集</th></tr></thead>
+<tbody>
+<tr><td>F</td><td>{ (, i }</td></tr>
+<tr><td>T'</td><td>{ *, ε }</td></tr>
+<tr><td>T</td><td>{ (, i }(F 不能推 ε)</td></tr>
+<tr><td>E'</td><td>{ +, ε }</td></tr>
+<tr><td>E</td><td>{ (, i }(T 不能推 ε)</td></tr>
+</tbody>
+</table>
+
+<h4>4.3.6 FOLLOW 集<span class="tag must">必考</span></h4>
+<p><strong>定义</strong>:<code>FOLLOW(A) = {a | S ⇒* ...Aa..., a ∈ T}</code> ∪ (若 A 是最右符号,加 <code>#</code>)</p>
+<p><span class="hl-primary">直观理解</span>:在某个句型中,紧跟在 A 后面的终结符。</p>
+
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ FOLLOW 集计算算法</div>
+  <ol>
+    <li><code>#</code> ∈ <code>FOLLOW(S)</code>(S 是开始符号)</li>
+    <li>对产生式 <code>A → αBβ</code>:
+      <ul>
+        <li>把 <code>FIRST(β) \ {ε}</code> 加入 <code>FOLLOW(B)</code></li>
+        <li>若 ε ∈ FIRST(β)(即 β 可推空),把 <code>FOLLOW(A)</code> 加入 <code>FOLLOW(B)</code></li>
+      </ul>
+    </li>
+    <li>重复直到不再变化</li>
+  </ol>
+</div>
+
+<p><strong>例</strong>(同上文法):</p>
+<table>
+<thead><tr><th>非终结符</th><th>FOLLOW 集</th><th>推导</th></tr></thead>
+<tbody>
+<tr><td>E</td><td>{ #, ) }</td><td>F → (E),E 后跟 ); S=E 加 #</td></tr>
+<tr><td>E'</td><td>{ #, ) }</td><td>E' 在 E → TE' 末尾,继承 FOLLOW(E)</td></tr>
+<tr><td>T</td><td>{ +, #, ) }</td><td>FIRST(E')\ε ∪ FOLLOW(E)</td></tr>
+<tr><td>T'</td><td>{ +, #, ) }</td><td>T' 在 T → FT' 末尾,继承 FOLLOW(T)</td></tr>
+<tr><td>F</td><td>{ *, +, #, ) }</td><td>FIRST(T')\ε ∪ FOLLOW(T)</td></tr>
+</tbody>
+</table>
+
+<div class="callout danger">
+  <div class="callout-title">⚠️ 永远不含 ε</div>
+  <code>FOLLOW(A)</code> 中<strong>永远不含 ε</strong>,只可能有终结符和 <code>#</code>!这是高频考点。
+</div>
+
+<h4>4.3.7 LL(1) 分析表构造<span class="tag points">15 分大题终点</span></h4>
+<div class="algo-box">
+  <div class="algo-box-title">📐 构造规则</div>
+  <p>对每个产生式 <code>A → α</code>:</p>
+  <ol>
+    <li>对 <code>FIRST(α)</code> 中每个终结符 a:<code>M[A, a] = A → α</code></li>
+    <li>若 ε ∈ FIRST(α):对 <code>FOLLOW(A)</code> 中每个 b:<code>M[A, b] = A → α</code></li>
+  </ol>
+</div>
+
+<p><strong>例</strong>:</p>
+<table>
+<thead><tr><th></th><th>i</th><th>+</th><th>*</th><th>(</th><th>)</th><th>#</th></tr></thead>
+<tbody>
+<tr><td><strong>E</strong></td><td>E→TE'</td><td></td><td></td><td>E→TE'</td><td></td><td></td></tr>
+<tr><td><strong>E'</strong></td><td></td><td>E'→+TE'</td><td></td><td></td><td>E'→ε</td><td>E'→ε</td></tr>
+<tr><td><strong>T</strong></td><td>T→FT'</td><td></td><td></td><td>T→FT'</td><td></td><td></td></tr>
+<tr><td><strong>T'</strong></td><td></td><td>T'→ε</td><td>T'→*FT'</td><td></td><td>T'→ε</td><td>T'→ε</td></tr>
+<tr><td><strong>F</strong></td><td>F→i</td><td></td><td></td><td>F→(E)</td><td></td><td></td></tr>
+</tbody>
+</table>
+
+<div class="callout accent">
+  <div class="callout-title">✅ LL(1) 文法判定</div>
+  分析表中每个格子<strong>最多一个产生式</strong> → LL(1) 文法;否则非 LL(1)。<br>
+  等价判定:<code>FIRST(α1) ∩ FIRST(α2) = ∅</code>;若某 α 可推 ε,则 <code>FIRST(α) ∩ FOLLOW(A) = ∅</code>。
+</div>
+
+<h4>4.3.8 LL(1) 分析过程<span class="tag normal">用栈模拟</span></h4>
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ 算法</div>
+  <p><strong>初始</strong>:<code>#</code> 入栈,S 入栈,输入指针指首字符</p>
+  <p><strong>循环</strong>:</p>
+  <ul style="margin:6px 0 0 18px;">
+    <li>栈顶 X,当前输入 a</li>
+    <li>若 X = a = #:接受</li>
+    <li>若 X = a ≠ #:出栈,指针前进</li>
+    <li>若 X 是非终结符:查表 M[X, a]
+      <ul>
+        <li>有产生式 X → α:出栈 X,把 α 逆序入栈(若 α = ε 则不出栈新内容)</li>
+        <li>无产生式:报错</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<h4>4.3.9 综合题第 3 题解题套路<span class="tag points">15 分</span></h4>
+<div class="algo-box">
+  <div class="algo-box-title">🎯 题型:已知文法,求 FIRST、FOLLOW,构造 LL(1) 分析表</div>
+  <div class="step"><div class="step-num">1</div><div class="step-body">消除左递归(若有)、提取左因子(若有)</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body"><strong>求 FIRST 集</strong>:对每个非终结符,从底向上(先叶子产生式)</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body"><strong>求 FOLLOW 集</strong>:从 S 开始,反复迭代直到不变</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body"><strong>构造分析表</strong>:对每条产生式查 FIRST 和 FOLLOW 填表</div></div>
+  <div class="step"><div class="step-num">5</div><div class="step-body">(若题目要求)用表分析输入串</div></div>
+</div>
+
+<div class="callout danger">
+  <div class="callout-title">⚠️ 易错点 TOP5</div>
+  <ol style="margin:6px 0 0 18px;">
+    <li>FIRST 计算时,若 Y1 不能推 ε,就别算 Y2</li>
+    <li>FOLLOW 集一定要<strong>迭代多轮</strong>,直到不变</li>
+    <li><code>FOLLOW(A)</code> 中<strong>永远不含 ε</strong>,只可能有终结符和 <code>#</code></li>
+    <li>填表时 ε ∈ FIRST(α) 才用 FOLLOW</li>
+    <li>多个产生式填同格 → 非 LL(1),别强行只填一个</li>
+  </ol>
+</div>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 现代技术栈映射</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li><strong>ANTLR 4</strong> 用 LL(*),向前看 k 个符号,k 自适应</li>
+    <li><strong>递归下降(手写)</strong>:GCC 早期 C 编译器、V8 早期 JS parser、SQLite SQL parser 都是手写递归下降,因为性能更好、错误恢复更强</li>
+    <li><strong>TypeScript Compiler</strong>:手写递归下降,每个产生式对应一个函数</li>
+    <li><strong>Babel Parser</strong>:基于 ESTree 规范的手写递归下降</li>
+    <li><strong>LLM 时代</strong>:grammar-constrained decoding 在采样时跑 LR/LL 分析器,只允许走文法可接受的 token</li>
+  </ul>
+</div>
+
+<h3 id="ch4-4">4.4 自底向上语法分析:LR 分析法<span class="tag must">综合题第 4 题 12 分</span></h3>
+
+<h4>4.4.1 自底向上分析的思想</h4>
+<p>从输入串开始,<strong>最左归约</strong>(最右推导的逆),目标是归约到 S。<strong>归约(Reduce)</strong>:产生式右部 → 左部,是推导的逆操作。</p>
+
+<p><strong>例</strong>:<code>i+i*i</code> 归约过程:</p>
+<pre><code>i+i*i  → F+i*i  → T+i*i  → E+i*i  → E+F*i  → E+T*i  → E+T  → E</code></pre>
+
+<h4>4.4.2 LR 分析的家族</h4>
+<table>
+<thead><tr><th>文法</th><th>向前看</th><th>能力</th><th>难点</th></tr></thead>
+<tbody>
+<tr><td>LR(0)</td><td>0</td><td>弱</td><td>状态多,冲突多</td></tr>
+<tr><td>SLR(1)</td><td>1</td><td>中</td><td>用 FOLLOW 解决冲突</td></tr>
+<tr><td>LALR(1)</td><td>1</td><td>中强</td><td>合并同心状态,Yacc 默认</td></tr>
+<tr><td>LR(1)</td><td>1</td><td>强</td><td>状态爆炸</td></tr>
+</tbody>
+</table>
+<p><strong>能力</strong>:LR(0) &lt; SLR(1) &lt; LALR(1) &lt; LR(1)</p>
+
+<div class="callout primary">
+  <div class="callout-title">💼 业务场景</div>
+  Yacc/Bison 默认用 LALR(1),GCC 早期用 Bison,后改为手写递归下降(性能和错误恢复)。PostgreSQL SQL parser 也是 Bison + LALR(1)。
+</div>
+
+<h4>4.4.3 LR(0) 项目与项目集</h4>
+<p><strong>LR(0) 项目</strong>:产生式右部加一个点 <code>·</code>,表示分析位置。</p>
+<table>
+<thead><tr><th>项目形式</th><th>含义</th></tr></thead>
+<tbody>
+<tr><td><code>A → ·αβ</code></td><td>还没看任何字符</td></tr>
+<tr><td><code>A → α·β</code></td><td>看了 α</td></tr>
+<tr><td><code>A → αβ·</code></td><td>归约项目(可以归约)</td></tr>
+</tbody>
+</table>
+
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ 项目集闭包 closure(I)</div>
+  <ol>
+    <li>I 中所有项目加入</li>
+    <li>若 <code>A → α·Bβ</code> ∈ I(B 是非终结符),对 B 的所有产生式 <code>B → γ</code>,加入 <code>B → ·γ</code></li>
+    <li>重复直到不变</li>
+  </ol>
+  <p><strong>GOTO 函数</strong>:<code>GOTO(I, X) = closure({A → αX·β | A → α·Xβ ∈ I})</code></p>
+</div>
+
+<h4>4.4.4 拓广文法<span class="tag must">必考第一步</span></h4>
+<div class="callout primary">
+  <div class="callout-title">🎯 目的</div>
+  让分析器有一个唯一的接受状态。<br>
+  <strong>做法</strong>:新增开始符号 S' 和产生式 <code>S' → S</code>。
+</div>
+<p><strong>例</strong>:原文法 <code>S → aSb | ab</code>,拓广为:</p>
+<pre><code>(0) S' → S
+(1) S → aSb
+(2) S → ab</code></pre>
+
+<h4>4.4.5 构造识别活前缀的 DFA<span class="tag must">综合题核心</span></h4>
+<div class="callout primary">
+  <div class="callout-title">🔑 活前缀(Viable Prefix)</div>
+  规范归约中,栈里始终是某规范句型的前缀,且不超过句柄右端。LR 分析就是要识别所有活前缀。
+</div>
+
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ 算法</div>
+  <ol>
+    <li>初态 I0 = closure({S' → ·S})</li>
+    <li>对每个项目集中的每个 <code>·</code> 后符号 X,计算 GOTO(I, X)</li>
+    <li>把新项目集加入,直到不变</li>
+    <li>状态间用 X 标号的边连接</li>
+  </ol>
+</div>
+
+<div class="svg-box">
+<svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="arr5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+  <!-- I0 -->
+  <rect x="20" y="40" width="200" height="100" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+  <text x="40" y="62" font-size="13" font-weight="700" fill="#0969da">I0</text>
+  <text x="40" y="82" font-size="11">S' → ·S</text>
+  <text x="40" y="100" font-size="11">S → ·aSb</text>
+  <text x="40" y="118" font-size="11">S → ·ab</text>
+  <!-- I1 -->
+  <rect x="580" y="40" width="180" height="60" rx="8" fill="#dafbe1" stroke="#1f883d" stroke-width="2"/>
+  <text x="600" y="62" font-size="13" font-weight="700" fill="#1f883d">I1 (接受)</text>
+  <text x="600" y="82" font-size="11">S' → S·</text>
+  <!-- I2 -->
+  <rect x="280" y="180" width="220" height="100" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="2"/>
+  <text x="300" y="202" font-size="13" font-weight="700" fill="#9a6700">I2</text>
+  <text x="300" y="222" font-size="11">S → a·Sb</text>
+  <text x="300" y="240" font-size="11">S → a·b</text>
+  <text x="300" y="258" font-size="11">S → ·aSb  (自环)</text>
+  <text x="300" y="276" font-size="11">S → ·ab</text>
+  <!-- I3 -->
+  <rect x="20" y="180" width="200" height="60" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="2"/>
+  <text x="40" y="202" font-size="13" font-weight="700" fill="#9a6700">I3</text>
+  <text x="40" y="222" font-size="11">S → aS·b</text>
+  <!-- I4 -->
+  <rect x="540" y="180" width="180" height="60" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="2"/>
+  <text x="560" y="202" font-size="13" font-weight="700" fill="#cf222e">I4 (归约)</text>
+  <text x="560" y="222" font-size="11">S → ab·</text>
+  <!-- I5 -->
+  <rect x="280" y="310" width="180" height="60" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="2"/>
+  <text x="300" y="332" font-size="13" font-weight="700" fill="#cf222e">I5 (归约)</text>
+  <text x="300" y="352" font-size="11">S → aSb·</text>
+  <!-- 边 -->
+  <line x1="220" y1="80" x2="580" y2="70" stroke="#333" stroke-width="2" marker-end="url(#arr5)"/>
+  <text x="380" y="68" font-size="13" fill="#1f883d" font-weight="700">S</text>
+  <line x1="120" y1="140" x2="370" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arr5)"/>
+  <text x="220" y="165" font-size="13" fill="#1f883d" font-weight="700">a</text>
+  <path d="M 390 220 Q 300 130 390 180" stroke="#9a6700" stroke-width="1.5" fill="none" marker-end="url(#arr5)" stroke-dasharray="3,2"/>
+  <text x="310" y="140" font-size="11" fill="#9a6700">a (自环)</text>
+  <line x1="280" y1="220" x2="220" y2="200" stroke="#333" stroke-width="2" marker-end="url(#arr5)"/>
+  <text x="240" y="215" font-size="13" fill="#1f883d" font-weight="700">S</text>
+  <line x1="500" y1="220" x2="540" y2="200" stroke="#333" stroke-width="2" marker-end="url(#arr5)"/>
+  <text x="510" y="215" font-size="13" fill="#1f883d" font-weight="700">b</text>
+  <line x1="220" y1="225" x2="280" y2="320" stroke="#333" stroke-width="2" marker-end="url(#arr5)"/>
+  <text x="225" y="290" font-size="13" fill="#1f883d" font-weight="700">b</text>
+</svg>
+<div class="svg-caption">图 4-2 · 识别活前缀的 DFA(文法 S → aSb | ab 的 LR(0) 项目集)</div>
+</div>
+
+<h4>4.4.6 LR(0) 分析表构造<span class="tag points">12 分大题终点</span></h4>
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ 构造规则</div>
+  <ol>
+    <li><strong>移进</strong>:若 <code>A → α·aβ ∈ Ii</code>,<code>GOTO(Ii, a) = Ij</code>:<code>ACTION[i, a] = sj</code></li>
+    <li><strong>归约</strong>:若 <code>A → α· ∈ Ii</code>(A ≠ S'):<code>ACTION[i, a] = rj</code>(用第 j 条产生式),<strong>对所有终结符 a</strong></li>
+    <li><strong>接受</strong>:若 <code>S' → S· ∈ Ii</code>:<code>ACTION[i, #] = acc</code></li>
+    <li><strong>GOTO</strong>:<code>GOTO[Ii, A] = Ij</code>(A 是非终结符):填 GOTO[i, A] = j</li>
+  </ol>
+</div>
+
+<p><strong>上例分析表</strong>:</p>
+<table>
+<thead><tr><th>状态</th><th>a</th><th>b</th><th>#</th><th>S</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>s2</td><td></td><td></td><td>1</td></tr>
+<tr><td>1</td><td></td><td></td><td>acc</td><td></td></tr>
+<tr><td>2</td><td>s2</td><td>s4</td><td></td><td>3</td></tr>
+<tr><td>3</td><td></td><td>s5</td><td></td><td></td></tr>
+<tr><td>4</td><td>r2</td><td>r2</td><td></td><td></td></tr>
+<tr><td>5</td><td>r1</td><td>r1</td><td></td><td></td></tr>
+</tbody>
+</table>
+<p><span style="color:#57606a;">产生式编号:1=<code>S → aSb</code>,2=<code>S → ab</code></span></p>
+
+<h4>4.4.7 LR(0) 文法的冲突</h4>
+<div class="callout warn">
+  <div class="callout-title">⚠️ LR(0) 要求</div>
+  每个状态不能同时:
+  <ul style="margin:6px 0 0 18px;">
+    <li>既有移进又有归约(<strong>移进-归约冲突</strong>)</li>
+    <li>有多个归约(<strong>归约-归约冲突</strong>)</li>
+  </ul>
+</div>
+<div class="callout primary">
+  <div class="callout-title">🔧 SLR(1) 改进</div>
+  只在 <code>FOLLOW(A)</code> 中的终结符上归约,不全部填表,减少冲突。<br>
+  <strong>LALR(1) 改进</strong>:合并同心状态(状态中项目相同但向前看符号不同的),状态数与 SLR 相同,但能力接近 LR(1)。
+</div>
+
+<h4>4.4.8 LR 分析过程<span class="tag normal">用栈模拟</span></h4>
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ 算法</div>
+  <p><strong>初始</strong>:状态 0 入栈,输入指针指首字符。</p>
+  <p><strong>循环</strong>:查 <code>ACTION[s, a]</code>:</p>
+  <ul style="margin:6px 0 0 18px;">
+    <li><code>sj</code>:状态 j 入栈,指针前进(移进)</li>
+    <li><code>rj</code>:用第 j 条产生式 <code>A → α</code> 归约:弹出 |α| 个状态,看新栈顶 s' 和 A,把 <code>GOTO[s', A]</code> 入栈</li>
+    <li><code>acc</code>:接受</li>
+    <li>空:报错</li>
+  </ul>
+</div>
+
+<h4>4.4.9 综合题第 4 题解题套路<span class="tag points">12 分</span></h4>
+<div class="algo-box">
+  <div class="algo-box-title">🎯 题型:已知文法,构造拓广文法、识别活前缀 DFA、LR(0) 分析表</div>
+  <div class="step"><div class="step-num">1</div><div class="step-body"><strong>拓广文法</strong>:加 <code>S' → S</code>,所有产生式编号</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body"><strong>构造项目集族</strong>:从 I0 = closure({S' → ·S}) 开始,反复求 GOTO</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body"><strong>画 DFA</strong>:状态用方框,边用符号</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body"><strong>填分析表</strong>:
+    <ul>
+      <li>移进项目 → shift</li>
+      <li>归约项目 → reduce(<strong>对所有终结符</strong>,LR(0))</li>
+      <li>接受项目 → acc</li>
+      <li>GOTO 表填非终结符转移</li>
+    </ul>
+  </div></div>
+  <div class="step"><div class="step-num">5</div><div class="step-body">(若题目要求)分析输入串</div></div>
+</div>
+
+<div class="callout danger">
+  <div class="callout-title">⚠️ 易错点 TOP5</div>
+  <ol style="margin:6px 0 0 18px;">
+    <li>拓广文法的 S' 不要忘</li>
+    <li>closure 一定要包含所有 <code>·B</code> 后 B 的产生式</li>
+    <li>GOTO 漏算某个符号</li>
+    <li>归约时填表要填<strong>所有终结符列</strong>,不是只填 FOLLOW</li>
+    <li>LR(0) 不考虑 FOLLOW,SLR(1) 才用 FOLLOW 解决冲突</li>
+  </ol>
+</div>
+
+<h3>4.5 算符优先分析法<span class="tag normal">了解,可能出选择</span></h3>
+<div class="callout primary">
+  <div class="callout-title">💡 思想</div>
+  只比较<strong>终结符之间的优先关系</strong>,忽略非终结符。
+</div>
+<table>
+<thead><tr><th>关系</th><th>含义</th></tr></thead>
+<tbody>
+<tr><td><code>a &lt;· b</code></td><td>a 优先级低于 b</td></tr>
+<tr><td><code>a ·&gt; b</code></td><td>a 优先级高于 b</td></tr>
+<tr><td><code>a =· b</code></td><td>a 与 b 同级</td></tr>
+</tbody>
+</table>
+
+<div class="callout warn">
+  <div class="callout-title">📐 适用:算符文法(OG)</div>
+  产生式右部<strong>不含相邻非终结符</strong>(即两个非终结符不能挨着)。<br>
+  <strong>最左素短语</strong>:算符优先分析归约的对象(<strong>不是句柄</strong>)。
+</div>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 业务场景</div>
+  早期计算器、表达式求值、SQL 表达式优化器都用类似思想。现代编译器已基本不用,但<strong>表达式中缀转后缀算法(逆波兰)</strong>就是算符优先思想的简化,广泛用于计算器、PostScript 打印机等。
+</div>
+
+<h3>4.6 第三章综合复习要点</h3>
+<table>
+<thead><tr><th>知识点</th><th>题型</th><th>分值</th></tr></thead>
+<tbody>
+<tr><td>文法分类(0/1/2/3 型)</td><td>选择</td><td>2</td></tr>
+<tr><td>短语、句柄、二义性</td><td>综合</td><td>5</td></tr>
+<tr><td>FIRST/FOLLOW + LL(1) 表</td><td>综合</td><td>15</td></tr>
+<tr><td>LR(0) 拓广文法/DFA/分析表</td><td>综合</td><td>12</td></tr>
+</tbody>
+</table>
+
+<h4>LL(1) vs LR(1) 核心对比</h4>
+<table>
+<thead><tr><th>维度</th><th>LL(1)</th><th>LR(0)/SLR/LALR/LR(1)</th></tr></thead>
+<tbody>
+<tr><td>方向</td><td>自顶向下</td><td>自底向上</td></tr>
+<tr><td>推导类型</td><td>最左推导</td><td>最左归约(最右推导逆)</td></tr>
+<tr><td>左递归</td><td>必须消除</td><td>自然支持</td></tr>
+<tr><td>能力</td><td>弱</td><td>强</td></tr>
+<tr><td>错误恢复</td><td>难</td><td>容易</td></tr>
+<tr><td>实现复杂度</td><td>低</td><td>中</td></tr>
+</tbody>
+</table>
+
+<h3>4.7 面试高频题</h3>
+<div class="callout warn">
+  <p><strong>Q1</strong>:为什么 LR 比 LL 强?<br>
+  <strong>A</strong>:LL 在推导时只看当前非终结符和向前看符号,选择产生式;LR 在归约时已经"看到"了完整右部,信息更充分。LR 能处理左递归,LL 不能。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q2</strong>:Bison 默认用 LALR(1) 而非 LR(1),为什么?<br>
+  <strong>A</strong>:LR(1) 状态数最坏指数爆炸,LALR(1) 合并同心状态,状态数与 SLR 相同,但能力接近 LR(1)。代价:可能引入归约-归约冲突,但实际很少触发。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q3</strong>:手写递归下降和 Yacc 生成的 parser,该选哪个?<br>
+  <strong>A</strong>:现代主流编译器(GCC、Clang、V8、TypeScript、Rust)都是手写递归下降,因为性能更好、错误恢复更灵活、错误信息更友好。Yacc/Bison 主要用于 DSL、配置文件、SQL parser 这种规则相对简单的场景。</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- 第五章 语义分析 -->
+<!-- ============================================================ -->
+<h2 id="ch5">五、第四章 语义分析与中间代码生成<span class="tag points">综合题 8 分</span></h2>
+
+<div class="callout danger">
+  <div class="callout-title">🎯 期末综合题第 5 题(8 分)</div>
+  <strong>已知程序段,写出对应的四元式</strong>。结合第七章目标代码生成。
+</div>
+
+<h3>5.1 概述:语义分析在做什么?</h3>
+<p>语法分析只能告诉你"语法对不对",<strong>语义分析</strong>回答"意义对不对"。具体做四件事:</p>
+<ol>
+  <li><strong>类型检查</strong>:<code>int + string</code> 是否合法?</li>
+  <li><strong>作用域检查</strong>:变量是否已声明?</li>
+  <li><strong>控制流检查</strong>:<code>break</code> 是否在循环内?</li>
+  <li><strong>生成中间代码</strong>:把 AST 翻译成线性中间表示</li>
+</ol>
+
+<h3>5.2 语法制导翻译(SDTS,核心方法论)</h3>
+<div class="callout primary">
+  <div class="callout-title">💡 核心思想</div>
+  在语法分析的同时(每个产生式归约/推导时),执行一段语义动作,生成中间代码。<br>
+  <strong>实现方式</strong>:给每个产生式附上<strong>语义规则</strong>,形成<strong>属性文法</strong>。
+</div>
+
+<h3>5.3 属性文法</h3>
+
+<h4>5.3.1 文法的属性</h4>
+<table>
+<thead><tr><th>属性类型</th><th>传递方向</th><th>示例</th><th>适合的分析法</th></tr></thead>
+<tbody>
+<tr><td><strong>综合属性</strong>(Synthesized)</td><td>子节点 → 父节点(自底向上)</td><td><code>E.val</code>(表达式的值)</td><td>LR 自底向上</td></tr>
+<tr><td><strong>继承属性</strong>(Inherited)</td><td>父节点/兄弟 → 子节点(自顶向下)</td><td><code>L.in</code>(继承的类型信息)</td><td>LL(1) 自顶向下</td></tr>
+</tbody>
+</table>
+
+<h4>5.3.2 属性文法示例</h4>
+<pre><code>产生式          语义规则
+E → E1 + T     E.val := E1.val + T.val
+E → T          E.val := T.val
+T → T1 * F     T.val := T1.val * F.val
+T → F          T.val := F.val
+F → (E)        F.val := E.val
+F → num        F.val := num.lexval</code></pre>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 业务场景</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li>TypeScript 的类型系统就是属性文法:每个 AST 节点带 <code>type</code> 属性,自底向上综合 + 自顶向下继承</li>
+    <li>SQL 优化器 Catalyst:Logical Plan 节点带 stats(行数估算)属性,自底向上传播</li>
+    <li>LLM 时代:Agent 工具调用参数 schema 校验(JSON Schema/OpenAPI spec 检查)</li>
+  </ul>
+</div>
+
+<h3>5.4 几种常见的中间语言</h3>
+
+<h4>5.4.1 抽象语法树(AST)</h4>
+<p>去掉语法树中冗余的非终结符,只保留语义相关结构。<code>a + b * c</code> 的 AST:</p>
+
+<div class="svg-box">
+<svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="arr6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#57606a"/></marker></defs>
+  <!-- 根 + -->
+  <rect x="140" y="20" width="40" height="36" rx="6" fill="#fff8c5" stroke="#9a6700" stroke-width="2"/>
+  <text x="160" y="44" text-anchor="middle" font-size="18" font-weight="700">+</text>
+  <line x1="160" y1="56" x2="80" y2="100" stroke="#57606a" stroke-width="1.5"/>
+  <line x1="160" y1="56" x2="240" y2="100" stroke="#57606a" stroke-width="1.5"/>
+  <!-- a -->
+  <rect x="60" y="100" width="40" height="36" rx="6" fill="#dafbe1" stroke="#1f883d" stroke-width="2"/>
+  <text x="80" y="124" text-anchor="middle" font-size="14" font-weight="700">a</text>
+  <!-- * -->
+  <rect x="220" y="100" width="40" height="36" rx="6" fill="#fff8c5" stroke="#9a6700" stroke-width="2"/>
+  <text x="240" y="124" text-anchor="middle" font-size="18" font-weight="700">*</text>
+  <line x1="240" y1="136" x2="200" y2="180" stroke="#57606a" stroke-width="1.5"/>
+  <line x1="240" y1="136" x2="280" y2="180" stroke="#57606a" stroke-width="1.5"/>
+  <rect x="180" y="180" width="40" height="32" rx="6" fill="#dafbe1" stroke="#1f883d" stroke-width="2"/>
+  <text x="200" y="201" text-anchor="middle" font-size="14" font-weight="700">b</text>
+  <rect x="260" y="180" width="40" height="32" rx="6" fill="#dafbe1" stroke="#1f883d" stroke-width="2"/>
+  <text x="280" y="201" text-anchor="middle" font-size="14" font-weight="700">c</text>
+</svg>
+<div class="svg-caption">图 5-1 · a + b * c 的 AST</div>
+</div>
+
+<h4>5.4.2 逆波兰表示法(后缀表达式)</h4>
+<p><strong>规则</strong>:运算符在操作数后。如 <code>a + b * c</code> → <code>a b c * +</code></p>
+
+<div class="callout primary">
+  <div class="callout-title">💼 现代映射</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li><strong>PostScript</strong>(打印机描述语言)就是逆波兰</li>
+    <li><strong>JVM 字节码</strong>、<strong>WebAssembly</strong> 都是栈式指令,本质是逆波兰</li>
+    <li><strong>计算器实现</strong>:逆波兰求值是最经典的面试题(LeetCode 150)</li>
+  </ul>
+</div>
+
+<h4>5.4.3 三地址代码(3-Address Code, 3AC)</h4>
+<p><strong>形式</strong>:<code>x := y op z</code>(每条指令最多 3 个地址:2 个操作数 + 1 个结果)</p>
+<p><strong>变体</strong>:二元 <code>x := y op z</code>、一元 <code>x := op y</code>、赋值 <code>x := y</code>、条件跳转 <code>if x relop y goto L</code>、无条件跳转 <code>goto L</code>、函数调用 <code>param x / call p, n / return y</code>、数组 <code>x := y[i] / x[i] := y</code>、指针 <code>x := &amp;y / x := *y / *x := y</code></p>
+
+<div class="callout primary">
+  <div class="callout-title">💼 现代映射</div>
+  LLVM IR 是三地址代码的代表,Clang、Rust、Swift 都编译到 LLVM IR。
+</div>
+
+<h4>5.4.4 四元式(Quadruple)<span class="tag must">期末必考!</span></h4>
+<div class="callout danger">
+  <div class="callout-title">📐 形式</div>
+  <code>(op, arg1, arg2, result)</code><br>
+  与三地址代码的关系:四元式 = 显式写出 result 的三地址代码。<br>
+  <code>t1 := a + b</code> 等价于四元式 <code>(+, a, b, t1)</code>。
+</div>
+
+<p><strong>例</strong>:<code>x := a + b * c</code> 的四元式序列:</p>
+<pre><code>(1) (*, b, c, t1)
+(2) (+, a, t1, t2)
+(3) (:=, t2, -, x)</code></pre>
+
+<table>
+<thead><tr><th>约定</th><th>写法</th></tr></thead>
+<tbody>
+<tr><td>一元运算符</td><td>arg2 填 <code>-</code>(占位)</td></tr>
+<tr><td>赋值</td><td>op 用 <code>:=</code> 或 <code>=</code>;<code>(:=, t2, -, x)</code> 表示 <code>x := t2</code></td></tr>
+<tr><td>无条件跳转</td><td><code>(j, -, -, L)</code> 跳到 L</td></tr>
+<tr><td>条件跳转</td><td><code>(jrop, a, b, L)</code> 若 a rop b 则跳 L</td></tr>
+<tr><td>数组取下标</td><td><code>([], a, i, t)</code> 即 <code>t := a[i]</code></td></tr>
+<tr><td>数组存下标</td><td><code>([]=, t, -, a[i])</code> 即 <code>a[i] := t</code></td></tr>
+</tbody>
+</table>
+
+<h3>5.5 表达式及赋值语句的翻译</h3>
+
+<h4>5.5.1 简单算术表达式的翻译</h4>
+<pre><code>产生式           语义动作(生成四元式)
+E → E1 + E2     { E.place := newtemp;
+                  emit('+', E1.place, E2.place, E.place) }
+E → E1 * E2     { E.place := newtemp;
+                  emit('*', E1.place, E2.place, E.place) }
+E → (E1)        { E.place := E1.place }
+E → id          { E.place := id.lexeme }</code></pre>
+<p><strong>newtemp</strong>:分配临时变量 t1, t2, ...;<strong>emit</strong>:输出一条四元式。</p>
+
+<h4>5.5.2 布尔表达式的翻译<span class="tag important">重点</span></h4>
+<p><strong>两种翻译方式</strong>:</p>
+<table>
+<thead><tr><th>方式</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>数值法</td><td>直接算出 0/1</td></tr>
+<tr><td><strong>短路翻译法(控制流)</strong></td><td>利用 &amp;&amp;、|| 的短路语义,期末重点</td></tr>
+</tbody>
+</table>
+
+<div class="callout primary">
+  <div class="callout-title">🔑 核心概念:真链 / 假链 + 回填(backpatching)</div>
+  <strong>真链(true list)</strong> 和 <strong>假链(false list)</strong>:记录所有"为真时该跳到哪"和"为假时该跳到哪"的四元式位置,等目标地址确定后<strong>回填(backpatching)</strong>。
+</div>
+
+<p><strong>例</strong>:<code>a or b</code> 的翻译:</p>
+<pre><code>(1) (jnz, a, -, 0)      // a 真,跳到真出口(待回填)
+(2) (j, -, -, 3)         // a 假,顺序执行 b
+(3) (jnz, b, -, 0)      // b 真,跳到真出口(待回填)
+(4) (j, -, -, 0)         // b 假,跳到假出口(待回填)</code></pre>
+
+<h3>5.6 控制语句的翻译<span class="tag must">综合题核心</span></h3>
+
+<h4>5.6.1 if 语句的翻译</h4>
+<pre><code>if E then S1 else S2</code></pre>
+
+<div class="svg-box">
+<svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="arr7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+  <!-- E 代码 -->
+  <rect x="20" y="20" width="200" height="50" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+  <text x="120" y="42" text-anchor="middle" font-size="13" font-weight="700">E 的代码(条件求值)</text>
+  <text x="120" y="60" text-anchor="middle" font-size="11" fill="#57606a">含 jrop 条件跳转</text>
+  <!-- S1 -->
+  <rect x="20" y="100" width="200" height="50" rx="6" fill="#dafbe1" stroke="#1f883d" stroke-width="1.5"/>
+  <text x="120" y="125" text-anchor="middle" font-size="13" font-weight="700">S1 的代码(then 分支)</text>
+  <text x="120" y="143" text-anchor="middle" font-size="11" fill="#57606a">真出口</text>
+  <!-- goto end -->
+  <rect x="20" y="170" width="200" height="40" rx="6" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+  <text x="120" y="195" text-anchor="middle" font-size="13" font-weight="700">goto end</text>
+  <!-- S2 -->
+  <rect x="280" y="100" width="200" height="50" rx="6" fill="#ffebe9" stroke="#cf222e" stroke-width="1.5"/>
+  <text x="380" y="125" text-anchor="middle" font-size="13" font-weight="700">S2 的代码(else 分支)</text>
+  <text x="380" y="143" text-anchor="middle" font-size="11" fill="#57606a">假出口</text>
+  <!-- end -->
+  <rect x="520" y="20" width="160" height="50" rx="6" fill="#fbefff" stroke="#8250df" stroke-width="1.5"/>
+  <text x="600" y="42" text-anchor="middle" font-size="13" font-weight="700">end:</text>
+  <text x="600" y="60" text-anchor="middle" font-size="11" fill="#57606a">后续代码</text>
+  <!-- 箭头 -->
+  <line x1="120" y1="70" x2="120" y2="100" stroke="#1f883d" stroke-width="2" marker-end="url(#arr7)"/>
+  <text x="135" y="88" font-size="11" fill="#1f883d" font-weight="600">真</text>
+  <line x1="220" y1="45" x2="380" y2="100" stroke="#cf222e" stroke-width="2" marker-end="url(#arr7)"/>
+  <text x="290" y="65" font-size="11" fill="#cf222e" font-weight="600">假</text>
+  <line x1="220" y1="190" x2="520" y2="45" stroke="#9a6700" stroke-width="2" marker-end="url(#arr7)"/>
+  <line x1="480" y1="125" x2="520" y2="45" stroke="#333" stroke-width="2" marker-end="url(#arr7)"/>
+</svg>
+<div class="svg-caption">图 5-2 · if-then-else 的四元式控制流</div>
+</div>
+
+<p><strong>例</strong>:<code>if a > b then x := a else x := b</code></p>
+<pre><code>(1) (j>, a, b, 3)      // a>b 真,跳到 3 执行 S1
+(2) (j, -, -, 6)       // 假,跳到 6 执行 S2
+(3) (:=, a, -, x)      // S1: x := a
+(4) (j, -, -, 7)       // 跳过 S2 到 end
+(5)                    // (空)
+(6) (:=, b, -, x)      // S2: x := b
+(7)                    // end</code></pre>
+
+<h4>5.6.2 while 语句的翻译</h4>
+<pre><code>while E do S</code></pre>
+
+<div class="svg-box">
+<svg viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="arr8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+  <!-- begin -->
+  <rect x="200" y="20" width="200" height="50" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+  <text x="300" y="42" text-anchor="middle" font-size="13" font-weight="700">begin: E 的代码</text>
+  <text x="300" y="60" text-anchor="middle" font-size="11" fill="#57606a">条件求值</text>
+  <!-- S -->
+  <rect x="200" y="100" width="200" height="50" rx="6" fill="#dafbe1" stroke="#1f883d" stroke-width="1.5"/>
+  <text x="300" y="125" text-anchor="middle" font-size="13" font-weight="700">S 的代码(循环体)</text>
+  <text x="300" y="143" text-anchor="middle" font-size="11" fill="#57606a">真出口</text>
+  <!-- goto begin -->
+  <rect x="200" y="170" width="200" height="40" rx="6" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+  <text x="300" y="195" text-anchor="middle" font-size="13" font-weight="700">goto begin</text>
+  <!-- end -->
+  <rect x="450" y="20" width="120" height="50" rx="6" fill="#fbefff" stroke="#8250df" stroke-width="1.5"/>
+  <text x="510" y="42" text-anchor="middle" font-size="13" font-weight="700">end:</text>
+  <text x="510" y="60" text-anchor="middle" font-size="11" fill="#57606a">假出口</text>
+  <!-- 箭头 -->
+  <line x1="300" y1="70" x2="300" y2="100" stroke="#1f883d" stroke-width="2" marker-end="url(#arr8)"/>
+  <text x="315" y="88" font-size="11" fill="#1f883d" font-weight="600">真</text>
+  <line x1="400" y1="45" x2="450" y2="45" stroke="#cf222e" stroke-width="2" marker-end="url(#arr8)"/>
+  <text x="415" y="35" font-size="11" fill="#cf222e" font-weight="600">假</text>
+  <line x1="300" y1="170" x2="300" y2="100" stroke="#9a6700" stroke-width="2" marker-end="url(#arr8)" transform="translate(-150,0)"/>
+  <path d="M 200 190 Q 100 190 100 45 Q 100 20 200 45" stroke="#9a6700" stroke-width="2" fill="none" marker-end="url(#arr8)"/>
+  <text x="50" y="120" font-size="11" fill="#9a6700" font-weight="600">循环回跳</text>
+</svg>
+<div class="svg-caption">图 5-3 · while-do 的四元式控制流</div>
+</div>
+
+<p><strong>例</strong>:<code>while a &lt; b do a := a + 1</code></p>
+<pre><code>(1) (j&lt;, a, b, 3)      // a&lt;b 真,跳到 3 执行循环体
+(2) (j, -, -, 6)       // 假,跳到 6 退出
+(3) (+, a, 1, t1)      // a+1 → t1
+(4) (:=, t1, -, a)     // a := t1
+(5) (j, -, -, 1)       // 回到 begin
+(6)                    // end</code></pre>
+
+<h4>5.6.3 switch 语句的翻译</h4>
+<p>两种实现:</p>
+<ol>
+  <li><strong>条件跳转链</strong>:每个 case 顺序比较(适合 case 少)</li>
+  <li><strong>跳转表(jump table)</strong>:把 case 值和目标地址做成表,直接索引(适合 case 多且密集,C 编译器常用)</li>
+</ol>
+
+<div class="callout primary">
+  <div class="callout-title">💼 业务场景</div>
+  C 编译器对 switch-case 优化:case 少用条件链,case 多且密集用跳转表,稀疏用 hash 表。<br>
+  JVM <code>tableswitch</code>(密集)和 <code>lookupswitch</code>(稀疏)指令就是这个思路。Java 7 <code>switch String</code> 用 hashCode + equals,本质是 hash 优化。
+</div>
+
+<h4>5.6.4 数组元素的翻译</h4>
+<div class="algo-box">
+  <div class="algo-box-title">📐 数组地址计算</div>
+  <p><strong>一维</strong> <code>A[i]</code>(下标从 0,元素宽度 w):<code>addr(A[i]) = base(A) + i * w</code></p>
+  <p><strong>二维</strong> <code>A[i][j]</code>(行优先,行大小 n2*w):<code>addr(A[i][j]) = base(A) + (i * n2 + j) * w</code></p>
+</div>
+
+<p><strong>数组元素赋值的四元式</strong>:</p>
+<pre><code>x := A[i]      // 取下标
+([], A, i, t)        // t := A[i]
+(:=, t, -, x)        // x := t
+
+A[i] := x      // 存下标
+([]=, x, -, A[i])    // A[i] := x</code></pre>
+
+<h4>5.6.5 过程调用的翻译</h4>
+<p><strong>参数传递</strong>:用 <code>param</code> 四元式压参,最后 <code>call</code>。</p>
+<p><strong>例</strong>:<code>f(a, b+c, d)</code>:</p>
+<pre><code>(1) (+, b, c, t1)       // 算 b+c
+(2) (param, a, -, -)    // 压第 1 参
+(3) (param, t1, -, -)   // 压第 2 参
+(4) (param, d, -, -)    // 压第 3 参
+(5) (call, f, 3, -)     // 调用 f,3 个参数</code></pre>
+
+<div class="callout warn">
+  <div class="callout-title">⚠️ 注意</div>
+  参数计算顺序依赖求值策略。C 是右到左压栈(为了支持 printf 可变参数),Java 是左到右。
+</div>
+
+<h3>5.7 综合题第 5 题解题套路<span class="tag points">8 分</span></h3>
+<div class="algo-box">
+  <div class="algo-box-title">🎯 题型:已知一段 C 风格程序,写出对应四元式序列</div>
+  <div class="step"><div class="step-num">1</div><div class="step-body"><strong>标注跳转目标</strong>:先在草稿上画控制流,标出 begin、end、true_exit、false_exit</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body"><strong>生成表达式四元式</strong>:每个运算用一个临时变量</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body"><strong>生成控制流四元式</strong>:if → jrop + j;while → begin + 条件 + 循环体 + j + end</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body"><strong>回填地址</strong>:把待定跳转地址填实</div></div>
+  <div class="step"><div class="step-num">5</div><div class="step-body"><strong>编号</strong>:每条四元式连续编号</div></div>
+</div>
+
+<div class="callout danger">
+  <div class="callout-title">⚠️ 易错点 TOP5</div>
+  <ol style="margin:6px 0 0 18px;">
+    <li>临时变量 t1、t2 编号要连续,不复用</li>
+    <li>跳转目标四元式编号要准确(漏一行后续全错)</li>
+    <li><code>:=</code> 赋值方向:<code>(:=, source, -, target)</code>,<strong>target 在最后</strong></li>
+    <li>条件跳转 <code>(j&gt;, a, b, L)</code> 意为"若 a&gt;b 跳到 L"</li>
+    <li>else 分支末尾必须有 <code>goto end</code> 跳过 S2</li>
+  </ol>
+</div>
+
+<h3>5.8 现代技术栈映射</h3>
+<table>
+<thead><tr><th>中间表示</th><th>现代代表</th></tr></thead>
+<tbody>
+<tr><td>AST</td><td>Babel、TS Compiler、Rust HIR</td></tr>
+<tr><td>逆波兰 / 栈式</td><td>JVM bytecode、WebAssembly、PostScript</td></tr>
+<tr><td>三地址代码</td><td>LLVM IR、Java bytecode(部分)、Python bytecode</td></tr>
+<tr><td>四元式</td><td>教学用,工业界用 SSA(更现代)</td></tr>
+<tr><td>SSA(静态单赋值)</td><td>LLVM IR(强制 SSA)、Java GraalVM IR、V8 TurboFan</td></tr>
+</tbody>
+</table>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 SSA(Static Single Assignment)</div>
+  每个变量只赋值一次,出现 φ 函数处理合并点。是现代编译器的核心 IR,大大简化了优化 Pass。LLVM 的优化 Pass 几乎都基于 SSA。
+</div>
+
+<h3>5.9 面试高频题</h3>
+<div class="callout warn">
+  <p><strong>Q1</strong>:为什么要引入中间代码,不直接翻译成机器码?<br>
+  <strong>A</strong>:三大好处:(1) 平台无关,一次中间代码可生成多平台机器码;(2) 优化在中间层做一次,目标代码层少做;(3) 语言无关,多语言共享后端(如 LLVM 支持C/C++/Rust/Swift)。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q2</strong>:SSA 比四元式强在哪?<br>
+  <strong>A</strong>:SSA 每个变量只赋值一次,使 def-use 链显式,简化数据流分析(如常量传播、死代码删除)。LLVM 的优化 Pass 几乎都基于 SSA。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q3</strong>:短路求值怎么实现?<br>
+  <strong>A</strong>:用跳转 + 回填。<code>a &amp;&amp; b</code> 中 a 假直接跳到假出口,不计算 b。LLVM 用 <code>select</code> 指令或基本块 + phi 节点实现。</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- 第六章 代码优化 -->
+<!-- ============================================================ -->
+<h2 id="ch6">六、第五章 代码优化<span class="tag points">综合题 8 分</span></h2>
+
+<div class="callout danger">
+  <div class="callout-title">🎯 期末综合题第 6 题(8 分)</div>
+  <strong>已知四元式序列,通过局部优化(DAG)写出优化结果</strong>。
+</div>
+
+<h3>6.1 代码优化的分类</h3>
+<table>
+<thead><tr><th>维度</th><th>分类</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td rowspan="3">范围</td><td>局部优化</td><td>基本块内</td></tr>
+<tr><td>循环优化</td><td>循环内</td></tr>
+<tr><td>全局优化</td><td>整个函数/过程</td></tr>
+<tr><td rowspan="3">时机</td><td>源代码级</td><td>AST 层(如 const folding)</td></tr>
+<tr><td>机器无关</td><td>IR 层(LLVM Optimization Pass)</td></tr>
+<tr><td>机器相关</td><td>目标代码层(寄存器分配、指令调度)</td></tr>
+</tbody>
+</table>
+
+<div class="callout primary">
+  <div class="callout-title">💼 业务场景</div>
+  为什么 <code>-O2</code> 比 <code>-O0</code> 快 5-10 倍?全是这些优化的功劳。Clang/LLVM 的 Optimization Pipeline 有 60+ 个 Pass,GCC 也有类似的 GIMPLE SSA Pass 链。
+</div>
+
+<h3>6.2 局部优化:基本块与 DAG</h3>
+
+<h4>6.2.1 基本块(Basic Block)的划分</h4>
+<div class="callout primary">
+  <div class="callout-title">📐 定义</div>
+  顺序执行的指令序列,<strong>只有一个入口</strong>(第一条)和<strong>一个出口</strong>(最后一条)。
+</div>
+
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ 划分算法</div>
+  <ol>
+    <li><strong>找入口(Leaders)</strong>:
+      <ul>
+        <li>程序第一条指令</li>
+        <li>跳转目标(条件/无条件跳转的目标地址)</li>
+        <li>跳转指令的下一条(条件跳转的下一条)</li>
+      </ul>
+    </li>
+    <li><strong>划分</strong>:每个 leader 到下一个 leader 前 = 一个基本块</li>
+  </ol>
+</div>
+
+<p><strong>例</strong>:</p>
+<pre><code>(1)  read x
+(2)  if x &gt; 0 goto (5)
+(3)  x := -x
+(4)  goto (5)
+(5)  y := x + 1</code></pre>
+<p>Leaders: (1)、(3) [(2)条件跳转的下一条]、(5) [(2)和(4)的跳转目标]</p>
+<table>
+<thead><tr><th>基本块</th><th>指令</th></tr></thead>
+<tbody>
+<tr><td>B1</td><td>(1)-(2)</td></tr>
+<tr><td>B2</td><td>(3)-(4)</td></tr>
+<tr><td>B3</td><td>(5)</td></tr>
+</tbody>
+</table>
+
+<h4>6.2.2 程序流图(CFG)</h4>
+<div class="callout primary">
+  <div class="callout-title">💼 业务场景</div>
+  LLVM 的 <code>Function</code> 由 <code>BasicBlock</code> 组成,CFG 是所有优化 Pass 的工作基础。PProf、火焰图、perf 都依赖 CFG。
+</div>
+
+<h4>6.2.3 基本块的 DAG 构造<span class="tag must">必练</span></h4>
+<p><strong>DAG 节点类型</strong>:</p>
+<ul>
+  <li><strong>叶节点</strong>:变量常量(标记为标识符),带初值</li>
+  <li><strong>内部节点</strong>:运算符,带操作数子节点,标记为运算结果变量</li>
+</ul>
+
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ 构造算法(对基本块每条四元式)</div>
+  <ol>
+    <li><code>(:=, a, -, b)</code>(b := a):
+      <ul>
+        <li>找/建 a 的节点</li>
+        <li>把 b 加到该节点的"附加标识符"集合</li>
+      </ul>
+    </li>
+    <li><code>(op, a, b, c)</code>(c := op a b):
+      <ul>
+        <li>找/建 a、b 的节点</li>
+        <li>查找已存在的"以 op 为标记,a 和 b 为子节点"的节点
+          <ul>
+            <li>若存在,c 加到该节点附加标识符集(<strong>公共子表达式复用</strong>)</li>
+            <li>若不存在,新建节点,c 加附加标识符</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><code>([]=, ...)</code> 数组赋值要特殊处理(杀掉所有依赖于数组的节点)</li>
+  </ol>
+</div>
+
+<h4>6.2.4 DAG 优化示例<span class="tag must">必练</span></h4>
+<p><strong>原四元式序列</strong>:</p>
+<pre><code>(1) (+, a, b, t1)     // t1 := a + b
+(2) (+, a, b, t2)     // t2 := a + b  (公共子表达式)
+(3) (*, t1, t2, t3)   // t3 := t1 * t2
+(4) (:=, t3, -, c)    // c := t3</code></pre>
+
+<p><strong>DAG 构造过程</strong>:</p>
+<ol>
+  <li>(1):建叶 a、b,建节点 n1(+, a, b),t1 附加</li>
+  <li>(2):找已有 (+, a, b) 节点 = n1,<strong>t2 附加到 n1(复用!)</strong></li>
+  <li>(3):建节点 n2(*, n1, n1),t3 附加</li>
+  <li>(4):c 附加到 n2</li>
+</ol>
+
+<div class="svg-box">
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <!-- 叶 a -->
+  <rect x="60" y="180" width="50" height="40" rx="6" fill="#dafbe1" stroke="#1f883d" stroke-width="2"/>
+  <text x="85" y="205" text-anchor="middle" font-size="14" font-weight="700">a</text>
+  <!-- 叶 b -->
+  <rect x="290" y="180" width="50" height="40" rx="6" fill="#dafbe1" stroke="#1f883d" stroke-width="2"/>
+  <text x="315" y="205" text-anchor="middle" font-size="14" font-weight="700">b</text>
+  <!-- n1 + -->
+  <rect x="150" y="100" width="100" height="50" rx="6" fill="#fff8c5" stroke="#9a6700" stroke-width="2"/>
+  <text x="200" y="122" text-anchor="middle" font-size="18" font-weight="700">+</text>
+  <text x="200" y="142" text-anchor="middle" font-size="11" fill="#9a6700">t1, t2 (复用)</text>
+  <!-- 连线 -->
+  <line x1="200" y1="100" x2="85" y2="180" stroke="#57606a" stroke-width="1.5"/>
+  <line x1="200" y1="100" x2="315" y2="180" stroke="#57606a" stroke-width="1.5"/>
+  <!-- n2 * -->
+  <rect x="150" y="20" width="100" height="50" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+  <text x="200" y="42" text-anchor="middle" font-size="18" font-weight="700">*</text>
+  <text x="200" y="62" text-anchor="middle" font-size="11" fill="#0969da">t3, c</text>
+  <line x1="200" y1="70" x2="200" y2="100" stroke="#57606a" stroke-width="1.5"/>
+  <line x1="200" y1="70" x2="200" y2="100" stroke="#57606a" stroke-width="1.5"/>
+  <path d="M 200 70 Q 130 80 200 100" stroke="#57606a" stroke-width="1.5" fill="none"/>
+</svg>
+<div class="svg-caption">图 6-1 · DAG 示例:t1 和 t2 复用同一个 + 节点(公共子表达式消除)</div>
+</div>
+
+<p><strong>从 DAG 重新生成四元式</strong>:</p>
+<pre><code>(1) (+, a, b, t1)     // t1 := a + b
+(2) (*, t1, t1, t3)   // t3 := t1 * t1  (t2 复用 t1)
+(3) (:=, t3, -, c)    // c := t3</code></pre>
+
+<p><strong>优化效果</strong>:</p>
+<ul>
+  <li>公共子表达式消除(a+b 只算一次)</li>
+  <li>死代码消除(t2 被消除)</li>
+  <li>临时变量复用</li>
+</ul>
+
+<h4>6.2.5 DAG 的几种优化能力</h4>
+<table>
+<thead><tr><th>优化</th><th>说明</th><th>示例</th></tr></thead>
+<tbody>
+<tr><td>公共子表达式消除</td><td>相同运算只算一次</td><td><code>(a+b)*(a+b)</code> → 算一次</td></tr>
+<tr><td>常量折叠</td><td>编译期算出结果</td><td><code>3+4</code> → <code>7</code></td></tr>
+<tr><td>死代码消除</td><td>无用赋值删除</td><td><code>x := 1; x := 2</code> → 删第一条</td></tr>
+<tr><td>复写传播</td><td>用原变量替换副本</td><td><code>t := a; b := t+1</code> → <code>b := a+1</code></td></tr>
+<tr><td>代数化简</td><td>利用代数恒等式</td><td><code>x+0 → x</code>,<code>x*1 → x</code>,<code>x*0 → 0</code></td></tr>
+<tr><td>强度削弱</td><td>用便宜运算替代贵的</td><td><code>x*2 → x+x</code> 或 <code>x&lt;&lt;1</code>,<code>x**2 → x*x</code></td></tr>
+</tbody>
+</table>
+
+<h4>6.2.6 综合题第 6 题解题套路<span class="tag points">8 分</span></h4>
+<div class="algo-box">
+  <div class="algo-box-title">🎯 题型:已知四元式序列,用 DAG 优化,写出优化结果</div>
+  <div class="step"><div class="step-num">1</div><div class="step-body"><strong>判断是否基本块</strong>:若是,直接构造 DAG;若不是(含跳转),分段处理或只优化无跳转部分</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body"><strong>构造 DAG</strong>:
+    <ul>
+      <li>每条四元式,先找子节点,再找现有节点复用</li>
+      <li>数组赋值要"杀掉"旧依赖</li>
+      <li>赋值语句 <code>:=</code> 把目标变量加到源节点附加标识符集</li>
+    </ul>
+  </div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body"><strong>从 DAG 重新生成四元式</strong>:
+    <ul>
+      <li>按 DAG 节点构造顺序输出(拓扑序)</li>
+      <li>每个节点只生成一条四元式(用附加变量之一作为结果)</li>
+      <li>其他附加变量用 <code>:=</code> 复制(若活跃)</li>
+    </ul>
+  </div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body"><strong>检查死代码</strong>:若某节点附加变量都不活跃,可删除</div></div>
+</div>
+
+<div class="callout danger">
+  <div class="callout-title">⚠️ 易错点 TOP3</div>
+  <ol style="margin:6px 0 0 18px;">
+    <li>DAG 节点的"附加标识符集"是关键,不能漏</li>
+    <li>数组赋值要杀依赖(否则公共子表达式消除会出错)</li>
+    <li>重新生成时,优先保留<strong>活跃变量</strong>作为结果</li>
+  </ol>
+</div>
+
+<h3>6.3 循环优化<span class="tag normal">选择/简答可能考</span></h3>
+
+<h4>6.3.1 循环的定义与查找</h4>
+<div class="callout primary">
+  <div class="callout-title">📐 关键概念</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li><strong>必经节点(Dominator)</strong>:从入口到节点 n 的所有路径都经过 d,则 d 支配 n</li>
+    <li><strong>回边(Back Edge)</strong>:边 <code>n → d</code>,其中 d 支配 n</li>
+    <li><strong>自然循环</strong>:由回边 <code>n → d</code> 确定的循环 = {n, d} + d 到 n 的所有路径上的节点</li>
+  </ul>
+</div>
+
+<h4>6.3.2 三大循环优化</h4>
+
+<div class="callout accent">
+  <div class="callout-title">① 代码外提(Loop-Invariant Code Motion)</div>
+  <strong>思想</strong>:循环不变的计算提到循环外。<br>
+  <strong>例</strong>:
+  <pre style="margin-top:8px;"><code>while (i &lt; n) {
+    a = b * c + 10;   // b、c 不变
+    i++;
+}
+→ 优化为:
+t = b * c + 10;
+while (i &lt; n) {
+    a = t;
+    i++;
+}</code></pre>
+</div>
+
+<div class="callout accent">
+  <div class="callout-title">② 强度削弱(Strength Reduction)</div>
+  <strong>思想</strong>:用便宜运算替代贵的运算。<br>
+  <strong>例</strong>:<code>x * 2 → x + x</code> 或 <code>x &lt;&lt; 1</code>;循环内 <code>i * 4</code> → 维护 <code>j</code>,每次 <code>j += 4</code>
+</div>
+
+<div class="callout accent">
+  <div class="callout-title">③ 归纳变量删除(Induction Variable Elimination)</div>
+  <strong>思想</strong>:循环里多个归纳变量(同步变化)只保留一个。<br>
+  <strong>例</strong>:
+  <pre style="margin-top:8px;"><code>for (i = 0; i &lt; n; i++) {
+    j = i * 4;    // j 是 i 的归纳变量
+    a[j] = 0;
+}
+→ 优化为:
+for (j = 0; j &lt; 4*n; j += 4) {
+    a[j] = 0;
+}
+// i 被删除(若循环外不用)</code></pre>
+</div>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 现代编译器对应 Pass</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li>LLVM:<code>LoopStrengthReduce</code>、<code>LICM</code>、<code>IndVarSimplify</code></li>
+    <li>JVM C2:Sea of Nodes 上的循环优化</li>
+    <li>LLM 时代:Prefix Caching / KV Cache 复用,本质是循环不变量外提</li>
+  </ul>
+</div>
+
+<h4>6.3.3 现代编译器的循环优化</h4>
+<table>
+<thead><tr><th>优化</th><th>说明</th><th>LLVM Pass</th></tr></thead>
+<tbody>
+<tr><td>循环展开</td><td>减少循环开销</td><td><code>LoopUnroll</code></td></tr>
+<tr><td>循环融合</td><td>合并相邻循环</td><td><code>LoopFuse</code></td></tr>
+<tr><td>循环分块</td><td>提升缓存命中</td><td><code>LoopInterchange + Tile</code></td></tr>
+<tr><td>向量化</td><td>SIMD</td><td><code>LoopVectorize</code></td></tr>
+<tr><td>循环并行化</td><td>多线程</td><td><code>Polly</code></td></tr>
+</tbody>
+</table>
+
+<h3>6.4 全局优化概述<span class="tag normal">了解,标 * 章节</span></h3>
+
+<h4>6.4.1 数据流分析(Data-Flow Analysis)</h4>
+<p><strong>到达-定值(Reaching Definition)</strong>:变量在某点"被定义"后,到另一点是否未被覆盖。</p>
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ 数据流方程</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li><strong>gen[B]</strong>:基本块内新产生的定值</li>
+    <li><strong>kill[B]</strong>:基本块内被覆盖的定值</li>
+    <li><strong>in[B]</strong> = ∪ out[P],P ∈ 前驱</li>
+    <li><strong>out[B]</strong> = gen[B] ∪ (in[B] - kill[B])</li>
+  </ul>
+</div>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 业务场景</div>
+  IDE 的"未使用变量警告"、SQL 优化器的列依赖分析,都是数据流分析的应用。LLVM SSA 中每个 use 直接指向唯一定义,数据流分析天然显式。
+</div>
+
+<h4>6.4.2 du 链与 ud 链</h4>
+<table>
+<thead><tr><th>链类型</th><th>方向</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td><strong>ud 链</strong>(Use-Definition)</td><td>使用 → 定义</td><td>某变量使用点 → 所有定义点</td></tr>
+<tr><td><strong>du 链</strong>(Definition-Use)</td><td>定义 → 使用</td><td>某定义点 → 所有使用点</td></tr>
+</tbody>
+</table>
+<div class="callout purple">
+  <div class="callout-title">🤖 业务场景</div>
+  LLVM SSA 中每个 use 直接指向唯一定义,ud/du 链天然显式。这是 SSA 优于四元式的核心原因。
+</div>
+
+<h4>6.4.3 复写传播(Copy Propagation)</h4>
+<p><code>x := y</code> 后,用 y 替换后续的 x(直到 x 被重定义)。</p>
+<pre><code>// 优化前
+t := a;
+b := t + 1;
+// 复写传播后
+b := a + 1;  // t 不再需要</code></pre>
+
+<h3>6.5 现代优化全景</h3>
+<p><strong>LLVM <code>-O2</code> Pipeline(简化)</strong>:</p>
+<pre><code>IR → InstCombine → SROA → CFG Simplify → GVN → LICM →
+LoopRotate → IndVarSimplify → LoopDeletion → LoopUnroll →
+SLP Vectorizer → GlobalDCE → ConstantMerge → ...</code></pre>
+
+<div class="callout primary">
+  <div class="callout-title">💼 JVM C2 编译器</div>
+  优化路径:中间表示 <strong>Sea of Nodes</strong>(节点图,比 CFG+SSA 更灵活);优化包括内联、逃逸分析、锁消除、循环优化、向量化。
+</div>
+
+<div class="callout primary">
+  <div class="callout-title">💼 V8 TurboFan</div>
+  Sea of Nodes + TurboFan Tiering:ignition → sparkplug → maglev → turbofan。
+  HotSpot JIT 用<strong>计数器</strong>触发热点代码编译,而不是全程序优化,这叫"自适应优化"。
+</div>
+
+<h3>6.6 面试高频题</h3>
+<div class="callout warn">
+  <p><strong>Q1</strong>:为什么 LLVM 用 SSA,而 GCC 早期不用?<br>
+  <strong>A</strong>:SSA 显式表达 def-use 链,使数据流分析算法大幅简化,优化 Pass 写起来更简单。GCC 4.0(2005)之后才引入 SSA(GIMPLE),追上 LLVM。现代编译器后端几乎全 SSA。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q2</strong>:公共子表达式消除(CSE)和 SSA 的关系?<br>
+  <strong>A</strong>:SSA 下,相同变量名只赋值一次,所以"同名"等价于"同值"。但 CSE 仍需识别"运算相同且操作数相同",SSA 只是基础。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q3</strong>:为什么循环展开能加速?<br>
+  <strong>A</strong>:减少循环控制开销(条件判断、跳转)、增大指令级并行(ILP)窗口、便于 SIMD 向量化。但展开过多会增大代码体积,损害 I-cache 命中。LLVM 有 unroll heuristics 自动决定展开因子。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q4</strong>:哪些优化会改变语义?<br>
+  <strong>A</strong>:浮点运算优化最敏感:<code>x*0 → 0</code> 对 NaN 不成立;<code>a+b+c</code> 重组顺序可能改变结果。Java 用 <code>strictfp</code> 关键字约束,LLVM 用 <code>fast-math</code> 标志放宽。</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- 第七章 运行时存储 -->
+<!-- ============================================================ -->
+<h2 id="ch7">七、第六章 运行时存储空间组织<span class="tag normal">简答题重点</span></h2>
+
+<div class="callout warn">
+  <div class="callout-title">📝 简答题 20 分中,第 6 章出 1 题</div>
+  核心:<strong>栈式存储分配、活动记录、DISPLAY 表</strong>。
+</div>
+
+<h3>7.1 存储分配的三大策略</h3>
+<table>
+<thead><tr><th>策略</th><th>时机</th><th>适用语言</th><th>代表</th></tr></thead>
+<tbody>
+<tr><td>静态分配</td><td>编译期</td><td>FORTRAN、COBOL</td><td>全局变量、static 变量</td></tr>
+<tr><td>栈式分配</td><td>运行时(自动)</td><td>C、Pascal、Java</td><td>局部变量、函数参数</td></tr>
+<tr><td>堆式分配</td><td>程序员/运行时</td><td>Java、Python、Lisp</td><td>new/malloc、GC 对象</td></tr>
+</tbody>
+</table>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 现代映射</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li><strong>C</strong>:静态 + 栈 + 堆(malloc/free)</li>
+    <li><strong>Java</strong>:静态 + 栈(栈帧)+ 堆(所有对象,GC 管理)</li>
+    <li><strong>Go</strong>:静态 + 栈(可增长栈)+ 堆(逃逸分析后非逃逸对象放栈)</li>
+    <li><strong>Rust</strong>:静态 + 栈 + 堆(Box),所有权语义自动管理</li>
+    <li><strong>LLM Agent</strong>:Runtime 上下文管理 = 消息历史 + 工具状态 + scratchpad,本质是栈式 + 堆式混合</li>
+  </ul>
+</div>
+
+<h3>7.2 静态存储分配</h3>
+<div class="callout primary">
+  <div class="callout-title">📐 特点</div>
+  <strong>编译期</strong>确定每个数据对象的位置。程序运行期间,变量地址不变。<br>
+  <strong>限制</strong>:
+  <ul style="margin:6px 0 0 18px;">
+    <li>不允许递归(同一次递归的局部变量会冲突)</li>
+    <li>不允许动态数组(大小编译期不确定)</li>
+    <li>不允许动态内存分配</li>
+  </ul>
+</div>
+<div class="callout primary">
+  <div class="callout-title">💼 业务场景</div>
+  嵌入式系统、内核早期初始化代码(无动态分配)、AVR/单片机编程仍常用静态分配以避免动态内存碎片。
+</div>
+
+<h3>7.3 栈式存储分配</h3>
+
+<h4>7.3.1 活动记录(Activation Record / Stack Frame)<span class="tag must">必考</span></h4>
+<p><strong>活动记录 = 函数调用时栈上的一块区域</strong>,包含:</p>
+
+<div class="svg-box">
+<svg viewBox="0 0 380 400" xmlns="http://www.w3.org/2000/svg">
+  <defs><linearGradient id="arGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ddf4ff"/><stop offset="100%" stop-color="#dafbe1"/></linearGradient></defs>
+  <rect x="40" y="20" width="300" height="370" rx="8" fill="url(#arGrad)" stroke="#0969da" stroke-width="2"/>
+  <text x="190" y="40" text-anchor="middle" font-size="14" font-weight="700" fill="#0969da">活动记录(Activation Record)</text>
+  <!-- 各字段 -->
+  <rect x="60" y="55" width="260" height="38" rx="4" fill="#fff8c5" stroke="#9a6700" stroke-width="1"/>
+  <text x="190" y="79" text-anchor="middle" font-size="13">临时变量区</text>
+  <rect x="60" y="98" width="260" height="38" rx="4" fill="#dafbe1" stroke="#1f883d" stroke-width="1"/>
+  <text x="190" y="122" text-anchor="middle" font-size="13">局部变量区</text>
+  <rect x="60" y="141" width="260" height="38" rx="4" fill="#fbefff" stroke="#8250df" stroke-width="1"/>
+  <text x="190" y="165" text-anchor="middle" font-size="13">访问链(静态链) / DISPLAY</text>
+  <rect x="60" y="184" width="260" height="38" rx="4" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+  <text x="190" y="208" text-anchor="middle" font-size="13">控制链(动态链)</text>
+  <rect x="60" y="227" width="260" height="38" rx="4" fill="#ffebe9" stroke="#cf222e" stroke-width="1"/>
+  <text x="190" y="251" text-anchor="middle" font-size="13">返回地址</text>
+  <rect x="60" y="270" width="260" height="38" rx="4" fill="#fff8c5" stroke="#9a6700" stroke-width="1"/>
+  <text x="190" y="294" text-anchor="middle" font-size="13">返回值区</text>
+  <rect x="60" y="313" width="260" height="38" rx="4" fill="#dafbe1" stroke="#1f883d" stroke-width="1"/>
+  <text x="190" y="337" text-anchor="middle" font-size="13">实参区</text>
+  <rect x="60" y="356" width="260" height="22" rx="4" fill="#f6f8fa" stroke="#57606a" stroke-width="1"/>
+  <text x="190" y="372" text-anchor="middle" font-size="11" fill="#57606a">寄存器保存区</text>
+</svg>
+<div class="svg-caption">图 7-1 · 活动记录结构(栈帧)</div>
+</div>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 现代映射</div>
+  这就是 JVM 栈帧、C 函数栈帧、Go goroutine 栈帧的统一结构。
+</div>
+
+<h4>7.3.2 过程的执行(调用与返回)</h4>
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ 调用时</div>
+  <ol>
+    <li>计算实参,压栈</li>
+    <li>压返回地址</li>
+    <li>保存调用者的寄存器</li>
+    <li>调整 SP(栈顶指针),为新活动记录分配空间</li>
+    <li>跳转到被调用者</li>
+  </ol>
+</div>
+
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ 返回时</div>
+  <ol>
+    <li>保存返回值</li>
+    <li>恢复调用者寄存器</li>
+    <li>释放活动记录(SP 复位)</li>
+    <li>跳转到返回地址</li>
+  </ol>
+</div>
+
+<div class="callout primary">
+  <div class="callout-title">💼 业务场景</div>
+  CPU 的 <code>call</code>/<code>ret</code> 指令、JVM 的 <code>invokevirtual</code>/<code>return</code> 指令,都是这套流程。
+</div>
+
+<h4>7.3.3 嵌套过程语言:DISPLAY 表<span class="tag must">必考简答</span></h4>
+<div class="callout warn">
+  <div class="callout-title">❓ 问题</div>
+  Pascal 等语言允许过程嵌套定义,内层过程要访问外层过程的局部变量。怎么找到外层的活动记录?
+</div>
+
+<table>
+<thead><tr><th>方案</th><th>说明</th><th>复杂度</th></tr></thead>
+<tbody>
+<tr><td><strong>静态链(Static Link)</strong></td><td>活动记录中加一个"访问链",指向<strong>定义时外层</strong>的活动记录;访问外层变量时,沿着访问链逐层查找</td><td>O(嵌套深度)</td></tr>
+<tr><td><strong>DISPLAY 表</strong></td><td>维护一个数组 <code>display[]</code>,<code>display[i]</code> = 当前第 i 层过程的最新活动记录地址;访问 <code>display[k]</code> 直接得到第 k 层活动记录</td><td>O(1)</td></tr>
+</tbody>
+</table>
+
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ DISPLAY 更新规则</div>
+  <p><strong>进入第 k 层过程 P</strong>:</p>
+  <ol>
+    <li>保存旧的 <code>display[k]</code> 到 P 的活动记录(为了返回时恢复)</li>
+    <li><code>display[k] := 当前活动记录地址</code></li>
+  </ol>
+  <p><strong>退出第 k 层过程</strong>:</p>
+  <ul>
+    <li>从活动记录取出旧值,恢复 <code>display[k]</code></li>
+  </ul>
+</div>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 业务场景</div>
+  Python 的闭包、JS 的作用域链、Lua 的 upvalue,本质都是静态链/Display 的实现。V8 的 ScopeInfo、JS 引擎的 <code>[[Environment]]</code> 内部槽,都是为支持嵌套作用域。<br>
+  <strong>现代编译器不用 Display,改用</strong>:
+  <ul style="margin:6px 0 0 18px;">
+    <li><strong>闭包(Closure)</strong>:把外层变量捕获到堆上的闭包对象</li>
+    <li><strong>环境指针</strong>:活动记录带一个指向父环境的指针</li>
+  </ul>
+</div>
+
+<h3>7.4 堆式动态存储分配</h3>
+
+<h4>7.4.1 堆的概念</h4>
+<p><strong>堆(Heap)</strong>:运行时动态分配的内存区,生命周期由程序员或 GC 控制。特点:分配/释放顺序任意(不像栈的 LIFO),需要显式管理或自动管理。</p>
+
+<h4>7.4.2 堆的管理方法</h4>
+<table>
+<thead><tr><th>方法</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>空闲块链表</td><td>first-fit / best-fit / worst-fit;释放时合并相邻空闲块</td></tr>
+<tr><td>伙伴系统(Buddy System)</td><td>块大小为 2 的幂;分配时分裂,释放时与伙伴合并</td></tr>
+<tr><td>Slab 分配器</td><td>Linux 内核;为常见大小的对象预分配池,减少碎片</td></tr>
+</tbody>
+</table>
+
+<table>
+<thead><tr><th>GC 算法</th><th>说明</th><th>应用</th></tr></thead>
+<tbody>
+<tr><td>标记-清除</td><td>老牌 GC</td><td>老年代</td></tr>
+<tr><td>复制算法</td><td>空间换时间</td><td>年轻代</td></tr>
+<tr><td>标记-整理</td><td>无碎片</td><td>老年代</td></tr>
+<tr><td>分代回收</td><td>不同代不同策略</td><td>Hotspot、V8</td></tr>
+<tr><td>增量/并发 GC</td><td>减少 STW</td><td>G1、ZGC、Shenandoah</td></tr>
+</tbody>
+</table>
+
+<div class="callout primary">
+  <div class="callout-title">💼 业务场景</div>
+  JVM 堆 = 年轻代(Eden + S0 + S1)+ 老年代;Go 的 mcache/mcentral/mheap 三级缓存;Redis 的 jemalloc。
+</div>
+
+<h3>7.5 参数传递方法<span class="tag normal">了解,可能出选择</span></h3>
+<table>
+<thead><tr><th>方式</th><th>说明</th><th>代表语言</th></tr></thead>
+<tbody>
+<tr><td>传值(Call by Value)</td><td>复制实参,函数内修改不影响外</td><td>C(默认)、Java(基本类型)</td></tr>
+<tr><td>传引用(Call by Reference)</td><td>传地址,函数内修改影响外</td><td>C++(<code>&amp;</code>)、C#(<code>ref</code>)</td></tr>
+<tr><td>传名(Call by Name)</td><td>每次使用实参时重新求值</td><td>Algol 60(已淘汰)</td></tr>
+<tr><td>传结果(Call by Result)</td><td>函数返回时复制回</td><td>Ada(<code>out</code>)</td></tr>
+<tr><td>传值-结果</td><td>进复制一份,出再复制回</td><td>Fortran(部分)</td></tr>
+</tbody>
+</table>
+
+<h3>7.6 第六章简答题可能考点</h3>
+<div class="callout warn">
+  <div class="callout-title">📝 可能题目</div>
+  <ol style="margin:6px 0 0 18px;">
+    <li>简述静态/栈式/堆式存储分配的特点与适用语言。</li>
+    <li>活动记录包含哪些内容?</li>
+    <li>什么是 DISPLAY 表?它如何支持嵌套过程访问非局部变量?</li>
+    <li>参数传递有哪些方式?区别是什么?</li>
+  </ol>
+</div>
+
+<div class="callout accent">
+  <div class="callout-title">✅ DISPLAY 表标准答案要点</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li>DISPLAY 是一个数组,每个元素指向对应嵌套层的最新活动记录</li>
+    <li>进入第 k 层过程时,先保存旧 display[k],再设置 display[k] = 当前 AR</li>
+    <li>退出时恢复</li>
+    <li>访问第 k 层的非局部变量时,通过 display[k] 直接定位,O(1) 时间</li>
+    <li>比静态链快,但每个过程调用都要维护</li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<!-- 第八章 目标代码生成 -->
+<!-- ============================================================ -->
+<h2 id="ch8">八、第七章 目标代码生成<span class="tag normal">简答题 + 综合题</span></h2>
+
+<div class="callout warn">
+  <div class="callout-title">📝 简答题 1 题 + 综合题第 5 题(8 分,与第四章结合)</div>
+</div>
+
+<h3>8.1 简单代码生成器</h3>
+
+<h4>8.1.1 待用信息与活跃信息<span class="tag must">必懂</span></h4>
+<div class="callout primary">
+  <div class="callout-title">📐 定义</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li><strong>待用信息(Next Use)</strong>:某变量在当前点之后,下次被使用的位置</li>
+    <li><strong>活跃信息(Live)</strong>:某变量在当前点之后是否还会被使用</li>
+  </ul>
+</div>
+
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ 计算:从基本块末尾反向扫描</div>
+  <p>对每条指令:</p>
+  <ol>
+    <li>对结果变量 x:当前 x 的待用 = ∅、活跃 = false(此点之前不会被用)</li>
+    <li>对操作数变量 y、z:当前 y/z 的待用 = 当前指令、活跃 = true</li>
+    <li>更新 x、y、z 的待用/活跃表</li>
+  </ol>
+</div>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 业务场景</div>
+  LLVM 的 LiveIntervals、RegisterCoalescer,Java HotSpot 的 Liveness Analysis,都是这个概念的工业级实现。
+</div>
+
+<h4>8.1.2 代码生成算法<span class="tag normal">寄存器分配</span></h4>
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ 简单算法(基于待用/活跃信息)</div>
+  <p><code>x := y op z</code>:</p>
+  <ol>
+    <li>取 y、z 的当前寄存器(若不在内存则加载到寄存器)</li>
+    <li>选一个空闲寄存器 R(优先选不活跃的)</li>
+    <li>生成 <code>op R, Ry, Rz</code>(或 <code>op Ry, Rz, R</code>)</li>
+    <li>更新 x → R 的映射</li>
+  </ol>
+  <p><code>x := y</code>(赋值):把 y 的寄存器也关联到 x(若 y 不再活跃)</p>
+</div>
+
+<h4>8.1.3 寄存器分配算法</h4>
+
+<div class="callout primary">
+  <div class="callout-title">📐 图着色算法(Chaitin)</div>
+  <strong>思想</strong>:把寄存器分配建模为图着色问题。
+  <ol style="margin:6px 0 0 18px;">
+    <li><strong>冲突图</strong>(Interference Graph):节点 = 变量,边 = 同时活跃(冲突)</li>
+    <li><strong>着色</strong>:用 k 种颜色(k = 寄存器数)给图着色,相邻节点不同色</li>
+    <li><strong>溢出</strong>(Spill):若不可 k-着色,把某些变量溢出到内存</li>
+  </ol>
+  <strong>复杂度</strong>:NP-hard,实际用启发式(Chaitin-Briggs、PBQP)。
+</div>
+
+<div class="callout primary">
+  <div class="callout-title">📐 线性扫描(Linear Scan)</div>
+  <strong>思想</strong>:按变量的活跃区间排序,一次扫描分配。
+  <ol style="margin:6px 0 0 18px;">
+    <li>计算所有变量的活跃区间</li>
+    <li>按起点排序</li>
+    <li>扫描,用活跃集合维护"当前占用寄存器的变量"</li>
+    <li>若寄存器不够,选一个最远结束的溢出</li>
+  </ol>
+  <strong>复杂度</strong>:O(n log n),远快于图着色。
+</div>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 业务场景</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li>GCC、LLVM 早期都用图着色。LLVM 11 之后默认用 RegAllocGreedy(贪心 + 图着色变体)</li>
+    <li>JVM HotSpot Client Compiler(C1)用线性扫描,追求低编译延迟。V8 也用线性扫描</li>
+    <li>LLM 时代:GPU 显存调度(KV Block 分配)借鉴同样的分配思想</li>
+  </ul>
+</div>
+
+<h4>8.1.4 源程序到目标代码生成示例</h4>
+<p><strong>源</strong>:<code>x = a + b * c</code></p>
+<p><strong>中间代码</strong>(四元式):</p>
+<pre><code>(1) (*, b, c, t1)
+(2) (+, a, t1, t2)
+(3) (:=, t2, -, x)</code></pre>
+<p><strong>目标代码</strong>(假设 R0、R1 可用):</p>
+<pre><code>MOV  R0, b       ; b → R0
+MUL  R0, c       ; R0 := R0 * c (= t1)
+MOV  R1, a       ; a → R1
+ADD  R1, R0      ; R1 := R1 + R0 (= t2)
+MOV  x, R1       ; x := R1</code></pre>
+
+<h3>8.2 现代代码生成:LLVM 后端</h3>
+<p><strong>LLVM 后端 Pipeline</strong>:</p>
+<pre><code>IR → Instruction Selection(DAGPatternMatcher)→
+     Scheduling → Register Allocation →
+     Instruction Scheduling → Machine Code</code></pre>
+<p><strong>关键组件</strong>:</p>
+<ul>
+  <li><strong>SelectionDAG / GlobalISel</strong>:指令选择,把 IR 匹配到目标指令</li>
+  <li><strong>MachineInstr</strong>:目标相关的中间表示</li>
+  <li><strong>RegAlloc</strong>:寄存器分配</li>
+  <li><strong>MCInst</strong>:机器码层</li>
+</ul>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 业务场景</div>
+  Clang 编译 C/C++ 到 LLVM IR,后端再生成 x86/ARM/RISC-V 机器码。Rust、Swift 也共享这套后端。
+</div>
+
+<h3>8.3 第七章简答题可能考点</h3>
+<div class="callout warn">
+  <div class="callout-title">📝 可能题目</div>
+  <ol style="margin:6px 0 0 18px;">
+    <li>简述寄存器分配的图着色算法思想。</li>
+    <li>什么是待用信息和活跃信息?有何作用?</li>
+    <li>简述从中间代码生成目标代码的基本过程。</li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<!-- 第九章 符号表与错误处理 -->
+<!-- ============================================================ -->
+<h2 id="ch9">九、第八章 符号表与错误处理<span class="tag normal">简答题</span></h2>
+
+<h3>9.1 符号表</h3>
+
+<h4>9.1.1 符号表的作用</h4>
+<p><strong>符号表</strong>:记录源程序中所有标识符的信息,<strong>贯穿编译全过程</strong>。</p>
+<p>每条记录包含:名字、类型(int、struct、function...)、种类(变量、函数、类、常量)、作用域、存储位置(地址偏移)、维度/参数列表/成员。</p>
+
+<table>
+<thead><tr><th>阶段</th><th>符号表作用</th></tr></thead>
+<tbody>
+<tr><td>词法分析</td><td>登记标识符</td></tr>
+<tr><td>语法分析</td><td>登记结构信息</td></tr>
+<tr><td>语义分析</td><td>类型检查、作用域检查</td></tr>
+<tr><td>代码生成</td><td>获取地址、类型大小</td></tr>
+</tbody>
+</table>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 业务场景</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li>IDE 的"跳转定义"、"自动补全"、"重命名重构"都基于符号表</li>
+    <li>LSP(Language Server Protocol)本质是符号表的标准化接口</li>
+    <li>Go 的 <code>go doc</code>、Rust 的 <code>rustdoc</code> 是从符号表生成文档</li>
+    <li><strong>LLM 时代</strong>:MCP(Model Context Protocol)Server 工具注册表 = Agent 的"符号表";Agent 工具发现与索引本质是符号表查询</li>
+  </ul>
+</div>
+
+<h4>9.1.2 符号表的组织</h4>
+<table>
+<thead><tr><th>组织方式</th><th>查询复杂度</th><th>特点</th></tr></thead>
+<tbody>
+<tr><td>线性表</td><td>O(n)</td><td>简单</td></tr>
+<tr><td>散列表(Hash Table)</td><td>O(1)</td><td>最常用</td></tr>
+<tr><td>二叉搜索树</td><td>O(log n)</td><td>有序</td></tr>
+<tr><td>平衡树(AVL、红黑)</td><td>O(log n)</td><td>保证最坏情况</td></tr>
+</tbody>
+</table>
+<p><strong>现代实现</strong>:JVM 用 hash + 链表/红黑树(Java HashMap),LLVM 用 StringMap,V8 也类似,Clang 用 IdentifierTable。</p>
+
+<h4>9.1.3 分程序结构语言的符号表</h4>
+<div class="callout primary">
+  <div class="callout-title">📐 分程序结构(Block Structure)</div>
+  Pascal、C、Java 等允许嵌套作用域。<br>
+  <strong>建立方法</strong>:
+  <ul style="margin:6px 0 0 18px;">
+    <li>每进入一个作用域,<strong>压栈</strong>一个新表</li>
+    <li>退出作用域,<strong>弹出</strong>栈顶表</li>
+    <li>查找时从栈顶向下查(就近原则)</li>
+  </ul>
+</div>
+
+<h4>9.1.4 非分程序结构语言</h4>
+<p><strong>非分程序结构</strong>:FORTRAN、BASIC 等,作用域是全局或函数级,无嵌套。符号表:全局表 + 每函数独立表,无需作用域栈。</p>
+
+<h3>9.2 错误处理</h3>
+
+<h4>9.2.1 错误类型</h4>
+<table>
+<thead><tr><th>阶段</th><th>错误类型</th><th>例子</th></tr></thead>
+<tbody>
+<tr><td>词法</td><td>非法字符、未闭合字符串</td><td><code>$</code>、<code>"hello</code></td></tr>
+<tr><td>语法</td><td>缺分号、括号不匹配、关键字错</td><td><code>if x &gt; 0</code> 缺 <code>(</code></td></tr>
+<tr><td>语义</td><td>类型不匹配、未声明、重复声明</td><td><code>int + string</code></td></tr>
+<tr><td>运行</td><td>除零、空指针、越界</td><td>(编译期不报,运行时报)</td></tr>
+</tbody>
+</table>
+
+<h4>9.2.2 错误处理方式</h4>
+<div class="callout primary">
+  <div class="callout-title">📐 两类</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li><strong>错误恢复</strong>:尽可能继续编译,一次发现多个错误</li>
+    <li><strong>错误校正</strong>:尝试自动修正(实际很少做,容易误导)</li>
+  </ul>
+</div>
+
+<div class="algo-box">
+  <div class="algo-box-title">⚙️ 错误恢复策略</div>
+  <ol>
+    <li><strong>恐慌模式(Panic Mode)</strong>:跳过字符直到同步点(如 <code>;</code>、<code>}</code>),从同步点继续</li>
+    <li><strong>短语层次恢复</strong>:局部替换/插入字符,继续分析</li>
+    <li><strong>错误产生式</strong>:在文法中加入"错误规则",识别常见错误</li>
+    <li><strong>全局纠正</strong>:找最小修改使程序合法(理论意义大,实用性差)</li>
+  </ol>
+</div>
+
+<h4>9.2.3 现代编译器错误处理</h4>
+<div class="callout purple">
+  <div class="callout-title">🤖 Rust 编译器</div>
+  错误信息极其友好,带建议、高亮、参考链接:
+  <pre style="margin-top:8px;"><code>error[E0277]: `Rc&lt;String&gt;` cannot be sent between threads safely
+  --> src/main.rs:5:5
+   |
+5  |     thread::spawn(move || {
+   |     ^^^^^^^^^^^^^ `Rc&lt;String&gt;` cannot be sent between threads safely
+   |
+   = help: the trait `Send` is not implemented for `Rc&lt;String&gt;`</code></pre>
+</div>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 LLM 时代的错误恢复</div>
+  <strong>Agent Self-Correction</strong>:LLM 输出解析失败 → 反馈错误 → 重新生成,完全对应编译器 panic mode + 重新分析。<br>
+  Babel Parser 的错误恢复特别强(支持部分代码补全、AST 修复),前端工具链(eslint、prettier)都依赖它。
+</div>
+
+<h3>9.3 第八章简答题可能考点</h3>
+<div class="callout warn">
+  <div class="callout-title">📝 可能题目</div>
+  <ol style="margin:6px 0 0 18px;">
+    <li>简述符号表的作用和组织方式。</li>
+    <li>编译过程的错误分哪几类?如何校正?</li>
+    <li>分程序结构语言如何建立符号表?</li>
+    <li>什么是恐慌模式错误恢复?</li>
+  </ol>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- 第十章 期末冲刺 -->
+<!-- ============================================================ -->
+<h2 id="ch10">十、期末综合冲刺:6 道大题解题套路</h2>
+
+<div class="callout danger">
+  <div class="callout-title">🎯 6 道综合题速记卡</div>
+  <table style="margin-top:8px;">
+  <thead><tr><th>题号</th><th>章节</th><th>分值</th><th>核心套路</th><th>易错核心</th></tr></thead>
+  <tbody>
+  <tr><td>1</td><td>第 2 章</td><td>12</td><td>子集构造 + Hopcroft</td><td>ε-closure 包含自己</td></tr>
+  <tr><td>2</td><td>第 3 章</td><td>5</td><td>最左推导画树 + 找子树</td><td>句柄 = 最左直接短语</td></tr>
+  <tr><td>3</td><td>第 3 章</td><td>15</td><td>FIRST + FOLLOW + 填表</td><td>FOLLOW 不含 ε</td></tr>
+  <tr><td>4</td><td>第 3 章</td><td>12</td><td>拓广 + DFA + 填表</td><td>LR(0) 归约填所有终结符</td></tr>
+  <tr><td>5</td><td>第 4 章</td><td>8</td><td>控制流跳转 + 表达式</td><td><code>:=</code> 方向,临时变量编号</td></tr>
+  <tr><td>6</td><td>第 5 章</td><td>8</td><td>DAG 构造 + 重建</td><td>附加变量集,数组杀依赖</td></tr>
+  </tbody>
+  </table>
+</div>
+
+<h3 id="ch10-1">10.1 综合题 1:NFA → DFA → 最小化<span class="tag points">12 分</span></h3>
+<div class="algo-box">
+  <div class="algo-box-title">📐 5 步标准流程</div>
+  <div class="step"><div class="step-num">1</div><div class="step-body"><strong>求 ε-closure(q0)</strong> 作为 DFA 初态 I0(注意:ε-closure 一定包含 q0 自己)</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body"><strong>子集构造(核心)</strong>:对每个未处理的状态集 I,对每个输入字符 a,求 <code>Ia = ε-closure(move(I, a))</code>;新状态集加入队列,直到无新状态产生</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body"><strong>建状态转换表</strong>:行=状态集,列=输入字符;标注初态(→)和终态(*)</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body"><strong>定终态</strong>:包含 NFA 任一终态的状态集 = DFA 终态</div></div>
+  <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Hopcroft 最小化</strong>:初始划分 Π = {终态集, 非终态集};反复对每个组,看每个输入字符,转移到不同组的拆开;直到 Π 不再变化;每组选一代表,重命名</div></div>
+</div>
+
+<div class="callout danger">
+  <div class="callout-title">⚠️ 易错点 TOP3</div>
+  <ol style="margin:6px 0 0 18px;">
+    <li>ε-closure 忘了包含自己</li>
+    <li>子集构造漏算某个字符(每个状态集对每个字符都要算)</li>
+    <li>最小化时,看"转移到不同状态"而非"转移到不同组"</li>
+  </ol>
+</div>
+<div class="callout accent">
+  <div class="callout-title">✅ 自检技巧</div>
+  最小化后,DFA 状态数应该 ≤ 原状态数。若新状态数更多,肯定错。
+</div>
+
+<h3>10.2 综合题 2:语法树 / 短语 / 句柄<span class="tag points">5 分</span></h3>
+<div class="algo-box">
+  <div class="algo-box-title">📐 4 步标准流程</div>
+  <div class="step"><div class="step-num">1</div><div class="step-body"><strong>最左推导</strong>:从 S 推到 α,记录每步</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body"><strong>画语法树</strong>:每步产生式 = 一棵子树</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body"><strong>找短语</strong>:每棵子树的叶子序列(从根到叶子遍历所有子树)</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body"><strong>找直接短语</strong>:只有两层的子树;句柄 = 最左直接短语</div></div>
+</div>
+
+<div class="callout primary">
+  <div class="callout-title">🔑 口诀</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li>短语 = 任意子树叶子</li>
+    <li>直接短语 = 二层子树叶子</li>
+    <li>句柄 = 最左直接短语</li>
+  </ul>
+</div>
+
+<h3>10.3 综合题 3:FIRST/FOLLOW + LL(1) 分析表<span class="tag points">15 分</span></h3>
+<div class="algo-box">
+  <div class="algo-box-title">📐 5 步标准流程</div>
+  <div class="step"><div class="step-num">1</div><div class="step-body"><strong>消除左递归 + 提取左因子</strong>(若需要)</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body"><strong>求 FIRST 集</strong>(自底向上):终结符 X:<code>FIRST(X)={X}</code>;<code>A→Xβ</code>:<code>FIRST(X)\{ε}</code> 加入;若 X 可推 ε,继续看 β 的下一个符号;全可推 ε → 加 ε</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body"><strong>求 FOLLOW 集</strong>(从 S 开始迭代):<code>#∈FOLLOW(S)</code>;<code>A→αBβ</code>:<code>FIRST(β)\{ε}</code> 加入 FOLLOW(B);<code>A→αB</code>(或 β 可推 ε):FOLLOW(A) 加入 FOLLOW(B);迭代到不变</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body"><strong>构造分析表</strong>:对每条 <code>A→α</code>:对 <code>FIRST(α)</code> 中每个终结符 a:<code>M[A,a]=A→α</code>;若 ε ∈ FIRST(α):对 <code>FOLLOW(A)</code> 中每个 b:<code>M[A,b]=A→α</code></div></div>
+  <div class="step"><div class="step-num">5</div><div class="step-body"><strong>判定 LL(1)</strong>:每个格子最多一个产生式 → LL(1)</div></div>
+</div>
+
+<div class="callout danger">
+  <div class="callout-title">⚠️ 易错点 TOP5</div>
+  <ol style="margin:6px 0 0 18px;">
+    <li>FIRST 计算漏 ε(尤其是符号串 <code>α = X1X2...Xk</code>,所有 Xi 都能推 ε 才加 ε)</li>
+    <li>FOLLOW 迭代不充分(至少 2 轮直到不变)</li>
+    <li>FOLLOW 误加 ε(FOLLOW 永远不含 ε!)</li>
+    <li>填表时,<code>A → α</code> 中 α 可推 ε 才用 FOLLOW 填,不能直接对 <code>A → ε</code> 用 FOLLOW</li>
+    <li>多个产生式填同格 → 非 LL(1),别强行只填一个</li>
+  </ol>
+</div>
+
+<h3>10.4 综合题 4:LR(0) 分析表<span class="tag points">12 分</span></h3>
+<div class="algo-box">
+  <div class="algo-box-title">📐 4 步标准流程</div>
+  <div class="step"><div class="step-num">1</div><div class="step-body"><strong>拓广文法</strong>:加 <code>S' → S</code>;所有产生式编号(0=<code>S'→S</code>,1、2、3... 依次)</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body"><strong>构造项目集族</strong>(DFA 状态):初态 <code>I0 = closure({S' → ·S})</code>;closure:<code>A → α·Bβ</code> 加入所有 <code>B → ·γ</code>;GOTO:<code>GOTO(I, X) = closure({A → αX·β | A → α·Xβ ∈ I})</code>;直到无新状态</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body"><strong>画 DFA</strong>:状态用方框,标项目集内容;边用符号(X 转移到 GOTO(I, X));同状态可自环</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body"><strong>填分析表</strong>:
+    <ul>
+      <li><strong>移进</strong>:<code>A → α·aβ ∈ Ii</code>,<code>GOTO(Ii, a) = Ij</code> → <code>ACTION[i, a] = sj</code></li>
+      <li><strong>归约</strong>:<code>A → α· ∈ Ii</code>(A ≠ S'),用第 k 条产生式 → <code>ACTION[i, *] = rk</code>(<strong>LR(0) 对所有终结符 + #</strong>)</li>
+      <li><strong>接受</strong>:<code>S' → S· ∈ Ii</code> → <code>ACTION[i, #] = acc</code></li>
+      <li><strong>GOTO</strong>:<code>GOTO(Ii, A) = Ij</code> → <code>GOTO[i, A] = j</code></li>
+    </ul>
+  </div></div>
+</div>
+
+<div class="callout danger">
+  <div class="callout-title">⚠️ 易错点 TOP5</div>
+  <ol style="margin:6px 0 0 18px;">
+    <li>拓广文法忘加 <code>S' → S</code></li>
+    <li>closure 不完整(<code>·</code> 后非终结符的所有产生式都要加)</li>
+    <li>GOTO 漏算某个符号</li>
+    <li>LR(0) 归约填表要填<strong>所有终结符 + #</strong>,不是只填 FOLLOW(那是 SLR(1))</li>
+    <li>项目集编号要连续,不能跳号</li>
+  </ol>
+</div>
+
+<div class="callout warn">
+  <div class="callout-title">🔍 冲突检测</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li><strong>移进-归约冲突</strong>:某状态既有 <code>A → α·aβ</code> 又有 <code>B → γ·</code></li>
+    <li><strong>归约-归约冲突</strong>:某状态有两个归约项目</li>
+    <li>有冲突 → 非 LR(0),需用 SLR(1)/LALR(1)/LR(1)</li>
+  </ul>
+</div>
+
+<h3>10.5 综合题 5:四元式生成<span class="tag points">8 分</span></h3>
+<div class="algo-box">
+  <div class="algo-box-title">📐 5 步标准流程</div>
+  <div class="step"><div class="step-num">1</div><div class="step-body"><strong>标号</strong>:在草稿上画出控制流,标 begin、true_exit、false_exit、end</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body"><strong>表达式</strong>:每个二元运算生成一条四元式,用临时变量 t1、t2...</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body"><strong>条件跳转</strong>:<code>(jrop, a, b, L)</code> 表示"若 a rop b 则跳 L"</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body"><strong>无条件跳转</strong>:<code>(j, -, -, L)</code></div></div>
+  <div class="step"><div class="step-num">5</div><div class="step-body"><strong>回填</strong>:把待定跳转地址填实;每条四元式连续编号</div></div>
+</div>
+
+<div class="callout primary">
+  <div class="callout-title">📋 模板速查</div>
+  <p><strong>if E then S1 else S2</strong>:</p>
+  <pre style="margin-top:6px;"><code>(1) E 的代码(产生跳转,E 真 → true_exit,E 假 → false_exit)
+(true_exit) S1 的代码
+(j, -, -, end)
+(false_exit) S2 的代码
+(end)</code></pre>
+  <p><strong>while E do S</strong>:</p>
+  <pre style="margin-top:6px;"><code>(begin) E 的代码(假 → end)
+S 的代码
+(j, -, -, begin)
+(end)</code></pre>
+  <p><strong>赋值 <code>x := a + b * c</code></strong>:</p>
+  <pre style="margin-top:6px;"><code>(*, b, c, t1)
+(+, a, t1, t2)
+(:=, t2, -, x)</code></pre>
+</div>
+
+<h3>10.6 综合题 6:DAG 优化<span class="tag points">8 分</span></h3>
+<div class="algo-box">
+  <div class="algo-box-title">📐 4 步标准流程</div>
+  <div class="step"><div class="step-num">1</div><div class="step-body"><strong>构造 DAG</strong>:
+    <ul>
+      <li>叶节点:变量/常量初值</li>
+      <li>内部节点:运算符 + 操作数子节点 + 附加标识符集</li>
+      <li>复用:查找已有节点,若运算符和子节点相同,直接复用(公共子表达式消除)</li>
+      <li>赋值:<code>:=</code> 把目标变量加到源节点的附加集</li>
+    </ul>
+  </div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body"><strong>从 DAG 重建四元式</strong>:
+    <ul>
+      <li>按节点构造顺序(拓扑序)输出</li>
+      <li>每个节点生成一条四元式,结果用附加变量之一</li>
+      <li>其他活跃的附加变量用 <code>:=</code> 复制</li>
+    </ul>
+  </div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body"><strong>删除死代码</strong>:不活跃的附加变量对应节点可删</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body"><strong>应用其他优化</strong>:常量折叠、代数化简、强度削弱</div></div>
+</div>
+
+<h3>10.7 简答题 4 题预测<span class="tag points">20 分</span></h3>
+<table>
+<thead><tr><th>章节</th><th>预测题目</th></tr></thead>
+<tbody>
+<tr><td>第 1 章(5 分)</td><td>编译程序五阶段 / 编译 vs 解释</td></tr>
+<tr><td>第 6 章(5 分)</td><td>静态/栈式/堆式存储分配 / 活动记录内容 / DISPLAY 表原理</td></tr>
+<tr><td>第 7 章(5 分)</td><td>寄存器分配图着色算法 / 待用信息/活跃信息</td></tr>
+<tr><td>第 8 章(5 分)</td><td>符号表组织方式 / 错误类型与校正方法 / 恐慌模式恢复</td></tr>
+</tbody>
+</table>
+
+<h3>10.8 选择题 10 题预测<span class="tag points">20 分</span></h3>
+<div class="callout warn">
+  <div class="callout-title">📝 高频考点</div>
+  <ol style="margin:6px 0 0 18px;">
+    <li><strong>Chomsky 文法分类</strong>:0/1/2/3 型对应的自动机</li>
+    <li><strong>正规式等价</strong>:与 3 型文法等价</li>
+    <li><strong>LL(1) 含义</strong>:左到右扫描、最左推导、看 1 个符号</li>
+    <li><strong>LR 系列能力</strong>:LR(0) &lt; SLR(1) &lt; LALR(1) &lt; LR(1)</li>
+    <li><strong>二义文法</strong>:不是任何 LR 文法</li>
+    <li><strong>短语/句柄定义</strong>:子树叶子 / 最左直接短语</li>
+    <li><strong>中间代码形式</strong>:四元式、三元式、三地址码、逆波兰</li>
+    <li><strong>优化分类</strong>:局部、循环、全局</li>
+    <li><strong>存储分配</strong>:静态、栈、堆的适用语言</li>
+    <li><strong>参数传递</strong>:传值 vs 传引用</li>
+  </ol>
+</div>
+
+<h3>10.9 终极复习路径<span class="tag important">冲刺 3 天</span></h3>
+<table>
+<thead><tr><th>日期</th><th>上午</th><th>下午</th><th>晚上</th></tr></thead>
+<tbody>
+<tr><td><strong>Day 1</strong></td><td>LL(1) 分析表,练 3-5 题</td><td>LR(0) 分析表,练 3-5 题</td><td>语法树/短语/句柄,练 5 题</td></tr>
+<tr><td><strong>Day 2</strong></td><td>NFA → DFA → 最小化,练 3 题</td><td>四元式生成,练 3 题(if/while/switch)</td><td>DAG 优化,练 3 题</td></tr>
+<tr><td><strong>Day 3</strong></td><td>第 1/6/7/8 章简答题背诵</td><td>第 1-8 章选择题刷题</td><td>模拟一套完整卷,限时 2 小时</td></tr>
+</tbody>
+</table>
+
+<h3 id="ch10-2">10.10 大模型/Agent 时代的编译原理映射<span class="tag important">面试加分点</span></h3>
+
+<div class="callout purple">
+  <div class="callout-title">🤖 编译原理在大模型时代的"上位映射"</div>
+  LLM 推理引擎、Agent 框架、DSL 编译器都在复用这套思想。
+</div>
+
+<table>
+<thead><tr><th width="32%">编译原理概念</th><th>LLM / Agent 现代映射</th></tr></thead>
+<tbody>
+<tr><td><strong>Token 化(NFA/DFA 思想)</strong></td><td>BPE/WordPiece/SentencePiece:确定性自动机把字节流切成 token id。tiktoken、HuggingFace tokenizers 的核心就是高速 DFA</td></tr>
+<tr><td><strong>文法约束生成(LL/LR)</strong></td><td>grammar-constrained decoding:用 CFG 限制 LLM 输出合法 JSON / SQL / DSL。Outlines、Guidance、LMQL、llama.cpp GBNF 都是这套思路</td></tr>
+<tr><td><strong>语法制导翻译</strong></td><td>Agent 的"自然语言 → 工具调用"翻译:prompt 模板(产生式)+ 输出 schema(语义规则)+ 执行器(代码生成)</td></tr>
+<tr><td><strong>AST 作为中间表示</strong></td><td>LangChain/LangGraph 的 Plan 树、AutoGPT 的任务 DAG、ReAct 的 Thought-Action-Observation 三元组,本质都是 AST</td></tr>
+<tr><td><strong>中间代码(IR)</strong></td><td>OpenAI Function Calling 的 JSON Schema、Anthropic Tool Use 的 tool_use block,都是结构化 IR</td></tr>
+<tr><td><strong>符号表 / 作用域</strong></td><td>MCP(Model Context Protocol)Server 工具注册表、Agent 工具发现索引、长对话的上下文窗口管理</td></tr>
+<tr><td><strong>类型检查(语义分析)</strong></td><td>Pydantic / Zod / JSON Schema 校验 LLM 输出,Anthropic Tool Use 的 input_schema 验证</td></tr>
+<tr><td><strong>代码优化 Pass 流水线</strong></td><td>LLM 推理优化:vLLM PagedAttention、Continuous Batching、Prefix Caching、Chunked Prefill、Speculative Decoding</td></tr>
+<tr><td><strong>指令选择</strong></td><td>LLM 路由层:小模型分类 → 大模型生成;MoE Expert 路由;Tool Selection</td></tr>
+<tr><td><strong>寄存器分配</strong></td><td>GPU 显存管理:KV Cache Block 分配(PagedAttention 借鉴 OS 虚拟内存分页)、激活值显存复用</td></tr>
+<tr><td><strong>控制流图(CFG)/ 数据流分析</strong></td><td>LangGraph 的工作流 DAG、Agent 决策图、状态机循环分析</td></tr>
+<tr><td><strong>公共子表达式消除</strong></td><td>Prefix Caching / KV Cache 复用:相同 prompt 前缀的 KV 不重复计算</td></tr>
+<tr><td><strong>死代码消除</strong></td><td>Agent 任务剪枝:无用子任务删除、循环检测(避免 Agent 卡死)</td></tr>
+<tr><td><strong>内联展开(Inlining)</strong></td><td>Prompt 内联:把工具描述、few-shot 示例内联到 prompt;Tool Definition inlined into system prompt</td></tr>
+<tr><td><strong>循环优化 / 强度削弱</strong></td><td>长上下文压缩(GPT-4 的 prompt caching)、滑动窗口注意力(Sliding Window Attention)</td></tr>
+<tr><td><strong>错误恢复(panic mode)</strong></td><td>Agent Self-Reflection / Self-Correction:LLM 输出解析失败 → 反馈错误 → 重新生成</td></tr>
+<tr><td><strong>多遍编译(Multi-pass)</strong></td><td>Agent 多轮规划:Plan → Execute → Reflect → Replan,每轮一次"pass"</td></tr>
+<tr><td><strong>JIT 编译</strong></td><td>LLM 推理引擎的运行时图优化(TensorRT-LLM、ONNX Runtime),根据输入 shape 动态编译 kernel</td></tr>
+<tr><td><strong>SSA(静态单赋值)</strong></td><td>LangGraph 的 State Checkpointer:每个节点状态的版本化,可回溯</td></tr>
+<tr><td><strong>目标代码生成</strong></td><td>Code Agent(Cursor、Devin、Claude Code):自然语言 → 代码 → 测试 → 部署</td></tr>
+<tr><td><strong>解释器 vs 编译器</strong></td><td>ReAct Agent(解释式:逐 Thought-Action)vs Plan-and-Execute Agent(编译式:先生成完整计划再执行)</td></tr>
+</tbody>
+</table>
+
+<h4>🔑 关键洞察</h4>
+<div class="callout purple">
+  <ul style="margin:6px 0 0 18px;">
+    <li><strong>LLM Tokenizer = DFA 词法分析器</strong>:BPE 合并规则本质是一棵确定性的二叉合并树,推理时是 O(n) 的确定性扫描,与 DFA 完全同构</li>
+    <li><strong>grammar-constrained decoding = 语法分析引导生成</strong>:让 LLM 在每个 token 采样时,只允许走"文法仍然可接受"的转移,等价于在生成时跑一个 LR/LL 分析器</li>
+    <li><strong>PagedAttention = 虚拟内存化的 KV Cache 管理</strong>:借鉴 OS 页表 + 编译器寄存器分配思想,把 KV Cache 切成固定大小 block,用 Block Table 索引,解决显存碎片化</li>
+    <li><strong>Speculative Decoding = 推测执行</strong>:CPU 分支预测的 LLM 版,小模型先猜多个 token,大模型批量验证,命中即跳过</li>
+    <li><strong>Agent Reflection = 错误恢复 + 重新编译</strong>:Agent 执行失败 → 把错误信息塞回上下文 → LLM 重新生成计划,完全对应编译器 panic mode + 重新分析</li>
+  </ul>
+</div>
+
+<h3 id="ch10-3">10.11 全部章节"现代技术栈"映射总览</h3>
+<table>
+<thead><tr><th>编译原理概念</th><th>现代技术栈</th></tr></thead>
+<tbody>
+<tr><td>词法分析(NFA/DFA)</td><td>grep、RE2、Nginx、SQL Lexer、ANTLR、LLM Tokenizer</td></tr>
+<tr><td>语法分析(LL)</td><td>TypeScript、Babel、ANTLR 4、递归下降、grammar-constrained decoding</td></tr>
+<tr><td>语法分析(LR/LALR)</td><td>Yacc、Bison、PostgreSQL SQL Parser</td></tr>
+<tr><td>语法分析(GLR)</td><td>tree-sitter、NLP 句法分析</td></tr>
+<tr><td>AST</td><td>ESTree、Rust HIR、Go AST、LangGraph Plan 树</td></tr>
+<tr><td>中间代码(三地址)</td><td>LLVM IR、Java Bytecode、Python bytecode</td></tr>
+<tr><td>中间代码(逆波兰)</td><td>JVM、WebAssembly、PostScript</td></tr>
+<tr><td>SSA</td><td>LLVM IR(强制 SSA)、GraalVM、V8 TurboFan</td></tr>
+<tr><td>优化 Pass</td><td>LLVM Optimization Pipeline、HotSpot C2、V8 TurboFan</td></tr>
+<tr><td>寄存器分配</td><td>图着色、线性扫描、PBQP、PagedAttention 显存</td></tr>
+<tr><td>活跃分析</td><td>LiveIntervals、Liveness Analysis</td></tr>
+<tr><td>运行时栈</td><td>JVM 栈帧、Go goroutine 栈、Rust frame</td></tr>
+<tr><td>DISPLAY 表</td><td>JS 作用域链、Python 闭包、Lua upvalue</td></tr>
+<tr><td>堆管理</td><td>JVM G1/ZGC、Go mheap、Redis jemalloc</td></tr>
+<tr><td>符号表</td><td>LSP、IDE 跳转、Go doc、Rust doc、MCP Server 工具表</td></tr>
+<tr><td>错误恢复</td><td>Rust 友好错误、TS 增量错误、Babel 错误恢复、Agent Self-Correction</td></tr>
+<tr><td>语法制导翻译</td><td>Catalyst(SQL)、Spark DataFrame、TypeScript 类型系统</td></tr>
+<tr><td>代码外提/强度削弱</td><td>LLVM LICM、LoopStrengthReduce、KV Cache 复用</td></tr>
+<tr><td>公共子表达式消除</td><td>LLVM GVN、HotSpot C2、Prefix Caching</td></tr>
+<tr><td>死代码消除</td><td>LLVM DCE、Tree Shaking(Webpack)、Agent 任务剪枝</td></tr>
+<tr><td>内联展开</td><td>LLVM Inline、HotSpot C2 Inline、Prompt 内联</td></tr>
+</tbody>
+</table>
+
+<h3>10.12 高频面试题汇总<span class="tag important">拓展</span></h3>
+
+<div class="callout warn">
+  <p><strong>Q1</strong>:编译器和解释器的本质区别?<br>
+  <strong>A</strong>:编译器一次性把源码翻译成目标代码,目标代码独立运行;解释器逐条翻译执行,不产生独立目标程序。JIT 是混合模式:运行时把热点代码编译成机器码缓存。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q2</strong>:为什么 LLVM 是"通用编译器后端"?<br>
+  <strong>A</strong>:LLVM 把"语言前端(Clang/Rust/Swift frontend)"和"目标后端(x86/ARM/RISC-V)"解耦,通过统一的 LLVM IR 中介,实现"前端复用后端、后端复用前端"的 N×M → N+M 简化。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q3</strong>:TypeScript 的类型系统是编译期的还是运行时的?<br>
+  <strong>A</strong>:编译期。TS 编译后是 JS,类型信息被擦除(Type Erasure)。这叫"语法制导的静态类型检查",对应属性文法。Java 的泛型也是类型擦除。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q4</strong>:为什么 Rust 没有 GC 还能保证内存安全?<br>
+  <strong>A</strong>:编译期借用检查器(Borrow Checker)基于数据流分析,静态验证所有权和借用规则,违反则编译失败。本质是"语义分析"的极致应用。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q5</strong>:WebAssembly 为什么快?<br>
+  <strong>A</strong>:(1) 字节码接近机器码,JIT/AOT 编译快;(2) 栈式虚拟机,无寄存器分配开销;(3) 强类型,无运行时类型检查;(4) 沙箱隔离,无副作用。本质是"中间代码 + 即时编译"。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q6</strong>:SQL 注入为什么不能用正则防?<br>
+  <strong>A</strong>:SQL 是 CFG(2 型文法),正则只能识别 3 型文法。要防注入必须用 SQL Parser 解析成 AST,检查结构和参数边界。Druid、ShardingSphere 都用这种方式。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q7</strong>:为什么 Go 编译这么快?<br>
+  <strong>A</strong>:(1) 语法简单,LL(1) 子集;(2) 无模板元编程(C++ 模板是图灵完备的编译期语言);(3) 包级别并行编译;(4) 不做激进优化,优化 Pass 少;(5) 自带依赖管理,避免重复编译。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q8</strong>:JIT 和 AOT 的取舍?<br>
+  <strong>A</strong>:JIT(Java/C#/JS)运行时编译,可基于 profile 优化,启动慢但峰值高;AOT(C/Rust/Go)编译期完成,启动快但无法用运行时信息。现代趋势是混合:Java GraalVM、V8 TurboFan、Android ART 都同时支持。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q9</strong>:tree-shaking 和死代码消除是一回事吗?<br>
+  <strong>A</strong>:概念相似,实现不同。DCE 基于数据流分析(LLVM DCE),tree-shaking 基于 ES Module 静态导入分析(Webpack/Rollup)。前端用 tree-shaking 是因为 JS 动态特性,DCE 难做。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q10</strong>:程序语言为什么不用正则描述语法?<br>
+  <strong>A</strong>:正则(3 型文法)表达能力有限,无法描述嵌套结构(括号配对、嵌套 if)。语法用 CFG(2 型文法),可由下推自动机识别,支持无限递归嵌套。</p>
+</div>
+
+<h3>10.13 大模型相关高频面试题<span class="tag important">增量</span></h3>
+
+<div class="callout purple">
+  <p><strong>Q11</strong>:LLM 的 Tokenizer 和编译器的词法分析器有什么关系?<br>
+  <strong>A</strong>:本质都是 DFA。BPE 的合并规则构建一棵确定性合并树,推理时按规则贪心切分字节流,与 DFA 状态转移完全同构。tiktoken 用 BPE,HuggingFace tokenizers 还支持 WordPiece、Unigram,都是确定性自动机。区别:编译器 lexer 输出 Token + 属性,tokenizer 输出 token id;编译器 lexer 要识别多种 token 类型,tokenizer 只产生一种(文本片段)。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q12</strong>:如何让 LLM 一定输出合法 JSON?<br>
+  <strong>A</strong>:三层保障:(1) Prompt 工程(提示词约束);(2) Function Calling / Tool Use(JSON Schema 强约束);(3) grammar-constrained decoding(Outlines/LMQL/llama.cpp GBNF)——在采样时跑一个 LR/LL 分析器,只允许走文法可接受的 token,本质是语法分析引导生成。第三种最可靠,工业级用 vLLM + outlines 集成。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q13</strong>:vLLM 的 PagedAttention 借鉴了什么思想?<br>
+  <strong>A</strong>:操作系统的虚拟内存分页 + 编译器的存储分配思想。传统 LLM 推理 KV Cache 连续分配,显存碎片严重;PagedAttention 把 KV 切成固定大小 block,用 Block Table 索引,逻辑连续物理分散。这和编译器栈式/堆式分配管理内存的本质是一样的——把"逻辑对象"和"物理位置"解耦。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q14</strong>:Agent 的 ReAct 和 Plan-and-Execute 哪个更像编译器?<br>
+  <strong>A</strong>:Plan-and-Execute 更像编译器——先生成完整计划(AST),再分步执行(代码生成 + 运行),对应"先分析后执行"。ReAct 更像解释器——边想边做(Thought→Action→Observation 循环),每步基于上一步结果,对应"逐条解释执行"。混合模式:先 Plan 编译,执行时 ReAct 解释,失败时 Reflect 重编译,这就是 JIT 的 Agent 版。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q15</strong>:Speculative Decoding 和 CPU 推测执行是一回事吗?<br>
+  <strong>A</strong>:思想同源,实现不同。CPU 推测执行预判分支,验证成功则继续,失败则回滚流水线;LLM Speculative Decoding 用小模型先并行生成 k 个 token,大模型批量验证,命中即跳过大模型的串行解码。本质都是"用便宜计算代替贵计算 + 失败回退"。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q16</strong>:MCP 协议和编译器符号表有什么关系?<br>
+  <strong>A</strong>:MCP(Model Context Protocol)本质是 Agent 的"符号表协议"。MCP Server 暴露工具/资源/Prompt 的元数据(name、schema、description),Client(LLM)通过 MCP 协议发现和查询工具,等价于编译器在符号表中查询标识符的类型、作用域、签名。没有 MCP 之前,每个 Agent 框架(LangChain/AutoGPT/Claude)各自维护工具注册表,等价于没有统一 ABI 的"野编译器"。</p>
+  <hr style="margin:12px 0;">
+  <p><strong>Q17</strong>:LangGraph 和编译器 CFG 有什么相通之处?<br>
+  <strong>A</strong>:LangGraph 的 StateGraph 节点是 Agent 状态,边是状态转移,本质就是带数据流的状态机。编译器的 CFG(Control Flow Graph)描述程序基本块间控制流,数据流分析(到达-定值、活跃变量)用于优化。LangGraph 的 Checkpointer 等价于 SSA 的版本化状态,可回溯、可分支。Agent 的循环检测(避免死循环)等价于编译器的循环不变量分析。</p>
+</div>
+
+<hr>
+
+<h2>结语</h2>
+<div class="callout primary">
+  <div class="callout-title">💡 编译原理这门课的核心</div>
+  不是"教你写一个完整的编译器",而是教你:
+  <ol style="margin:6px 0 0 18px;">
+    <li><strong>抽象与降维的方法论</strong>:如何把人类可读的高维表示,逐层降维到机器可执行的物理表示。</li>
+    <li><strong>形式化工具的应用</strong>:用自动机、文法、图论这些数学工具,解决工程问题。</li>
+    <li><strong>关注点分离的架构思想</strong>:五阶段分离、IR 中介、多遍 Pass,是软件工程的典范。</li>
+  </ol>
+  期末考的是<strong>套路</strong>(6 道大题刷到肌肉记忆),但现代技术栈里到处是这套思想的映射:从 LLVM 到 JVM,从 TypeScript 到 Rust,从 SQL 优化器到大模型 DSL,编译原理是程序语言生态的"通用语法"。
+</div>
+
+<div class="callout accent">
+  <div class="callout-title">🎯 复习优先级</div>
+  <strong>第 3 章(32 分) &gt; 第 2、4、5 章(28 分) &gt; 第 1、6、7、8 章(40 分简答+选择)</strong>
+</div>
+
+<div style="text-align:center; margin:48px 0 16px; padding:24px; background:linear-gradient(135deg,#ddf4ff 0%,#fbefff 100%); border-radius:12px;">
+  <div style="font-size:20px; font-weight:700; color:#0969da; margin-bottom:8px;">祝期末顺利 🎓</div>
+  <div style="font-size:13px; color:#57606a;">文档版本:v1.0 · 写作视角:大厂资深架构师 + 技术面试官</div>
+  <div style="font-size:13px; color:#57606a; margin-top:4px;">适用教材:《编译原理教程》及相关习题解析</div>
+</div>
+
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,2332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数字图像处理 · 从零开始学习指南</title>
+<style>
+:root{
+  --bg:#0f1419; --bg2:#161b22; --card:#1c2128; --border:#30363d;
+  --fg:#e6edf3; --muted:#8b949e; --accent:#58a6ff; --accent2:#f78166;
+  --green:#3fb950; --yellow:#d29922; --red:#f85149; --purple:#bc8cff; --cyan:#39c5cf;
+  --code-bg:#0d1117; --highlight:rgba(88,166,255,0.15);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--fg);line-height:1.75;font-size:15px;
+  display:flex;min-height:100vh;
+}
+/* ============ 侧边栏 ============ */
+nav.sidebar{
+  width:280px;background:var(--bg2);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;overflow-y:auto;padding:24px 16px;z-index:10;
+}
+nav.sidebar .logo{
+  font-size:18px;font-weight:700;color:var(--accent);margin-bottom:8px;
+  padding-bottom:12px;border-bottom:1px solid var(--border);
+}
+nav.sidebar .subtitle{font-size:12px;color:var(--muted);margin-bottom:20px}
+nav.sidebar ol{list-style:none;counter-reset:chapter}
+nav.sidebar li{margin:2px 0}
+nav.sidebar a{
+  display:block;padding:7px 12px;color:var(--muted);text-decoration:none;
+  border-radius:6px;font-size:13px;transition:all 0.15s;
+}
+nav.sidebar a:hover{background:var(--card);color:var(--accent)}
+nav.sidebar a.active{background:var(--highlight);color:var(--accent);font-weight:600}
+nav.sidebar .part-header{
+  font-size:11px;color:var(--accent2);font-weight:700;
+  margin:14px 0 4px 0;padding-left:12px;text-transform:uppercase;letter-spacing:0.05em;
+}
+/* ============ 主内容 ============ */
+main{
+  margin-left:280px;padding:48px 64px;max-width:1200px;flex:1;
+}
+header.hero{
+  padding:32px 0 24px 0;border-bottom:1px solid var(--border);margin-bottom:32px;
+}
+header.hero h1{
+  font-size:32px;background:linear-gradient(90deg,var(--accent),var(--purple));
+  -webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:8px;
+}
+header.hero .meta{color:var(--muted);font-size:14px}
+header.hero .meta span{margin-right:16px}
+
+section.chapter{
+  margin-bottom:80px;padding-bottom:40px;border-bottom:1px dashed var(--border);
+  scroll-margin-top:20px;
+}
+section.chapter:last-of-type{border-bottom:none}
+h2.chapter-title{
+  font-size:26px;margin-bottom:8px;color:var(--fg);
+  display:flex;align-items:center;gap:12px;
+}
+h2.chapter-title .num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:36px;height:36px;background:var(--accent);color:#0f1419;
+  border-radius:8px;font-size:16px;font-weight:700;flex-shrink:0;
+}
+h2.chapter-title .sub{color:var(--muted);font-size:18px;font-weight:400}
+h3.subsection{
+  font-size:19px;margin:32px 0 14px 0;color:var(--accent);
+  padding-left:12px;border-left:3px solid var(--accent);
+}
+h4.minor{font-size:16px;margin:20px 0 10px 0;color:var(--purple)}
+p{margin:10px 0}
+strong{color:var(--accent2);font-weight:600}
+em{color:var(--yellow);font-style:normal;font-weight:500}
+code.inline{
+  background:var(--code-bg);padding:2px 6px;border-radius:4px;
+  font-family:"JetBrains Mono","Fira Code",Consolas,monospace;font-size:13px;
+  color:var(--cyan);border:1px solid var(--border);
+}
+pre{
+  background:var(--code-bg) !important;padding:16px 20px;border-radius:8px;
+  border:1px solid var(--border);overflow-x:auto;margin:14px 0;
+}
+pre code{
+  font-family:"JetBrains Mono","Fira Code",Consolas,monospace;font-size:13px;
+  color:#e6edf3;background:none;
+}
+/* ============ 卡片组件 ============ */
+.callout{
+  border-left:4px solid;padding:14px 18px;margin:14px 0;border-radius:0 6px 6px 0;
+  background:var(--card);
+}
+.callout.origin{border-color:var(--cyan)}
+.callout.origin::before{content:"📖 渊源";display:block;font-weight:700;color:var(--cyan);margin-bottom:4px;font-size:13px}
+.callout.principle{border-color:var(--accent)}
+.callout.principle::before{content:"💡 原理";display:block;font-weight:700;color:var(--accent);margin-bottom:4px;font-size:13px}
+.callout.business{border-color:var(--green)}
+.callout.business::before{content:"🚀 业务";display:block;font-weight:700;color:var(--green);margin-bottom:4px;font-size:13px}
+.callout.warn{border-color:var(--red);background:rgba(248,81,73,0.08)}
+.callout.warn::before{content:"⚠️ 易错点";display:block;font-weight:700;color:var(--red);margin-bottom:4px;font-size:13px}
+.callout.architect{border-color:var(--purple);background:rgba(188,140,255,0.06)}
+.callout.architect::before{content:"🏛️ 架构师视角";display:block;font-weight:700;color:var(--purple);margin-bottom:4px;font-size:13px}
+
+/* ============ 表格 ============ */
+table{
+  width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;
+  background:var(--card);border-radius:8px;overflow:hidden;
+}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+th{background:var(--bg2);color:var(--accent);font-weight:600}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(88,166,255,0.05)}
+td code{background:var(--code-bg);padding:1px 5px;border-radius:3px;font-size:12px;color:var(--cyan)}
+
+/* ============ 记忆锚点 ============ */
+.anchor{
+  background:linear-gradient(135deg,rgba(210,153,34,0.15),rgba(247,129,102,0.1));
+  border:1px solid var(--yellow);border-radius:8px;padding:14px 18px;margin:14px 0;
+}
+.anchor::before{content:"⚓ 记忆锚点";display:block;font-weight:700;color:var(--yellow);margin-bottom:6px;font-size:13px}
+.formula{
+  background:var(--code-bg);border:1px solid var(--border);border-radius:6px;
+  padding:12px 18px;margin:10px 0;text-align:center;
+  font-family:"JetBrains Mono",monospace;font-size:16px;color:var(--accent);
+  letter-spacing:0.5px;
+}
+
+/* ============ 列表 ============ */
+ul,ol{margin:10px 0;padding-left:28px}
+li{margin:4px 0}
+ul.check{list-style:none;padding-left:8px}
+ul.check li{padding-left:24px;position:relative}
+ul.check li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:700}
+ul.cross{list-style:none;padding-left:8px}
+ul.cross li{padding-left:24px;position:relative}
+ul.cross li::before{content:"✗";position:absolute;left:0;color:var(--red);font-weight:700}
+
+/* ============ SVG 图示容器 ============ */
+.diagram{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:20px;margin:16px 0;text-align:center;overflow-x:auto;
+}
+.diagram svg{max-width:100%;height:auto;display:inline-block}
+.diagram .caption{
+  margin-top:8px;color:var(--muted);font-size:12px;font-style:italic;
+}
+
+/* ============ 标签 ============ */
+.tag{
+  display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;
+  font-weight:600;letter-spacing:0.03em;
+}
+.tag.origin{background:rgba(57,197,207,0.15);color:var(--cyan)}
+.tag.use{background:rgba(63,185,80,0.15);color:var(--green)}
+.tag.deprecated{background:rgba(248,81,73,0.15);color:var(--red)}
+.tag.modern{background:rgba(188,140,255,0.15);color:var(--purple)}
+
+/* ============ 代码高亮 ============ */
+.kw{color:#ff7b72} /* keyword */
+.fn{color:#d2a8ff} /* function */
+.str{color:#a5d6ff} /* string */
+.num{color:#79c0ff} /* number */
+.cmt{color:#8b949e;font-style:italic} /* comment */
+.var{color:#ffa657} /* variable */
+
+/* ============ 进度条/对比组件 ============ */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.compare .col{
+  background:var(--card);border-radius:8px;padding:14px 18px;
+  border-top:3px solid var(--accent);
+}
+.compare .col.bad{border-top-color:var(--red)}
+.compare .col.good{border-top-color:var(--green)}
+.compare .col h5{font-size:13px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em}
+.compare .col.bad h5{color:var(--red)}
+.compare .col.good h5{color:var(--green)}
+
+/* ============ 响应式 ============ */
+@media (max-width: 1100px){
+  nav.sidebar{display:none}
+  main{margin-left:0;padding:24px 20px}
+  .compare{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="logo">📷 数字图像处理</div>
+  <div class="subtitle">从零开始 · 期末复习</div>
+  <div class="part-header">第一部分 · 图像底层表示</div>
+  <ol>
+    <li><a href="#ch1">一、像素与灰度值</a></li>
+    <li><a href="#ch2">二、颜色模型</a></li>
+    <li><a href="#ch3">三、BMP 位图颜色表</a></li>
+    <li><a href="#ch4">四、图像合成</a></li>
+  </ol>
+  <div class="part-header">第二部分 · 像素值映射</div>
+  <ol>
+    <li><a href="#ch5">五、几何变换</a></li>
+    <li><a href="#ch6">六、灰度变换</a></li>
+  </ol>
+  <div class="part-header">第三部分 · 邻域操作</div>
+  <ol>
+    <li><a href="#ch7">七、图像平滑</a></li>
+    <li><a href="#ch8">八、卷积操作</a></li>
+    <li><a href="#ch9">九、图像锐化</a></li>
+  </ol>
+  <div class="part-header">第四部分 · 形态与分割</div>
+  <ol>
+    <li><a href="#ch10">十、形态学处理</a></li>
+    <li><a href="#ch11">十一、图像分割</a></li>
+  </ol>
+  <div class="part-header">第五部分 · 考试攻略</div>
+  <ol>
+    <li><a href="#ch12">十二、题型突破</a></li>
+    <li><a href="#ch13">十三、终极清单</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<header class="hero">
+  <h1>数字图像处理 · 从零开始学习指南</h1>
+  <div class="meta">
+    <span>📚 面向零基础</span>
+    <span>🎯 期末考试重点</span>
+    <span>🏛️ 架构师视角</span>
+    <span>🚀 现代技术栈全景</span>
+  </div>
+  <p style="margin-top:14px;color:var(--muted)">
+  每个知识点都讲清楚：<strong style="color:var(--cyan)">它从哪来</strong> → <strong style="color:var(--accent)">为什么需要它</strong> → <strong style="color:var(--green)">现实中怎么用</strong> → <strong style="color:var(--purple)">背后的原理</strong>。追求真正的理解，而非死记硬背。
+  </p>
+</header>
+
+<!-- ============================================================ -->
+<!-- 第一章 -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch1">
+<h2 class="chapter-title"><span class="num">1</span> 像素与灰度值 <span class="sub">—— 一切操作的原子</span></h2>
+
+<div class="callout origin">
+<strong>核心问题</strong>：现实是<em>连续</em>的，计算机是<em>离散</em>的。怎么把连续光信号交给计算机处理？<br>
+<strong>解法</strong>：<strong>采样</strong> —— 把画面切成小格子，每格只记一个代表值，这就是「像素」(Pixel = Picture Element)。<br>
+<strong>核心信息</strong>：每个像素携带的<em>亮度标量</em>就是<strong>灰度值</strong>。8 位灰度图中范围 0~255：0=纯黑（无光），255=纯白（光最强）。
+</div>
+
+<div class="diagram">
+<svg viewBox="0 0 600 220" width="600">
+  <!-- 现实场景 -->
+  <text x="80" y="20" text-anchor="middle" fill="#8b949e" font-size="12">连续现实画面</text>
+  <defs>
+    <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#000"/>
+      <stop offset="50%" stop-color="#888"/>
+      <stop offset="100%" stop-color="#fff"/>
+    </linearGradient>
+  </defs>
+  <rect x="20" y="30" width="120" height="120" fill="url(#grad1)" stroke="#30363d"/>
+  <text x="80" y="170" text-anchor="middle" fill="#8b949e" font-size="11">连续光信号</text>
+
+  <!-- 箭头 -->
+  <path d="M 160 90 L 220 90" stroke="#58a6ff" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="190" y="80" text-anchor="middle" fill="#58a6ff" font-size="11">采样</text>
+
+  <!-- 离散网格 -->
+  <text x="320" y="20" text-anchor="middle" fill="#8b949e" font-size="12">离散像素网格</text>
+  <g transform="translate(240,30)">
+    <!-- 8x8 像素网格 -->
+    [0,0,0,1,1,1,2,2]
+    用循环画 8x8
+  </g>
+  <g id="grid"></g>
+  <script>/* SVG 内嵌生成像素网格 */
+    (function(){
+      var grid = document.getElementById('grid');
+      var vals=[[10,15,25,40,60,90,130,180],[12,18,28,45,65,95,135,185],
+                [15,22,32,50,70,100,140,190],[18,25,35,55,75,105,145,195],
+                [22,30,40,60,80,110,150,200],[28,35,45,65,85,115,155,205],
+                [35,42,52,72,92,122,162,215],[45,55,65,85,105,135,175,225]];
+      for(var i=0;i<8;i++)for(var j=0;j<8;j++){
+        var v=vals[i][j];
+        var r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+        r.setAttribute('x',240+j*15);r.setAttribute('y',30+i*15);
+        r.setAttribute('width',15);r.setAttribute('height',15);
+        r.setAttribute('fill','rgb('+v+','+v+','+v+')');
+        r.setAttribute('stroke','#30363d');r.setAttribute('stroke-width','0.5');
+        grid.appendChild(r);
+      }
+    })();
+  </script>
+  <text x="320" y="170" text-anchor="middle" fill="#8b949e" font-size="11">每个格子一个灰度值 (0-255)</text>
+
+  <!-- 像素值 -->
+  <path d="M 410 90 L 470 90" stroke="#f78166" stroke-width="2" marker-end="url(#arr2)"/>
+  <text x="440" y="80" text-anchor="middle" fill="#f78166" font-size="11">存储</text>
+  <rect x="480" y="30" width="100" height="120" fill="#1c2128" stroke="#30363d"/>
+  <text x="530" y="55" text-anchor="middle" fill="#3fb950" font-size="13" font-family="monospace">0x0A</text>
+  <text x="530" y="80" text-anchor="middle" fill="#d29922" font-size="13" font-family="monospace">0x1C</text>
+  <text x="530" y="105" text-anchor="middle" fill="#f78166" font-size="13" font-family="monospace">0x32</text>
+  <text x="530" y="130" text-anchor="middle" fill="#f85149" font-size="13" font-family="monospace">...</text>
+  <text x="530" y="170" text-anchor="middle" fill="#8b949e" font-size="11">字节数组</text>
+
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#58a6ff"/>
+    </marker>
+    <marker id="arr2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#f78166"/>
+    </marker>
+  </defs>
+</svg>
+<div class="caption">图 1.1：现实世界 → 采样 → 离散像素 → 数字存储 的转换链路</div>
+</div>
+
+<h3 class="subsection">为什么是 0~255？</h3>
+
+<p>8 bit = 2⁸ = 256 级。一个字节（byte）恰好 8 位，能表示 0~255 共 256 个整数。</p>
+
+<div class="callout principle">
+这不是随意选择 —— 早期计算机内存昂贵，1 字节刚好够用且不浪费。更深层的考量来自<em>人眼感知</em>：人眼大约能分辨 100~200 个灰度级，8 位 256 级已足够覆盖。如果用 16 位（65536 级），人眼根本分辨不出相邻差异，纯属浪费存储。
+</div>
+
+<p>彩色图像？每个像素有 R、G、B 三个通道各 8 bit，共 24 bit —— 这就是「24 位真彩色」，能表示 256³ ≈ <strong>1677 万</strong>种颜色。</p>
+
+<h3 class="subsection">存储空间的计算</h3>
+
+<div class="formula">存储大小 = 宽 × 高 × 每像素位数 / 8</div>
+
+<div class="diagram">
+<svg viewBox="0 0 600 140" width="600">
+  <rect x="40" y="20" width="200" height="100" fill="none" stroke="#58a6ff" stroke-width="2" stroke-dasharray="4 2"/>
+  <text x="140" y="75" text-anchor="middle" fill="#58a6ff" font-size="14">512 × 512 图像</text>
+
+  <text x="280" y="55" fill="#8b949e" font-size="12">8-bit 灰度</text>
+  <text x="280" y="75" fill="#3fb950" font-size="14" font-family="monospace">512×512×8/8</text>
+  <text x="280" y="100" fill="#3fb950" font-size="13" font-weight="bold">= 256 KB</text>
+
+  <text x="430" y="55" fill="#8b949e" font-size="12">24-bit 彩色</text>
+  <text x="430" y="75" fill="#f78166" font-size="14" font-family="monospace">512×512×24/8</text>
+  <text x="430" y="100" fill="#f78166" font-size="13" font-weight="bold">= 768 KB (3倍)</text>
+</svg>
+<div class="caption">图 1.2：常见图像存储计算示例</div>
+</div>
+
+<h3 class="subsection">现实应用</h3>
+
+<table>
+<tr><th>场景</th><th>灰度值含义</th><th>业务</th></tr>
+<tr><td><strong>医学影像</strong></td><td>组织对 X 射线吸收率</td><td>CT、X 光片；医生"调窗"就是灰度变换</td></tr>
+<tr><td><strong>监控红外</strong></td><td>红外辐射强度</td><td>夜视监控、热成像</td></tr>
+<tr><td><strong>深度相机</strong></td><td>物体到相机距离</td><td>Face ID、Kinect、LiDAR</td></tr>
+</table>
+
+<div class="callout architect">
+<h4 style="color:var(--purple);margin-bottom:8px">🏛️ 现代技术栈全景</h4>
+<p><strong>从 8bit 到 HDR 的演化</strong>：8bit/256 级是 CRT 时代妥协产物。现代业务：</p>
+<ul>
+<li><span class="tag modern">10bit</span> 视频流媒体标配（Netflix HDR、Apple ProRes 422 HQ、H.265 Main10）—— 1024 级，色带现象大幅减轻</li>
+<li><span class="tag modern">12-16bit</span> 专业摄影 RAW（Sony ARW / Canon CR3 / DICOM 医学影像）—— 保留传感器全部线性响应</li>
+<li><span class="tag modern">32bit 浮点 HDR</span> 电影特效、PBR 渲染 —— OpenEXR（工业光魔发明）是 VFX 行业标准</li>
+</ul>
+<p><strong>深度学习中的"上位版本"</strong> —— 张量（Tensor）：PyTorch 表示为 <code class="inline">(3, 256, 256)</code> float32 张量，形状 [C, H, W]，像素值归一化到 [0, 1] 或 N(0, 1)。</p>
+<p><strong>存储公式的现实威力</strong>：B 站日均 10PB 视频流量，每个字节都是带宽费。从 8bit 转 10bit 数据量增加 25% —— 业务必须权衡画质与成本。这就是为什么大厂前端面试必问"图片优化"。</p>
+</div>
+
+<div class="anchor">
+<strong>简答题模板</strong>：灰度值表示像素的亮度信息，是一个<em>标量</em>。8 位灰度图中范围 0~255，0 为纯黑，255 为纯白，共 256 个灰度级。彩色图像每个像素有 RGB 三个通道，各 0~255，像素深度 24 位。存储空间 = 宽×高×8/8 字节。
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- 第二章 -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch2">
+<h2 class="chapter-title"><span class="num">2</span> 颜色模型 <span class="sub">—— 描述颜色的不同语言</span></h2>
+
+<div class="callout origin">
+<strong>核心矛盾</strong>：同样是"红色"，为什么显示器用 R=255,G=0,B=0，而印刷厂用 C=0,M=100,Y=100,K=0？<br>
+<strong>根源</strong>：<em>不同物理过程产生颜色的原理不同</em>，需要不同的数学语言。
+</div>
+
+<div class="diagram">
+<svg viewBox="0 0 700 280" width="700">
+  <!-- 加色 RGB -->
+  <text x="120" y="20" text-anchor="middle" fill="#58a6ff" font-size="14" font-weight="bold">加色模型 RGB</text>
+  <text x="120" y="38" text-anchor="middle" fill="#8b949e" font-size="11">发光设备 · 光越加越亮</text>
+  <circle cx="80" cy="100" r="40" fill="#ff0000" opacity="0.5"/>
+  <circle cx="160" cy="100" r="40" fill="#00ff00" opacity="0.5"/>
+  <circle cx="120" cy="160" r="40" fill="#0000ff" opacity="0.5"/>
+  <text x="120" y="220" text-anchor="middle" fill="#fff" font-size="11">三色叠加 = 白</text>
+
+  <!-- 减色 CMY -->
+  <text x="350" y="20" text-anchor="middle" fill="#f78166" font-size="14" font-weight="bold">减色模型 CMYK</text>
+  <text x="350" y="38" text-anchor="middle" fill="#8b949e" font-size="11">吸光材料 · 越加越暗</text>
+  <circle cx="310" cy="100" r="40" fill="#00ffff" opacity="0.5"/>
+  <circle cx="390" cy="100" r="40" fill="#ff00ff" opacity="0.5"/>
+  <circle cx="350" cy="160" r="40" fill="#ffff00" opacity="0.5"/>
+  <text x="350" y="220" text-anchor="middle" fill="#8b949e" font-size="11">三色叠加 = 黑(理论)</text>
+
+  <!-- HSV 色环 -->
+  <text x="580" y="20" text-anchor="middle" fill="#bc8cff" font-size="14" font-weight="bold">感知模型 HSV</text>
+  <text x="580" y="38" text-anchor="middle" fill="#8b949e" font-size="11">人脑直觉 · 色调/饱和/明度</text>
+  <defs>
+    <radialGradient id="hsvgrad">
+      <stop offset="0%" stop-color="#fff"/>
+      <stop offset="100%" stop-color="#000"/>
+    </radialGradient>
+  </defs>
+  <circle cx="580" cy="130" r="50" fill="none" stroke="url(#hsvgrad)" stroke-width="20"/>
+  <text x="580" y="220" text-anchor="middle" fill="#8b949e" font-size="11">色环 + 三角形</text>
+</svg>
+<div class="caption">图 2.1：三大颜色模型的可视化对比 —— 加色 / 减色 / 感知</div>
+</div>
+
+<h3 class="subsection">核心分野</h3>
+
+<table>
+<tr><th>场景</th><th>物理过程</th><th>模型</th><th>典型应用</th></tr>
+<tr><td>发光设备</td><td>叠加光产生颜色</td><td><strong>加色</strong> RGB</td><td>显示器、手机屏</td></tr>
+<tr><td>吸光材料</td><td>吸收光产生颜色</td><td><strong>减色</strong> CMY/CMYK</td><td>印刷、油墨</td></tr>
+<tr><td>人类感知</td><td>色调/鲜艳/亮度</td><td><strong>感知</strong> HSV/HSI</td><td>设计、调色</td></tr>
+<tr><td>视频传输</td><td>压缩带宽</td><td><strong>亮度-色差分离</strong> YUV/YCbCr</td><td>JPEG、H.264</td></tr>
+</table>
+
+<h3 class="subsection">RGB —— 发光的世界</h3>
+
+<div class="callout principle">
+<strong>三色理论 (Young-Helmholtz)</strong>：人眼视网膜上有三种锥状细胞，分别对红、绿、蓝光最敏感。显示器模仿此原理：每像素由 R/G/B 三个子像素组成。<br>
+<strong>加色模型</strong>：光越加越亮。R+G+B 全部最大 (255,255,255) = 白色；全部最小 (0,0,0) = 黑色。<br>
+<strong>为什么是红绿蓝</strong>：对应三种锥状细胞的峰值响应波长（约 560nm 红、530nm 绿、420nm 蓝）。
+</div>
+
+<h3 class="subsection">CMY/CMYK —— 印刷的世界</h3>
+
+<p>印刷时油墨涂在白纸上，白光被吸收一部分、反射一部分。油墨越厚吸光越多，看起来越暗 —— 与发光完全相反，是「减法」。</p>
+
+<div class="formula">
+C = 255 - R &nbsp;&nbsp;|&nbsp;&nbsp; M = 255 - G &nbsp;&nbsp;|&nbsp;&nbsp; Y = 255 - B
+</div>
+
+<p><strong>为什么额外加 K（黑色）</strong>：C+M+Y 理论上 = 黑，实际三种油墨混合不够黑，且黑色油墨便宜，故加 K。这就是 <strong>CMYK</strong>。</p>
+
+<div class="callout warn">
+<strong>为什么不能直接用 RGB 印刷</strong>：RGB 是加色模型，但纸张不会发光，只会反射光。你不能在纸上"加"红光，只能用油墨"减掉"绿光和蓝光让红光反射出来。
+</div>
+
+<h3 class="subsection">HSV/HSI —— 人脑的世界</h3>
+
+<div class="compare">
+<div class="col good">
+<h5>HSV / HSI 的三个分量</h5>
+<ul>
+<li><strong>H (Hue 色调)</strong>：颜色种类？范围 0°~360°（色环角度）</li>
+<li><strong>S (Saturation 饱和度)</strong>：多纯/多鲜艳？0% 灰，100% 纯色</li>
+<li><strong>V/I (Value/Intensity 明度)</strong>：多亮？0 黑，100% 最亮</li>
+</ul>
+</div>
+<div class="col bad">
+<h5>HSV 与 HSI 的区别</h5>
+<ul>
+<li><strong>HSV 中的 V</strong> = max(R,G,B)，三分量最大值</li>
+<li><strong>HSI 中的 I</strong> = (R+G+B)/3，三分量平均值</li>
+<li>V 对纯色亮度估计偏亮，I 更接近人眼"平均亮度"感受</li>
+</ul>
+</div>
+</div>
+
+<h3 class="subsection">YUV/YCbCr —— 压缩的世界</h3>
+
+<div class="callout origin">
+<strong>起源</strong>：黑白电视时代只有亮度 Y。彩色电视发明后需要兼容黑白电视 —— 彩色信号不能破坏黑白电视画面。<br>
+<strong>解法</strong>：继续传 Y（亮度），额外传 U/Cb（蓝差）和 V/Cr（红差）。黑白电视只读 Y，彩色电视用 Y+U+V 还原 RGB。<br>
+<strong>压缩核心</strong>：人眼对亮度敏感（差 1-2% 可察觉），对色彩不敏感。所以对色差分量大幅降采样（4:2:0 格式，4 个 Y 像素共享 1 个 Cb + 1 个 Cr），节省一半以上带宽。
+</div>
+
+<div class="diagram">
+<svg viewBox="0 0 600 200" width="600">
+  <text x="300" y="20" text-anchor="middle" fill="#8b949e" font-size="12">YCbCr 4:2:0 色度降采样</text>
+
+  <!-- Y 平面 -->
+  <text x="80" y="50" text-anchor="middle" fill="#58a6ff" font-size="13" font-weight="bold">Y 平面（亮度）</text>
+  <g transform="translate(20,60)">
+    [Y][Y][Y][Y]
+    [Y][Y][Y][Y]
+    [Y][Y][Y][Y]
+    [Y][Y][Y][Y]
+  </g>
+  <g id="y-grid"></g>
+  <script>
+    (function(){
+      var g=document.getElementById('y-grid');
+      for(var i=0;i<4;i++)for(var j=0;j<4;j++){
+        var r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+        r.setAttribute('x',20+j*30);r.setAttribute('y',60+i*25);
+        r.setAttribute('width',30);r.setAttribute('height',25);
+        r.setAttribute('fill','#58a6ff');r.setAttribute('opacity','0.6');
+        r.setAttribute('stroke','#30363d');
+        g.appendChild(r);
+        var t=document.createElementNS('http://www.w3.org/2000/svg','text');
+        t.setAttribute('x',20+j*30+15);t.setAttribute('y',60+i*25+17);
+        t.setAttribute('text-anchor','middle');t.setAttribute('fill','#fff');
+        t.setAttribute('font-size','11');t.textContent='Y';
+        g.appendChild(t);
+      }
+    })();
+  </script>
+
+  <!-- Cb/Cr 平面 -->
+  <text x="430" y="50" text-anchor="middle" fill="#f78166" font-size="13" font-weight="bold">Cb / Cr 平面（色度，1/4 分辨率）</text>
+  <g id="cbcr-grid"></g>
+  <script>
+    (function(){
+      var g=document.getElementById('cbcr-grid');
+      var labels=[['Cb','Cr'],['Cb','Cr']];
+      for(var i=0;i<2;i++)for(var j=0;j<2;j++){
+        var r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+        r.setAttribute('x',320+j*60);r.setAttribute('y',60+i*50);
+        r.setAttribute('width',60);r.setAttribute('height',50);
+        r.setAttribute('fill','#f78166');r.setAttribute('opacity','0.5');
+        r.setAttribute('stroke','#30363d');
+        g.appendChild(r);
+        var t=document.createElementNS('http://www.w3.org/2000/svg','text');
+        t.setAttribute('x',320+j*60+30);t.setAttribute('y',60+i*50+30);
+        t.setAttribute('text-anchor','middle');t.setAttribute('fill','#fff');
+        t.setAttribute('font-size','12');t.textContent=labels[i][j];
+        g.appendChild(t);
+      }
+      // 标注覆盖关系
+      var rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
+      rect.setAttribute('x',20);rect.setAttribute('y',60);
+      rect.setAttribute('width',60);rect.setAttribute('height',50);
+      rect.setAttribute('fill','none');rect.setAttribute('stroke','#d29922');
+      rect.setAttribute('stroke-width','2');rect.setAttribute('stroke-dasharray','3 2');
+      g.appendChild(rect);
+    })();
+  </script>
+  <path d="M 90 85 L 320 85" stroke="#d29922" stroke-width="1.5" stroke-dasharray="3 2" marker-end="url(#arr3)"/>
+  <defs>
+    <marker id="arr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#d29922"/>
+    </marker>
+  </defs>
+  <text x="200" y="78" text-anchor="middle" fill="#d29922" font-size="11">4 个 Y 共享 1 个 Cb+1 个 Cr</text>
+  <text x="300" y="180" text-anchor="middle" fill="#8b949e" font-size="11">数据量：Y占 2/3，Cb+Cr 共占 1/3 → 比原始 RGB 省一半带宽</text>
+</svg>
+<div class="caption">图 2.2：YCbCr 4:2:0 降采样原理 —— 亮度全分辨率，色度 1/4 分辨率</div>
+</div>
+
+<p><strong>YCbCr 与 YUV 的关系</strong>：YCbCr 是 YUV 的数字化版本（离散化+缩放），本质一样。JPEG 压缩就用 YCbCr 空间。</p>
+
+<h3 class="subsection">现实应用全景</h3>
+
+<table>
+<tr><th>技术</th><th>应用</th><th>业务实例</th></tr>
+<tr><td><strong>JPEG 压缩</strong></td><td>RGB→YCbCr，对 Cb/Cr 降采样后 DCT 变换+量化</td><td>压缩率 10:1~20:1 而人眼难辨</td></tr>
+<tr><td><strong>视频流</strong></td><td>H.264/H.265 在 YCbCr 空间编码</td><td>B 站 1080p 色度分辨率仅 960×540（4:2:0）</td></tr>
+<tr><td><strong>WebRTC 通话</strong></td><td>带宽有限时优先保证 Y 通道清晰</td><td>Zoom/腾讯会议低带宽模式</td></tr>
+<tr><td><strong>Photoshop 拾色器</strong></td><td>色环+三角形 = HSV 模型</td><td>色环选 H，三角形左右 S 上下 V</td></tr>
+<tr><td><strong>自动驾驶</strong></td><td>HSV 空间检测信号灯</td><td>H 通道直接编码色调，不受亮度干扰</td></tr>
+</table>
+
+<div class="callout architect">
+<h4 style="color:var(--purple);margin-bottom:8px">🏛️ 现代技术栈全景</h4>
+<p><strong>RGB 色域战争</strong>：sRGB (~35% CIE 1931，Web 标准) → AdobeRGB (~50%，专业摄影) → Display P3 (~45%，Apple 生态) → DCI-P3 (~45%，数字影院) → Rec.2020 (~75%，4K HDR 流媒体) → ACES (~100%+，电影 VFX)。</p>
+<p><strong>视频编码工业级实现</strong>：H.264 / H.265 / AV1 / VVC 全部基于 YCbCr 4:2:0。B 站 1080p 高码率 4Mbps，原始未压缩约 500Mbps —— 压缩比 125:1。AV1 (AOMedia 联盟：Google/Netflix/Amazon/微软等) 比同画质 H.265 再省 30%。</p>
+<p><strong>色彩管理 (CMS)</strong>：同一张 sRGB 图在 iPhone (P3 屏) 和 Android (sRGB 屏) 上颜色不同 —— iPhone 更鲜艳。解决方案是 <strong>ICC Profile</strong>：图片嵌入色彩空间描述，系统自动转换。前端必知：PNG/JPEG/WebP 都支持嵌入 ICC Profile。</p>
+<p><strong>AI 时代的可微色彩变换</strong>：传统颜色空间转换是固定矩阵，现代用神经网络学习最优变换。Adobe Enhance Super Resolution 用可学习参数；NeRF 用 MLP 隐式表示 3D 点的颜色+密度，放弃显式颜色模型。</p>
+</div>
+
+<div class="anchor">
+<strong>选模型速记口诀</strong>：<br>
+显示器/手机屏 → <strong>RGB</strong>（加色，发光）<br>
+印刷/打印/油墨 → <strong>CMYK</strong>（减色，吸光，K=黑色省钱）<br>
+设计师调色/信号灯检测 → <strong>HSV/HSI</strong>（H=色环角度，S=饱和，V=明度）<br>
+视频压缩/兼容黑白 → <strong>YUV/YCbCr</strong>（亮度+色差，4:2:0 降采样）
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- 第三章 -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch3">
+<h2 class="chapter-title"><span class="num">3</span> BMP 位图颜色表 <span class="sub">—— 用索引省钱</span></h2>
+
+<div class="callout origin">
+<strong>历史背景</strong>：1990 年代 Windows 3.x 时代，一台电脑只有 4MB 内存，一张 640×480 的 24 位真彩图需 900KB —— 几乎是可用内存的 1/5！<br>
+<strong>解法</strong>：<strong>颜色表（调色板 / Palette）</strong>。如果一幅图只用了 16 种颜色，为什么要为每个像素存 24 位 RGB？不如建一张"颜色查找表"，每个像素只存<strong>索引号</strong>。
+</div>
+
+<h3 class="subsection">工作原理</h3>
+
+<div class="diagram">
+<svg viewBox="0 0 700 240" width="700">
+  <text x="120" y="20" text-anchor="middle" fill="#8b949e" font-size="12">索引数据（每像素 8bit）</text>
+  <g id="idx-grid"></g>
+  <script>
+    (function(){
+      var g=document.getElementById('idx-grid');
+      var vals=[3,3,5,7,7,8,8,5,3,3,5,7,7,8,8,5,3,3,5,7,7,8,8,5,3,3,5,7,7,8,8,5];
+      var colors=['#000','#f00','#0f0','#00f','#ff0','#f0f','#0ff','#fff','#aaa','#888','#666','#444','#222','#fcc','#cfc','#ccf'];
+      for(var i=0;i<4;i++)for(var j=0;j<8;j++){
+        var v=vals[i*8+j];
+        var r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+        r.setAttribute('x',20+j*30);r.setAttribute('y',40+i*30);
+        r.setAttribute('width',30);r.setAttribute('height',30);
+        r.setAttribute('fill',colors[v]);
+        r.setAttribute('stroke','#30363d');r.setAttribute('stroke-width','0.5');
+        g.appendChild(r);
+        var t=document.createElementNS('http://www.w3.org/2000/svg','text');
+        t.setAttribute('x',20+j*30+15);t.setAttribute('y',40+i*30+20);
+        t.setAttribute('text-anchor','middle');t.setAttribute('fill','#fff');
+        t.setAttribute('font-size','12');t.setAttribute('font-family','monospace');
+        t.textContent=v;
+        g.appendChild(t);
+      }
+    })();
+  </script>
+
+  <!-- 箭头 -->
+  <path d="M 280 100 L 340 100" stroke="#58a6ff" stroke-width="2" marker-end="url(#arr4)"/>
+  <text x="310" y="90" text-anchor="middle" fill="#58a6ff" font-size="11">查表</text>
+
+  <!-- 颜色表 -->
+  <text x="510" y="20" text-anchor="middle" fill="#8b949e" font-size="12">颜色表 (BGR+reserved)</text>
+  <g transform="translate(360,30)">
+    <rect x="0" y="0" width="220" height="20" fill="#1c2128" stroke="#30363d"/>
+    <text x="20" y="14" text-anchor="middle" fill="#000" font-size="11" font-weight="bold" style="background:#fff">索引0 → BGR(0,0,0)</text>
+    <rect x="0" y="20" width="220" height="20" fill="#0a0a0a" stroke="#30363d"/>
+    <text x="20" y="34" text-anchor="middle" fill="#fff" font-size="11" font-family="monospace">0</text>
+    <text x="110" y="34" text-anchor="middle" fill="#3fb950" font-size="11" font-family="monospace">[0, 0, 0, 0]</text>
+    <rect x="0" y="40" width="220" height="20" fill="#0a0a0a" stroke="#30363d"/>
+    <text x="20" y="54" text-anchor="middle" fill="#fff" font-size="11" font-family="monospace">3</text>
+    <text x="110" y="54" text-anchor="middle" fill="#3fb950" font-size="11" font-family="monospace">[0, 0, 255, 0]</text>
+    <rect x="0" y="60" width="220" height="20" fill="#0a0a0a" stroke="#30363d"/>
+    <text x="20" y="74" text-anchor="middle" fill="#fff" font-size="11" font-family="monospace">5</text>
+    <text x="110" y="74" text-anchor="middle" fill="#3fb950" font-size="11" font-family="monospace">[255, 0, 255, 0]</text>
+    <rect x="0" y="80" width="220" height="20" fill="#0a0a0a" stroke="#30363d"/>
+    <text x="20" y="94" text-anchor="middle" fill="#fff" font-size="11" font-family="monospace">7</text>
+    <text x="110" y="94" text-anchor="middle" fill="#3fb950" font-size="11" font-family="monospace">[255, 255, 255, 0]</text>
+    <rect x="0" y="100" width="220" height="20" fill="#0a0a0a" stroke="#30363d"/>
+    <text x="20" y="114" text-anchor="middle" fill="#8b949e" font-size="11">...</text>
+    <text x="110" y="114" text-anchor="middle" fill="#8b949e" font-size="11">...</text>
+    <rect x="0" y="120" width="220" height="20" fill="#0a0a0a" stroke="#30363d"/>
+    <text x="20" y="134" text-anchor="middle" fill="#fff" font-size="11" font-family="monospace">8</text>
+    <text x="110" y="134" text-anchor="middle" fill="#3fb950" font-size="11" font-family="monospace">[170,170,170, 0]</text>
+  </g>
+  <defs>
+    <marker id="arr4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#58a6ff"/>
+    </marker>
+  </defs>
+</svg>
+<div class="caption">图 3.1：颜色表工作原理 —— 索引 → 查表 → RGB</div>
+</div>
+
+<div class="callout warn">
+<strong>⚠️ 易错：存储顺序是 BGR 不是 RGB！</strong>这是因为 Windows COLORREF 结构用 <code class="inline">0x00BBGGRR</code> 整型存储，小端序机器上低字节在前。考试会考这个细节！
+</div>
+
+<h3 class="subsection">位图深度与颜色表的关系</h3>
+
+<table>
+<tr><th>位图深度</th><th>颜色数</th><th>颜色表项数</th><th>每像素位数</th><th>颜色表</th></tr>
+<tr><td>1 位</td><td>2</td><td>2</td><td>1 bit</td><td>需要</td></tr>
+<tr><td>4 位</td><td>16</td><td>16</td><td>4 bit</td><td>需要</td></tr>
+<tr><td><strong>8 位</strong></td><td><strong>256</strong></td><td><strong>256</strong></td><td><strong>8 bit (1字节)</strong></td><td>需要</td></tr>
+<tr><td>24 位</td><td>2²⁴ ≈ 1677万</td><td>0</td><td>24 bit (3字节)</td><td><strong>不需要</strong></td></tr>
+</table>
+
+<p>24 位为什么不需要？因为每像素已直接存 3 字节 RGB，索引就失去了"压缩"的意义。</p>
+
+<h3 class="subsection">算一笔账</h3>
+
+<div class="formula">
+640×480 图像<br>
+24 位真彩色 = 640×480×3 = <span style="color:var(--red)">921600 字节 ≈ 900KB</span><br>
+8 位索引色 = 640×480×1 + 256×4 = <span style="color:var(--green)">307200 + 1024 ≈ 301KB</span><br>
+存储量缩小 <span style="color:var(--yellow)">2/3</span>
+</div>
+
+<div class="callout architect">
+<h4 style="color:var(--purple);margin-bottom:8px">🏛️ 现代技术栈全景</h4>
+<p><strong>颜色表本身已过时</strong>，但"用索引代替直接存储"的思想永生：</p>
+<ul>
+<li><span class="tag modern">GIF</span> 至今用 256 色调色板（这就是 GIF 颜色不够丰富的原因）</li>
+<li><span class="tag modern">PNG-8</span> 同样是索引色，支持透明度</li>
+<li><span class="tag modern">LUT 调色</span> 影视后期核心 —— 抖音"复古胶片"滤镜本质就是 3D LUT</li>
+<li><span class="tag modern">视频帧间预测</span> H.265/AV1 的 I/P/B 帧 —— "前一帧作为参考索引"是颜色表思想的极致演化</li>
+</ul>
+<p><strong>现代图像格式全景</strong>：</p>
+<table style="margin-top:8px">
+<tr><th>格式</th><th>年代</th><th>压缩</th><th>业务地位</th></tr>
+<tr><td>BMP</td><td>1985</td><td>无</td><td><span class="tag deprecated">几乎淘汰</span></td></tr>
+<tr><td>JPEG</td><td>1992</td><td>DCT 有损</td><td>主流，被 WebP 蚕食</td></tr>
+<tr><td>PNG</td><td>1996</td><td>DEFLATE 无损</td><td>透明图/Logo 主流</td></tr>
+<tr><td>WebP</td><td>2010</td><td>VP8 帧内</td><td>Google 主推，电商商品图</td></tr>
+<tr><td>HEIC/HEIF</td><td>2015</td><td>HEVC 帧内</td><td><span class="tag modern">iOS 默认</span></td></tr>
+<tr><td>AVIF</td><td>2019</td><td>AV1 帧内</td><td><span class="tag modern">Netflix/Chrome 主推</span></td></tr>
+<tr><td>JPEG XL</td><td>2022</td><td>新一代</td><td>已 ISO 标准化</td></tr>
+</table>
+</div>
+
+<div class="anchor">
+<strong>记忆要点</strong>：<br>
+8 位位图颜色表 = <strong>256</strong> 项 &nbsp;|&nbsp; 24 位位图 = <strong>无颜色表</strong><br>
+每条目 = <strong>4 字节 BGR+reserved</strong>（注意 BGR 顺序坑）
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- 第四章 -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch4">
+<h2 class="chapter-title"><span class="num">4</span> 图像合成 <span class="sub">—— 两张图怎么合为一张</span></h2>
+
+<div class="callout origin">
+<strong>业务背景</strong>：电影特效、PPT 融合、直播虚拟背景、微信换底色……都涉及"把两张图合并成一张且自然"。<br>
+<strong>演化</strong>：从粗糙到精细 = 直接叠加 → 线性混合 → 按位运算 → 掩膜合成。
+</div>
+
+<h3 class="subsection">线性混合（Alpha 混合）</h3>
+
+<div class="formula">
+g(x,y) = α · f₁(x,y) + (1-α) · f₂(x,y), &nbsp; α ∈ [0, 1]
+</div>
+
+<div class="diagram">
+<svg viewBox="0 0 600 200" width="600">
+  <!-- 图1 -->
+  <rect x="40" y="40" width="100" height="120" fill="#58a6ff" opacity="0.8"/>
+  <text x="90" y="35" text-anchor="middle" fill="#58a6ff" font-size="12">f₁</text>
+  <text x="90" y="175" text-anchor="middle" fill="#8b949e" font-size="11">权重 α</text>
+
+  <!-- 图2 -->
+  <rect x="460" y="40" width="100" height="120" fill="#f78166" opacity="0.8"/>
+  <text x="510" y="35" text-anchor="middle" fill="#f78166" font-size="12">f₂</text>
+  <text x="510" y="175" text-anchor="middle" fill="#8b949e" font-size="11">权重 (1-α)</text>
+
+  <!-- 混合结果 -->
+  <defs>
+    <linearGradient id="blend" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#58a6ff" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#f78166" stop-opacity="0.8"/>
+    </linearGradient>
+  </defs>
+  <rect x="250" y="40" width="100" height="120" fill="url(#blend)"/>
+  <text x="300" y="35" text-anchor="middle" fill="#3fb950" font-size="12" font-weight="bold">g = 混合结果</text>
+
+  <!-- 公式 -->
+  <path d="M 145 100 L 245 100" stroke="#d29922" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <path d="M 355 100 L 455 100" stroke="#d29922" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <text x="300" y="125" text-anchor="middle" fill="#d29922" font-size="13" font-family="monospace">α·f₁ + (1-α)·f₂</text>
+</svg>
+<div class="caption">图 4.1：Alpha 线性混合 —— 两张幻灯片叠在灯箱上</div>
+</div>
+
+<div class="callout principle">
+<strong>直觉</strong>：想象两张幻灯片叠在灯箱上。α 控制第一张的透明度 —— α=1 只看第一张，α=0 只看第二张，α=0.5 各看一半。<br>
+<strong>为什么是 (1-α) 而不是独立系数</strong>：保证加权系数之和为 1，结果不会超出 [0, 255]。如果两个系数独立取值（比如 0.6 + 0.8 = 1.4），结果会溢出。
+</div>
+
+<h3 class="subsection">按位运算合成</h3>
+
+<table>
+<tr><th>运算</th><th>效果</th><th>典型场景</th></tr>
+<tr><td><strong>AND（与）</strong></td><td>两图重叠区域保留</td><td>提取公共部分</td></tr>
+<tr><td><strong>OR（或）</strong></td><td>任一图有内容都保留</td><td>合并两图所有内容</td></tr>
+<tr><td><strong>XOR（异或）</strong></td><td>两图不同的区域保留</td><td>检测两帧差异（运动检测）</td></tr>
+<tr><td><strong>NOT（非）</strong></td><td>取反</td><td>反色效果</td></tr>
+</table>
+
+<div class="callout principle">
+<strong>XOR 的特殊用途</strong>：早期游戏中光标用 XOR 绘制 —— 画一次出现，再画一次消失，不需要额外保存背景。这个技巧叫"XOR 光标"。
+</div>
+
+<h3 class="subsection">掩膜合成（Mask Compositing）</h3>
+
+<div class="diagram">
+<svg viewBox="0 0 700 220" width="700">
+  <!-- 前景 -->
+  <text x="80" y="20" text-anchor="middle" fill="#58a6ff" font-size="12">前景 f₁</text>
+  <circle cx="80" cy="110" r="50" fill="#58a6ff" opacity="0.7"/>
+
+  <!-- 掩膜 -->
+  <text x="240" y="20" text-anchor="middle" fill="#d29922" font-size="12">掩膜 Mask</text>
+  <circle cx="240" cy="110" r="50" fill="#fff"/>
+  <rect x="190" y="60" width="100" height="100" fill="#000"/>
+  <circle cx="240" cy="110" r="50" fill="#fff"/>
+  <text x="240" y="115" text-anchor="middle" fill="#000" font-size="11" font-weight="bold">1</text>
+
+  <!-- 背景 -->
+  <text x="400" y="20" text-anchor="middle" fill="#f78166" font-size="12">背景 f₂</text>
+  <rect x="350" y="60" width="100" height="100" fill="#f78166" opacity="0.7"/>
+
+  <!-- 结果 -->
+  <text x="600" y="20" text-anchor="middle" fill="#3fb950" font-size="12" font-weight="bold">合成结果</text>
+  <rect x="550" y="60" width="100" height="100" fill="#f78166" opacity="0.7"/>
+  <circle cx="600" cy="110" r="50" fill="#58a6ff" opacity="0.7"/>
+
+  <!-- 箭头 -->
+  <path d="M 140 110 L 180 110" stroke="#8b949e" stroke-width="1.5" marker-end="url(#arr5)"/>
+  <path d="M 300 110 L 340 110" stroke="#8b949e" stroke-width="1.5" marker-end="url(#arr5)"/>
+  <path d="M 460 110 L 540 110" stroke="#3fb950" stroke-width="2" marker-end="url(#arr5)"/>
+  <text x="500" y="100" text-anchor="middle" fill="#3fb950" font-size="11">Mask=1 取前景，Mask=0 取背景</text>
+  <defs>
+    <marker id="arr5" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#8b949e"/>
+    </marker>
+  </defs>
+</svg>
+<div class="caption">图 4.2：掩膜合成 —— 用二值图控制哪些区域显示图 A，哪些显示图 B</div>
+</div>
+
+<div class="callout business">
+<strong>现实应用</strong>：
+<ul>
+<li><strong>绿幕抠图</strong>：掩膜由绿色检测生成，绿色区域替换为虚拟背景</li>
+<li><strong>Photoshop 蒙版</strong>：白色区域显示本图层，黑色显示下方，灰色做渐变融合</li>
+<li><strong>人脸美颜</strong>：掩膜标记皮肤区域，只对皮肤做磨皮，保留五官细节</li>
+</ul>
+</div>
+
+<div class="callout architect">
+<h4 style="color:var(--purple);margin-bottom:8px">🏛️ 现代技术栈全景</h4>
+<p><strong>Premultiplied Alpha（预乘 Alpha）</strong>：标准 alpha 混合 <code class="inline">(RGB*A + BGB*(1-A))</code> 有计算冗余。优化：存储时预先 RGB*A，混合时 <code class="inline">Out = RGB' + RGB_bg*(1-A)</code>，少一次乘法。<strong>PNG 不强制 premultiplied，WebP 解码时使用预乘 —— 传 GPU 渲染少一步处理</strong>。</p>
+<p><strong>16 种 Blend Mode</strong>（W3C Compositing and Blending Level 1）：</p>
+<ul>
+<li><span class="tag modern">Separable (12)</span>: normal / multiply / screen / overlay / darken / lighten / color-dodge / color-burn / hard-light / soft-light / difference / exclusion</li>
+<li><span class="tag modern">Non-separable (4)</span>: hue / saturation / color / luminosity</li>
+</ul>
+<p>另有 13 种 <strong>Porter-Duff compositing operator</strong>（source-over / destination-over / source-in 等）管合成层级关系。CSS <code class="inline">mix-blend-mode</code> 和 Canvas <code class="inline">globalCompositeOperation</code> 都基于这套标准。</p>
+<p><strong>AI 抠图的崛起</strong>：</p>
+<ul>
+<li><strong>BackgroundMatting v2</strong> (Microsoft 2020) —— 实时背景替换</li>
+<li><strong>MODNet</strong> —— 人像抠图 SOTA，移动端实时</li>
+<li><strong>SAM / SAM 2</strong> (Meta 2023/2024) —— 零样本分割任意目标，是 Photoshop "Generative Fill" / Canva 一键抠图的底层</li>
+<li><strong>Rembg / remove.bg</strong> —— 电商商品图必备</li>
+</ul>
+<p><strong>感知哈希</strong>：pHash/aHash/dHash —— 图缩成 8×8 灰度图，每像素 1 bit（高于均值=1），得到 64 bit 哈希。比对两张图的汉明距离 —— 这是图片去重、相似图搜索的核心。XOR 思想的现代延续。</p>
+</div>
+
+<div class="anchor">
+<strong>合成方法速选</strong>：<br>
+"渐变融合/淡入淡出" → <strong>线性混合</strong> (α·f₁ + (1-α)·f₂)<br>
+"检测两帧差异" → <strong>XOR 运算</strong><br>
+"绿幕/换底色/美颜" → <strong>掩膜合成</strong>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- 第五章 -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch5">
+<h2 class="chapter-title"><span class="num">5</span> 几何变换 <span class="sub">—— 移动、缩放、旋转的数学本质</span></h2>
+
+<div class="callout origin">
+<strong>核心问题</strong>：旋转照片、裁切视频、游戏中移动角色 —— 这些操作背后都是几何变换。本质：<strong>原图 (x,y) 位置的像素，变换后出现在 (x',y') 位置，怎么算？</strong>
+</div>
+
+<h3 class="subsection">四种基本变换</h3>
+
+<div class="diagram">
+<svg viewBox="0 0 700 320" width="700">
+  <!-- 原图 -->
+  <text x="100" y="20" text-anchor="middle" fill="#8b949e" font-size="12">原图</text>
+  <rect x="60" y="40" width="80" height="60" fill="#58a6ff" opacity="0.5" stroke="#58a6ff"/>
+
+  <!-- 平移 -->
+  <text x="280" y="20" text-anchor="middle" fill="#3fb950" font-size="12">平移 Translation</text>
+  <rect x="240" y="40" width="80" height="60" fill="none" stroke="#8b949e" stroke-dasharray="3 2"/>
+  <rect x="260" y="60" width="80" height="60" fill="#3fb950" opacity="0.5" stroke="#3fb950"/>
+  <path d="M 320 70 L 345 90" stroke="#d29922" stroke-width="1.5" marker-end="url(#ar5)"/>
+  <text x="335" y="65" fill="#d29922" font-size="11">(tx, ty)</text>
+
+  <!-- 缩放 -->
+  <text x="500" y="20" text-anchor="middle" fill="#f78166" font-size="12">缩放 Scale</text>
+  <rect x="460" y="40" width="80" height="60" fill="none" stroke="#8b949e" stroke-dasharray="3 2"/>
+  <rect x="450" y="30" width="100" height="75" fill="#f78166" opacity="0.5" stroke="#f78166"/>
+  <text x="475" y="80" fill="#f78166" font-size="11">sx, sy</text>
+
+  <!-- 旋转 -->
+  <text x="100" y="180" text-anchor="middle" fill="#bc8cff" font-size="12">旋转 Rotation</text>
+  <rect x="60" y="200" width="80" height="60" fill="none" stroke="#8b949e" stroke-dasharray="3 2"/>
+  <g transform="rotate(30, 100, 230)">
+    <rect x="60" y="200" width="80" height="60" fill="#bc8cff" opacity="0.5" stroke="#bc8cff"/>
+  </g>
+  <text x="120" y="220" fill="#bc8cff" font-size="11">θ</text>
+
+  <!-- 镜像 -->
+  <text x="350" y="180" text-anchor="middle" fill="#39c5cf" font-size="12">镜像 Mirror</text>
+  <rect x="290" y="200" width="60" height="60" fill="#39c5cf" opacity="0.5" stroke="#39c5cf"/>
+  <line x1="350" y1="190" x2="350" y2="280" stroke="#d29922" stroke-dasharray="4 2"/>
+  <rect x="350" y="200" width="60" height="60" fill="#39c5cf" opacity="0.3" stroke="#39c5cf" stroke-dasharray="2 2"/>
+  <text x="395" y="240" fill="#8b949e" font-size="11">flip</text>
+
+  <!-- 公式区 -->
+  <g transform="translate(490,190)">
+    <rect x="0" y="0" width="200" height="120" fill="#0d1117" stroke="#30363d" rx="6"/>
+    <text x="100" y="25" text-anchor="middle" fill="#58a6ff" font-size="11" font-weight="bold">变换公式</text>
+    <text x="100" y="45" text-anchor="middle" fill="#3fb950" font-size="11" font-family="monospace">平移: x'=x+tx, y'=y+ty</text>
+    <text x="100" y="65" text-anchor="middle" fill="#f78166" font-size="11" font-family="monospace">缩放: x'=sx·x, y'=sy·y</text>
+    <text x="100" y="85" text-anchor="middle" fill="#bc8cff" font-size="11" font-family="monospace">旋转: x'=x·cosθ-y·sinθ</text>
+    <text x="100" y="105" text-anchor="middle" fill="#39c5cf" font-size="11" font-family="monospace">镜像: x'=W-1-x</text>
+  </g>
+  <defs><marker id="ar5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#d29922"/></marker></defs>
+</svg>
+<div class="caption">图 5.1：四种基本几何变换的可视化</div>
+</div>
+
+<h3 class="subsection">齐次坐标 —— 统一所有变换的魔法</h3>
+
+<div class="callout warn">
+<strong>问题</strong>：平移是<strong>加法</strong>（x'=x+tx），缩放和旋转是<strong>乘法</strong>（x'=sx·x）。加法和乘法不能统一成同一个矩阵操作，意味着平移不能和其他变换组合。<br>
+<strong>解法</strong>：<strong>加一个维度</strong>。把 (x,y) 变成 (x, y, 1)，用 3×3 矩阵统一表示。
+</div>
+
+<div class="diagram">
+<svg viewBox="0 0 700 280" width="700">
+  <text x="350" y="20" text-anchor="middle" fill="#58a6ff" font-size="13" font-weight="bold">齐次坐标下的统一表示</text>
+
+  <!-- 平移 -->
+  <g transform="translate(20,40)">
+    <text x="100" y="15" text-anchor="middle" fill="#3fb950" font-size="12">平移</text>
+    <rect x="0" y="25" width="200" height="100" fill="#0d1117" stroke="#30363d" rx="4"/>
+    <text x="100" y="55" text-anchor="middle" fill="#3fb950" font-size="13" font-family="monospace">[1  0  tx]</text>
+    <text x="100" y="80" text-anchor="middle" fill="#3fb950" font-size="13" font-family="monospace">[0  1  ty]</text>
+    <text x="100" y="105" text-anchor="middle" fill="#3fb950" font-size="13" font-family="monospace">[0  0  1 ]</text>
+  </g>
+
+  <!-- 缩放 -->
+  <g transform="translate(250,40)">
+    <text x="100" y="15" text-anchor="middle" fill="#f78166" font-size="12">缩放</text>
+    <rect x="0" y="25" width="200" height="100" fill="#0d1117" stroke="#30363d" rx="4"/>
+    <text x="100" y="55" text-anchor="middle" fill="#f78166" font-size="13" font-family="monospace">[sx  0  0]</text>
+    <text x="100" y="80" text-anchor="middle" fill="#f78166" font-size="13" font-family="monospace">[0  sy  0]</text>
+    <text x="100" y="105" text-anchor="middle" fill="#f78166" font-size="13" font-family="monospace">[0   0  1]</text>
+  </g>
+
+  <!-- 旋转 -->
+  <g transform="translate(480,40)">
+    <text x="100" y="15" text-anchor="middle" fill="#bc8cff" font-size="12">旋转</text>
+    <rect x="0" y="25" width="200" height="100" fill="#0d1117" stroke="#30363d" rx="4"/>
+    <text x="100" y="55" text-anchor="middle" fill="#bc8cff" font-size="12" font-family="monospace">[cosθ -sinθ 0]</text>
+    <text x="100" y="80" text-anchor="middle" fill="#bc8cff" font-size="12" font-family="monospace">[sinθ  cosθ 0]</text>
+    <text x="100" y="105" text-anchor="middle" fill="#bc8cff" font-size="12" font-family="monospace">[ 0     0   1]</text>
+  </g>
+
+  <text x="350" y="200" text-anchor="middle" fill="#d29922" font-size="13">所有变换都是矩阵乘法 → 多个变换可合并为一个矩阵</text>
+  <text x="350" y="225" text-anchor="middle" fill="#8b949e" font-size="12">"先缩放再旋转" = 旋转矩阵 × 缩放矩阵 × 坐标向量</text>
+  <text x="350" y="250" text-anchor="middle" fill="#3fb950" font-size="12">→ 这是计算机图形学的基石，GPU 渲染管线的核心</text>
+</svg>
+<div class="caption">图 5.2：齐次坐标 —— 用 3×3 矩阵统一所有 2D 变换</div>
+</div>
+
+<h3 class="subsection">插值 —— 为什么变换后需要"补像素"</h3>
+
+<p>几何变换后目标位置坐标往往不是整数。比如原图 (3,4) 旋转后变成 (3.7, 4.3)，但像素坐标必须整数。<strong>插值</strong> —— 用周围已知像素估算非整数位置的值。</p>
+
+<div class="compare">
+<div class="col">
+<h5>最近邻插值</h5>
+<p>四舍五入到最近像素。<strong>速度快</strong>，但缩放时产生锯齿。</p>
+</div>
+<div class="col good">
+<h5>双线性插值</h5>
+<p>取周围 4 像素按距离加权平均。<strong>最常用</strong>，效果与计算量平衡。</p>
+</div>
+</div>
+
+<p><strong>双三次插值</strong>：取周围 16 像素，三次多项式拟合。效果最平滑，计算量大。Photoshop "两次立方"。</p>
+
+<div class="callout warn">
+<strong>关键理解</strong>：图像<strong>缩小不可逆</strong>（多像素合并为一，信息丢失）；图像<strong>放大不增信息</strong>（只在已有像素间插过渡值）。所以"放大看清楚"在技术上做不到 —— 这就是超分辨率重建要解决的问题。
+</div>
+
+<div class="callout architect">
+<h4 style="color:var(--purple);margin-bottom:8px">🏛️ 现代技术栈全景</h4>
+<p><strong>3D 渲染管线</strong>：齐次坐标从 2D 扩展到 3D，<code class="inline">(x,y,z,1)</code> → 4×4 矩阵。每帧计算 <strong>MVP 矩阵</strong>：Model（模型→世界）× View（世界→相机）× Projection（相机→裁剪空间）。CSS <code class="inline">matrix3d()</code>、WebGL/Three.js、Apple Metal/Vulkan 都是这套机制。</p>
+<p><strong>AI 超分辨率颠覆传统插值</strong>：</p>
+<ul>
+<li><strong>Real-ESRGAN</strong> (2021) —— B 站老番修复神器，能"幻觉"出逼真细节</li>
+<li><strong>NVIDIA DLSS</strong> —— 1080p 渲染 + AI 放大到 4K，性能比原生 4K 快 2-3 倍</li>
+<li><strong>AMD FSR / Intel XeSS</strong> —— 同类游戏超分技术</li>
+<li><strong>Apple Neural Engine</strong> —— 自 iPhone X/A11 起内置 NPU，照片"AI 增强"本质是超分</li>
+</ul>
+<p><strong>仿射 vs 投影变换</strong>：仿射（平移+旋转+缩放+剪切）保持平行线；投影（透视）不保持。CSS <code class="inline">matrix()</code> 是 2D 仿射，<code class="inline">matrix3d()</code> + <code class="inline">perspective</code> 是投影。业务：图片裁剪框 8 角点控制、街景标注贴广告、全景图拼接。</p>
+<p><strong>可学习变换 —— STN</strong>：Google DeepMind 2015 提出 Spatial Transformer Network，让网络自己学习最优 2D 仿射矩阵，端到端可微。延伸：Deformable Convolution（卷积核采样位置可学习）。</p>
+</div>
+
+<div class="anchor">
+<strong>判断题陷阱</strong>：<br>
+✅ 齐次坐标将平移表示为矩阵乘法<br>
+✅ 旋转矩阵是正交矩阵（转置 = 逆）<br>
+❌ "图像缩放一定丢失信息" —— 缩小会丢，放大不丢（只是不增）<br>
+❌ "旋转不需要插值" —— 旋转后坐标几乎都不是整数，必须插值
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- 第六章 -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch6">
+<h2 class="chapter-title"><span class="num">6</span> 灰度变换 <span class="sub">—— 单像素的值映射</span></h2>
+
+<div class="callout origin">
+<strong>需求</strong>：照片太暗、雾蒙蒙对比度不够 —— 不需要改变像素间空间关系，只需<strong>调整每个像素的亮度值</strong>。<br>
+<strong>定义</strong>：对每个像素独立做函数映射 <code class="inline">g = T(f)</code>。<br>
+<strong>特征</strong>：<em>逐像素操作，与邻域无关</em>。一个像素的输出只取决于它自己的输入值，不涉及周围像素。计算量极小，效果显著。
+</div>
+
+<h3 class="subsection">线性灰度变换</h3>
+
+<div class="formula">g(x,y) = a · f(x,y) + b</div>
+
+<div class="diagram">
+<svg viewBox="0 0 700 280" width="700">
+  <!-- 坐标系 -->
+  <g transform="translate(50,30)">
+    <line x1="0" y1="220" x2="280" y2="220" stroke="#8b949e"/>
+    <line x1="0" y1="0" x2="0" y2="220" stroke="#8b949e"/>
+    <text x="-10" y="10" fill="#8b949e" font-size="10">255</text>
+    <text x="-10" y="225" fill="#8b949e" font-size="10">0</text>
+    <text x="280" y="235" fill="#8b949e" font-size="10">255</text>
+    <text x="-25" y="115" fill="#58a6ff" font-size="11">g</text>
+    <text x="270" y="240" fill="#58a6ff" font-size="11">f</text>
+
+    <!-- a>1 -->
+    <line x1="0" y1="220" x2="280" y2="0" stroke="#3fb950" stroke-width="2"/>
+    <text x="240" y="40" fill="#3fb950" font-size="11">a>1（对比度↑）</text>
+
+    <!-- a=1 b>0 -->
+    <line x1="0" y1="180" x2="280" y2="180" stroke="#d29922" stroke-width="2" stroke-dasharray="4 2"/>
+    <text x="220" y="175" fill="#d29922" font-size="11">a=1,b>0（变亮）</text>
+
+    <!-- 0<a<1 -->
+    <line x1="0" y1="220" x2="280" y2="100" stroke="#f78166" stroke-width="2"/>
+    <text x="220" y="115" fill="#f78166" font-size="11">0&lt;a&lt;1（对比度↓）</text>
+
+    <!-- a<0 -->
+    <line x1="0" y1="0" x2="280" y2="220" stroke="#f85149" stroke-width="2"/>
+    <text x="200" y="60" fill="#f85149" font-size="11">a&lt;0（反相）</text>
+  </g>
+
+  <!-- 参数说明 -->
+  <g transform="translate(380,30)">
+    <rect x="0" y="0" width="280" height="240" fill="#1c2128" stroke="#30363d" rx="6"/>
+    <text x="140" y="25" text-anchor="middle" fill="#bc8cff" font-size="13" font-weight="bold">参数作用</text>
+
+    <text x="20" y="55" fill="#3fb950" font-size="12" font-weight="bold">a 的作用 — 拉伸/压缩</text>
+    <text x="20" y="75" fill="#8b949e" font-size="11">a &gt; 1：放大灰度差异，对比度↑</text>
+    <text x="20" y="93" fill="#8b949e" font-size="11">a = 1：不变</text>
+    <text x="20" y="111" fill="#8b949e" font-size="11">0 &lt; a &lt; 1：缩小差异，对比度↓</text>
+    <text x="20" y="129" fill="#8b949e" font-size="11">a &lt; 0：反转灰度关系（暗变亮）</text>
+
+    <text x="20" y="160" fill="#d29922" font-size="12" font-weight="bold">b 的作用 — 整体亮度</text>
+    <text x="20" y="180" fill="#8b949e" font-size="11">b &gt; 0：所有像素值右移，整体变亮</text>
+    <text x="20" y="198" fill="#8b949e" font-size="11">b &lt; 0：整体变暗</text>
+
+    <text x="20" y="225" fill="#f85149" font-size="11" font-weight="bold">⚠️ 裁剪：超出 [0,255] 需截断</text>
+  </g>
+</svg>
+<div class="caption">图 6.1：线性变换 g = a·f + b 的参数效果</div>
+</div>
+
+<h3 class="subsection">非线性灰度变换</h3>
+
+<h4 class="minor">幂次变换（伽马变换）—— 高频考点</h4>
+
+<div class="formula">g = c · f^γ, &nbsp; γ &gt; 0, &nbsp; c 通常取 1</div>
+
+<div class="diagram">
+<svg viewBox="0 0 700 240" width="700">
+  <g transform="translate(50,20)">
+    <line x1="0" y1="180" x2="280" y2="180" stroke="#8b949e"/>
+    <line x1="0" y1="0" x2="0" y2="180" stroke="#8b949e"/>
+    <text x="-10" y="10" fill="#8b949e" font-size="10">255</text>
+    <text x="280" y="195" fill="#8b949e" font-size="10">255 (f)</text>
+    <text x="-15" y="95" fill="#58a6ff" font-size="11">g</text>
+
+    <!-- γ<1 -->
+    <path d="M 0 180 Q 50 80, 280 0" stroke="#3fb950" stroke-width="2.5" fill="none"/>
+    <text x="180" y="60" fill="#3fb950" font-size="12">γ&lt;1 变亮（拉伸低灰度）</text>
+
+    <!-- γ=1 -->
+    <line x1="0" y1="180" x2="280" y2="0" stroke="#8b949e" stroke-width="1.5" stroke-dasharray="4 2"/>
+    <text x="220" y="115" fill="#8b949e" font-size="11">γ=1 恒等</text>
+
+    <!-- γ>1 -->
+    <path d="M 0 180 Q 230 100, 280 0" stroke="#f78166" stroke-width="2.5" fill="none"/>
+    <text x="80" y="130" fill="#f78166" font-size="12">γ&gt;1 变暗（拉伸高灰度）</text>
+  </g>
+
+  <g transform="translate(380,30)">
+    <rect x="0" y="0" width="290" height="180" fill="#1c2128" stroke="#30363d" rx="6"/>
+    <text x="145" y="25" text-anchor="middle" fill="#d29922" font-size="13" font-weight="bold">为什么叫"伽马"？</text>
+    <text x="15" y="50" fill="#8b949e" font-size="11">CRT 显示器物理特性：</text>
+    <text x="15" y="68" fill="#3fb950" font-size="12" font-family="monospace">L = V^γ (γ ≈ 2.2)</text>
+    <text x="15" y="92" fill="#8b949e" font-size="11">给 CRT 输入线性编码图像，显示偏暗</text>
+    <text x="15" y="110" fill="#8b949e" font-size="11">→ 存储时预补偿 g = f^(1/2.2)</text>
+    <text x="15" y="128" fill="#8b949e" font-size="11">→ CRT 非线性被抵消，显示正确</text>
+    <text x="15" y="155" fill="#f85149" font-size="11" font-weight="bold">⚠️ γ 必须大于 0！</text>
+    <text x="15" y="172" fill="#8b949e" font-size="10">γ=0 失去意义；γ&lt;0 对 f=0 无定义</text>
+  </g>
+</svg>
+<div class="caption">图 6.2：幂次变换曲线 —— γ&lt;1 变亮，γ&gt;1 变暗</div>
+</div>
+
+<h4 class="minor">对数变换</h4>
+
+<div class="formula">g = c · log(1 + f)</div>
+
+<p>效果类似 γ&lt;1 的幂次变换，但拉伸力度更大。<strong>最典型应用</strong>：显示傅里叶频谱 —— 频谱的直流分量可能比高频大几个数量级，对数变换能把动态范围压缩到显示范围。</p>
+
+<h4 class="minor">反色变换 —— 最易丢分！</h4>
+
+<div class="formula" style="font-size:22px;color:var(--red)">g(x,y) = <span style="color:var(--red);text-decoration:underline">255</span> - f(x,y)</div>
+
+<div class="callout warn">
+<strong>⚠️⚠️⚠️ 最易丢分</strong>：是 <strong style="color:var(--red);font-size:18px">255</strong> - f(x,y)，<strong>不是 256</strong>！<br>
+因为灰度范围 0~255 共 256 个值。0 和 255 是边界。<br>
+✅ f=0 → g=255（纯黑变纯白）<br>
+✅ f=255 → g=0（纯白变纯黑）<br>
+❌ 若用 256：f=0 → g=256 超范围！f=255 → g=1 不是真反色！
+</div>
+
+<h3 class="subsection">6 种降质图像及处理方法（分析题核心）</h3>
+
+<table>
+<tr><th>降质类型</th><th>灰度分布特征</th><th>处理方法</th><th>类别</th></tr>
+<tr><td><strong>过暗图像</strong></td><td>集中在 0 附近</td><td>γ&lt;1 幂次 / 对数变换</td><td><span class="tag origin">灰度变换</span></td></tr>
+<tr><td><strong>过亮图像</strong></td><td>集中在 255 附近</td><td>γ&gt;1 幂次变换</td><td><span class="tag origin">灰度变换</span></td></tr>
+<tr><td><strong>对比度不足</strong></td><td>集中在窄中间区间</td><td>线性对比度拉伸（分段线性）</td><td><span class="tag origin">灰度变换</span></td></tr>
+<tr><td><strong>加性噪声</strong></td><td>叠加随机干扰</td><td>邻域平均法（均值滤波）</td><td><span class="tag use">平滑处理</span></td></tr>
+<tr><td><strong>椒盐噪声</strong></td><td>随机黑白亮点</td><td><strong>中值滤波（首选）</strong></td><td><span class="tag use">平滑处理</span></td></tr>
+<tr><td><strong>模糊图像</strong></td><td>边缘不清晰</td><td>梯度法锐化</td><td><span class="tag modern">锐化处理</span></td></tr>
+</table>
+
+<div class="anchor">
+<strong>记忆口诀</strong>：<br>
+暗提亮（γ&lt;1） · 亮压暗（γ&gt;1） · 灰拉伸（对比度）<br>
+随机噪均值滤 · 椒盐噪中值滤 · 模糊图梯度锐
+</div>
+
+<div class="callout architect">
+<h4 style="color:var(--purple);margin-bottom:8px">🏛️ 现代技术栈全景</h4>
+<p><strong>LUT (Look-Up Table)</strong>：预计算 256 个输入对应的输出，运行时查表 O(1)。<strong>3D LUT</strong>（64×64×64 立方体纹理）用于 RGB 调色 —— Adobe Lightroom、抖音电影胶片滤镜、DaVinci Resolve 调色台的核心技术。</p>
+<p><strong>线性工作流 (Linear Workflow)</strong>：sRGB 图像存储时已做 γ≈1/2.2 预补偿。若直接做光照计算会偏暗。正确流程：sRGB → 转线性 → 光照/混合/滤波 → 转回 sRGB。Unity/Unreal 默认线性工作流；Apple 自 2015 年 5K iMac 起推 P3 显示器时就强调"端到端线性工作流"。</p>
+<p><strong>AI 修复 6 种降质</strong>：</p>
+<ul>
+<li><strong>Zero-DCE / EnlightenGAN</strong> —— 无监督学习提亮暗图</li>
+<li><strong>CLAHE</strong> —— 自适应直方图均衡，医学影像工业标准</li>
+<li><strong>DnCNN / Noise2Noise</strong> —— MIT 2018 革命性工作，<strong>用噪声图去噪声图，无需干净训练数据</strong></li>
+<li><strong>DeblurGAN-v2 / NAFNet</strong> —— 去模糊 SOTA</li>
+<li>中值滤波去椒盐仍是 SOTA，AI 难以超越</li>
+</ul>
+<p><strong>灰度变换与激活函数的同构</strong>：<code class="inline">g = T(f)</code> 在数学上和神经网络激活函数 <code class="inline">y = σ(x)</code> 完全同构。ReLU 本质就是对每个像素做 <code class="inline">max(0, x)</code> —— 和图像处理中"负值裁剪到 0"一模一样。</p>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- 第七章 -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch7">
+<h2 class="chapter-title"><span class="num">7</span> 图像平滑 <span class="sub">—— 用邻居信息压制噪声</span></h2>
+
+<div class="callout origin">
+<strong>核心思想</strong>：噪声是随机、孤立的，真实信号是连续、相关的 —— 用周围像素的平均来"淹没"噪声。<br>
+<strong>永恒矛盾</strong>：<strong>去噪 vs 保边</strong>。平滑在压制噪声的同时也会模糊边缘 —— 因为边缘本质是灰度突变，平滑恰恰削弱突变。
+</div>
+
+<h3 class="subsection">邻域平均法（均值滤波）</h3>
+
+<div class="formula">3×3 均值核：1/9 × [1 1 1; 1 1 1; 1 1 1]</div>
+
+<div class="callout principle">
+<strong>本质</strong>：卷积操作，核内所有权重相等。<br>
+<strong>效果</strong>：对加性高斯噪声有效（多个像素平均后期望趋近真实值，大数定律）；<strong>会模糊边缘</strong>（边缘两侧灰度平均后变中间值）。<br>
+<strong>加权均值</strong>：给中心更大权重。最常用高斯核近似 1/16 × [1 2 1; 2 4 2; 1 2 1]。
+</div>
+
+<h3 class="subsection">中值滤波法 —— 简答题必背</h3>
+
+<div class="diagram">
+<svg viewBox="0 0 700 240" width="700">
+  <text x="350" y="20" text-anchor="middle" fill="#58a6ff" font-size="13" font-weight="bold">中值滤波：3×3 窗口 → 排序 → 取中值</text>
+
+  <!-- 窗口 -->
+  <g transform="translate(30,40)">
+    <text x="120" y="-5" text-anchor="middle" fill="#8b949e" font-size="11">3×3 窗口（含椒盐噪声 200）</text>
+    <rect x="60" y="0" width="180" height="180" fill="none" stroke="#d29922" stroke-width="2"/>
+    [10, 20, 15]
+    [200, 18, 12]
+    [14, 16, 22]
+  </g>
+  <g id="mwin"></g>
+  <script>
+    (function(){
+      var g=document.getElementById('mwin');
+      var vals=[[10,20,15],[200,18,12],[14,16,22]];
+      for(var i=0;i<3;i++)for(var j=0;j<3;j++){
+        var v=vals[i][j];
+        var r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+        r.setAttribute('x',90+j*60);r.setAttribute('y',40+i*60);
+        r.setAttribute('width',60);r.setAttribute('height',60);
+        r.setAttribute('fill',v===200?'#f85149':'#1c2128');
+        r.setAttribute('stroke','#30363d');
+        g.appendChild(r);
+        var t=document.createElementNS('http://www.w3.org/2000/svg','text');
+        t.setAttribute('x',90+j*60+30);t.setAttribute('y',40+i*60+38);
+        t.setAttribute('text-anchor','middle');
+        t.setAttribute('fill',v===200?'#fff':'#58a6ff');
+        t.setAttribute('font-size','16');t.setAttribute('font-family','monospace');
+        t.textContent=v;
+        g.appendChild(t);
+      }
+    })();
+  </script>
+
+  <!-- 箭头 -->
+  <path d="M 280 130 L 340 130" stroke="#58a6ff" stroke-width="2" marker-end="url(#ar7)"/>
+  <text x="310" y="120" text-anchor="middle" fill="#58a6ff" font-size="11">排序</text>
+
+  <!-- 排序后 -->
+  <g transform="translate(360,100)">
+    <text x="160" y="-25" text-anchor="middle" fill="#8b949e" font-size="11">排序结果</text>
+    <text x="160" y="35" text-anchor="middle" fill="#3fb950" font-size="13" font-family="monospace">[10, 12, 14, 15, 16, 18, 20, 22, 200]</text>
+    <rect x="100" y="10" width="40" height="40" fill="#3fb950" opacity="0.3" stroke="#3fb950" stroke-width="2"/>
+    <text x="120" y="35" text-anchor="middle" fill="#3fb950" font-size="16" font-weight="bold" font-family="monospace">16</text>
+    <text x="120" y="70" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="bold">中值</text>
+  </g>
+  <defs><marker id="ar7" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#58a6ff"/></marker></defs>
+</svg>
+<div class="caption">图 7.1：中值滤波操作 —— 200 噪声点被排除，输出 16 不受影响</div>
+</div>
+
+<div class="callout principle">
+<strong>为什么中值滤波能保边</strong>：考虑水平边缘（上方灰度 10，下方 200），取跨越边缘的 3×3 窗口：<br>
+[10,10,10] [10,10,10] [200,200,200] → 排序后 [10,10,10,10,10,10,200,200,200] → 中值=10<br>
+均值滤波输出 = 73.3（边缘严重模糊）；中值滤波输出 = 10（保留边缘）。<br>
+<strong>非线性滤波</strong>：median(a·x + b·y) ≠ a·median(x) + b·median(y)，<strong>不能用卷积核表示</strong>。
+</div>
+
+<h3 class="subsection">邻域平均 vs 中值滤波（高频对比）</h3>
+
+<div class="compare">
+<div class="col">
+<h5>邻域平均法</h5>
+<ul>
+<li><strong>线性</strong>滤波</li>
+<li>椒盐噪声：效果差（噪声扩散）</li>
+<li>高斯噪声：<strong>效果好</strong></li>
+<li>边缘保持：差（模糊边缘）</li>
+<li>计算：快（加法+除法）</li>
+<li>卷积核表示：能</li>
+</ul>
+</div>
+<div class="col good">
+<h5>中值滤波法</h5>
+<ul>
+<li><strong>非线性</strong>滤波</li>
+<li>椒盐噪声：<strong>效果好</strong>（噪声被排除）</li>
+<li>高斯噪声：效果一般</li>
+<li>边缘保持：<strong>好</strong></li>
+<li>计算：较慢（需排序）</li>
+<li>卷积核表示：不能</li>
+</ul>
+</div>
+</div>
+
+<div class="callout architect">
+<h4 style="color:var(--purple);margin-bottom:8px">🏛️ 现代技术栈全景</h4>
+<p><strong>保边去噪的演化路径</strong>：</p>
+<ol>
+<li><strong>高斯滤波</strong> —— 各向同性，简单但模糊边缘</li>
+<li><strong>双边滤波</strong> (Tomasi 1998) —— 加"值域权重"，跨边缘权重小。Photoshop "表面模糊"本质就是双边滤波</li>
+<li><strong>引导滤波</strong> (何恺明 2010) —— O(N) 复杂度，避免梯度反转。美颜磨皮主流</li>
+<li><strong>非局部均值 NLM</strong> (Buades 2005) —— 全图搜索相似块加权</li>
+<li><strong>BM3D</strong> (Dabov 2007) —— 传统去噪 SOTA，相似块分组 → 3D 变换 → 协同滤波</li>
+<li><strong>深度学习</strong>：DnCNN (2017) / <strong>Noise2Noise</strong> (MIT 2018，用噪声图去噪声，无需干净样本) / SwinIR (2021) / NAFNet (2022)</li>
+</ol>
+<p><strong>扩散模型 — 噪声从"敌人"变"创造力源泉"</strong>：2020 年 DDPM 反转思路 —— 往图像逐步加高斯噪声到完全随机，训练网络预测并去除噪声。<strong>Stable Diffusion</strong> (2022) / DALL-E 3 / Midjourney v6 都基于此。本质是"训练一个超强的去噪网络"，然后从纯噪声反向生成图像。<strong>去噪和生成是同一硬币的两面</strong>。</p>
+<p><strong>业务案例</strong>：iPhone 夜景模式（多帧 Noise2Noise 思想，1 秒拍 9 帧融合）；Topaz Denoise AI / DxO DeepPRIME 商业 RAW 降噪；低剂量 CT 降噪让患者少受 90% 辐射。</p>
+</div>
+
+<div class="anchor">
+<strong>判断题陷阱</strong>：<br>
+✅ 中值滤波是非线性滤波<br>
+✅ 中值滤波比均值滤波更能保留边缘<br>
+❌ "中值滤波一定能去噪" —— 只对椒盐特别有效，对高斯不如均值<br>
+❌ "邻域越大平滑效果越好" —— 越大模糊越严重
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- 第八章 -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch8">
+<h2 class="chapter-title"><span class="num">8</span> 卷积操作 <span class="sub">—— 从数学到代码的完整链条</span></h2>
+
+<div class="callout origin">
+<strong>统一性</strong>：均值滤波、加权均值、Sobel 梯度算子 —— 它们都是"用模板在图像上滑动，对应位置相乘再求和"。这个统一操作就是<strong>卷积</strong> (Convolution)。<br>
+<strong>威力</strong>：<strong>换核不换算法</strong>。换均值核=平滑，换高斯核=加权平滑，换 Sobel 核=边缘检测。
+</div>
+
+<h3 class="subsection">卷积的严格定义</h3>
+
+<div class="formula">g(x,y) = Σᵢ Σⱼ f(x-i, y-j) · k(i, j)</div>
+
+<div class="callout warn">
+<strong>卷积 vs 相关</strong>：公式中的<strong>减号</strong>意味着核需要<strong>翻转 180°</strong>。<br>
+- <strong>卷积</strong>：核翻转 180° 后再滑动相乘求和<br>
+- <strong>相关</strong>：核直接滑动相乘求和（不翻转）<br>
+考试常见核（均值/高斯/Sobel）大多对称，翻转后和自己一样。只有不对称核（如 Roberts 算子）才需真正翻转。
+</div>
+
+<h3 class="subsection">卷积操作的完整步骤</h3>
+
+<div class="diagram">
+<svg viewBox="0 0 700 320" width="700">
+  <text x="350" y="20" text-anchor="middle" fill="#58a6ff" font-size="13" font-weight="bold">卷积操作流程</text>
+
+  <!-- 步骤1: 翻转 -->
+  <g transform="translate(20,40)">
+    <rect width="120" height="80" fill="#1c2128" stroke="#30363d" rx="4"/>
+    <text x="60" y="20" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="bold">1. 翻转核 180°</text>
+    <g transform="translate(40,30)">
+      <rect width="40" height="40" fill="none" stroke="#8b949e"/>
+      <text x="10" y="15" text-anchor="middle" fill="#8b949e" font-size="9">1</text>
+      <text x="30" y="15" text-anchor="middle" fill="#8b949e" font-size="9">2</text>
+      <text x="10" y="32" text-anchor="middle" fill="#8b949e" font-size="9">3</text>
+      <text x="30" y="32" text-anchor="middle" fill="#8b949e" font-size="9">4</text>
+    </g>
+    <path d="M 95 50 L 105 50" stroke="#d29922" marker-end="url(#ar8)"/>
+    <text x="60" y="78" text-anchor="middle" fill="#8b949e" font-size="10">对称核可跳过</text>
+  </g>
+
+  <!-- 步骤2: 填充 -->
+  <g transform="translate(150,40)">
+    <rect width="120" height="80" fill="#1c2128" stroke="#30363d" rx="4"/>
+    <text x="60" y="20" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="bold">2. 边界填充</text>
+    <g transform="translate(35,30)">
+      <rect x="-5" y="-5" width="50" height="50" fill="none" stroke="#d29922" stroke-dasharray="2 1"/>
+      <rect width="40" height="40" fill="#58a6ff" opacity="0.3"/>
+    </g>
+    <text x="60" y="78" text-anchor="middle" fill="#8b949e" font-size="10">零/复制/镜像</text>
+  </g>
+
+  <!-- 步骤3: 滑动 -->
+  <g transform="translate(280,40)">
+    <rect width="120" height="80" fill="#1c2128" stroke="#30363d" rx="4"/>
+    <text x="60" y="20" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="bold">3-5. 滑动+相乘+求和</text>
+    <g transform="translate(30,25)">
+      <rect width="60" height="50" fill="#1c2128" stroke="#8b949e"/>
+      <rect x="20" y="15" width="20" height="20" fill="#f78166" opacity="0.5" stroke="#f78166"/>
+    </g>
+    <text x="60" y="78" text-anchor="middle" fill="#8b949e" font-size="10">核中心对准像素</text>
+  </g>
+
+  <!-- 步骤4: 裁剪 -->
+  <g transform="translate(410,40)">
+    <rect width="120" height="80" fill="#1c2128" stroke="#30363d" rx="4"/>
+    <text x="60" y="20" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="bold">6-7. 裁剪+类型转换</text>
+    <g transform="translate(35,30)">
+      <rect width="50" height="40" fill="#0d1117" stroke="#8b949e"/>
+      <text x="25" y="25" text-anchor="middle" fill="#3fb950" font-size="11" font-family="monospace">0-255</text>
+    </g>
+    <text x="60" y="78" text-anchor="middle" fill="#8b949e" font-size="10">clip + uint8</text>
+  </g>
+
+  <path d="M 140 80 L 150 80" stroke="#58a6ff" marker-end="url(#ar8)"/>
+  <path d="M 270 80 L 280 80" stroke="#58a6ff" marker-end="url(#ar8)"/>
+  <path d="M 400 80 L 410 80" stroke="#58a6ff" marker-end="url(#ar8)"/>
+
+  <!-- 三种填充方法 -->
+  <g transform="translate(540,30)">
+    <text x="80" y="15" text-anchor="middle" fill="#bc8cff" font-size="11" font-weight="bold">三种填充方法</text>
+    <rect width="160" height="100" fill="#1c2128" stroke="#30363d" rx="4"/>
+    <text x="10" y="35" fill="#3fb950" font-size="10">零填充：边缘变暗（黑边）</text>
+    <text x="10" y="55" fill="#d29922" font-size="10">复制：用最近边界填充</text>
+    <text x="10" y="75" fill="#f78166" font-size="10">镜像：边界镜像翻转</text>
+    <text x="10" y="92" fill="#8b949e" font-size="9">3×3 核填 1 行/列，5×5 填 2 行/列</text>
+  </g>
+  <defs><marker id="ar8" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#58a6ff"/></marker></defs>
+</svg>
+<div class="caption">图 8.1：卷积操作的完整流程</div>
+</div>
+
+<h3 class="subsection">手算示例</h3>
+
+<div class="diagram">
+<svg viewBox="0 0 600 200" width="600">
+  <text x="180" y="20" text-anchor="middle" fill="#8b949e" font-size="12">输入图像 3×3</text>
+  <g transform="translate(100,35)">
+    [1,2,3]
+    [4,5,6]
+    [7,8,9]
+  </g>
+  <g id="cinv"></g>
+  <script>
+    (function(){
+      var g=document.getElementById('cinv');
+      var vals=[[1,2,3],[4,5,6],[7,8,9]];
+      for(var i=0;i<3;i++)for(var j=0;j<3;j++){
+        var r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+        r.setAttribute('x',100+j*50);r.setAttribute('y',35+i*40);
+        r.setAttribute('width',50);r.setAttribute('height',40);
+        r.setAttribute('fill','#1c2128');r.setAttribute('stroke','#8b949e');
+        g.appendChild(r);
+        var t=document.createElementNS('http://www.w3.org/2000/svg','text');
+        t.setAttribute('x',100+j*50+25);t.setAttribute('y',35+i*40+27);
+        t.setAttribute('text-anchor','middle');t.setAttribute('fill','#58a6ff');
+        t.setAttribute('font-size','16');t.setAttribute('font-family','monospace');
+        t.textContent=vals[i][j];
+        g.appendChild(t);
+      }
+    })();
+  </script>
+
+  <path d="M 280 95 L 320 95" stroke="#d29922" stroke-width="2" marker-end="url(#ar9)"/>
+  <text x="300" y="85" text-anchor="middle" fill="#d29922" font-size="11">*1/9</text>
+
+  <text x="430" y="20" text-anchor="middle" fill="#8b949e" font-size="12">3×3 均值核</text>
+  <g transform="translate(360,35)">
+    <rect width="150" height="120" fill="#1c2128" stroke="#30363d" rx="4"/>
+    <text x="75" y="30" text-anchor="middle" fill="#3fb950" font-size="12" font-family="monospace">1/9  1/9  1/9</text>
+    <text x="75" y="60" text-anchor="middle" fill="#3fb950" font-size="12" font-family="monospace">1/9  1/9  1/9</text>
+    <text x="75" y="90" text-anchor="middle" fill="#3fb950" font-size="12" font-family="monospace">1/9  1/9  1/9</text>
+    <text x="75" y="115" text-anchor="middle" fill="#d29922" font-size="11">中心 (1,1) 输出 = (1+2+3+4+5+6+7+8+9)/9 = 5</text>
+  </g>
+  <defs><marker id="ar9" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#d29922"/></marker></defs>
+</svg>
+<div class="caption">图 8.2：3×3 均值卷积手算示例</div>
+</div>
+
+<h3 class="subsection">编程题核心代码（10 个填空）</h3>
+
+<pre><code><span class="kw">def</span> <span class="fn">convolution</span>(image, kernel):
+    h, w = image.shape
+    kh, kw = kernel.shape
+    <span class="cmt"># 1. 计算填充大小</span>
+    ph = kh <span class="kw">//</span> <span class="num">2</span>       <span class="cmt"># 上下各填充的行数</span>
+    pw = kw <span class="kw">//</span> <span class="num">2</span>       <span class="cmt"># 左右各填充的列数</span>
+    <span class="cmt"># 2. 零填充</span>
+    padded = <span class="fn">np.zeros</span>((h + <span class="num">2</span>*ph, w + <span class="num">2</span>*pw))
+    padded[ph:ph+h, pw:pw+w] = image
+    <span class="cmt"># 3. 创建输出图像</span>
+    output = <span class="fn">np.zeros_like</span>(image, dtype=<span class="var">float</span>)
+    <span class="cmt"># 4. 滑动卷积核</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(h):
+        <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(w):
+            <span class="cmt"># 5. 提取当前窗口</span>
+            region = padded[i:i+kh, j:j+kw]
+            <span class="cmt"># 6. 对应相乘再求和</span>
+            output[i, j] = <span class="fn">np.sum</span>(region * kernel)
+    <span class="cmt"># 7. 裁剪到合法范围</span>
+    output = <span class="fn">np.clip</span>(output, <span class="num">0</span>, <span class="num">255</span>)
+    <span class="kw">return</span> output.<span class="fn">astype</span>(<span class="var">np.uint8</span>)</code></pre>
+
+<table>
+<tr><th>填空位置</th><th>可能考查</th><th>原理</th></tr>
+<tr><td>填充大小计算</td><td><code>kh // 2</code></td><td>核大小除以 2 取整</td></tr>
+<tr><td>零填充创建</td><td><code>np.zeros</code></td><td>创建全零数组扩展边界</td></tr>
+<tr><td>填充后尺寸</td><td><code>h + 2*ph, w + 2*pw</code></td><td>上下各加 ph 行</td></tr>
+<tr><td>原图复制</td><td><code>padded[ph:ph+h, pw:pw+w] = image</code></td><td>原图放在填充图中间</td></tr>
+<tr><td>创建输出</td><td><code>np.zeros_like</code></td><td>输出与原图同尺寸</td></tr>
+<tr><td>循环范围</td><td><code>range(h), range(w)</code></td><td>遍历每个像素</td></tr>
+<tr><td>窗口提取</td><td><code>padded[i:i+kh, j:j+kw]</code></td><td>截取核大小区域</td></tr>
+<tr><td>卷积计算</td><td><code>np.sum(region * kernel)</code></td><td>对应相乘再求和</td></tr>
+<tr><td>裁剪范围</td><td><code>np.clip(output, 0, 255)</code></td><td>防溢出</td></tr>
+<tr><td>类型转换</td><td><code>np.uint8</code></td><td>转 8 位无符号整型</td></tr>
+</table>
+
+<div class="callout architect">
+<h4 style="color:var(--purple);margin-bottom:8px">🏛️ 现代技术栈全景</h4>
+<p><strong>卷积 —— 深度学习时代的"原子操作"</strong>：2012 年 AlexNet 横空出世，<strong>卷积神经网络 (CNN)</strong> 成了整个 AI 行业的核心架构。换核不换算法 → 换成"让网络学习最优核"。</p>
+<p><strong>CNN 演化全景</strong>：</p>
+<ul>
+<li><strong>LeNet (1998)</strong> LeCun 手写数字 → <strong>AlexNet (2012)</strong> 引爆 DL → <strong>VGG (2014)</strong> 堆叠 3×3 小卷积 → <strong>ResNet (2015)</strong> 残差连接 → <strong>MobileNet (2017)</strong> 深度可分离卷积 → <strong>EfficientNet (2019)</strong> → <strong>ConvNeXt (2022)</strong></li>
+</ul>
+<p><strong>深度可分离卷积</strong>（MobileNet 工程魔法）：标准卷积参数量 <code class="inline">C_in × C_out × k × k</code>，拆成 Depthwise（每通道单独 k×k）+ Pointwise（1×1 通道混合），计算量降到约 <strong>1/9</strong>。iOS/Android 实时图像分类（Apple Vision、Google Lens）都依赖此。</p>
+<p><strong>1×1 卷积</strong>：看似无用，实则关键 —— 降维/升维、跨通道信息融合、Inception 瓶颈层、Transformer 全连接层的本质。</p>
+<p><strong>反卷积 / 转置卷积</strong>：正向卷积的反向操作，让小图放大。U-Net 医学分割、DCGAN 生成器、ESRGAN 超分的核心。</p>
+<p><strong>卷积的现代挑战者 —— ViT</strong> (2020 Google)：把图像切成 16×16 patch，每个 patch 当 token，用自注意力替代卷积。SAM/CLIP/Stable Diffusion 都基于 Transformer。但 CNN 在移动端仍有优势（计算效率高），混合架构（MobileViT、EfficientFormer）正在融合两者。</p>
+<p><strong>工业级加速</strong>：cuDNN（Winograd/FFT 算法，快 10-100 倍）、Tensor Core（V100/A100 混合精度）、im2col+GEMM（转矩阵乘调用 BLAS）、Winograd（3×3 卷积乘法减到 4/9）。</p>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- 第九章 -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch9">
+<h2 class="chapter-title"><span class="num">9</span> 图像锐化 <span class="sub">—— 突出变化，代价是放大噪声</span></h2>
+
+<div class="callout origin">
+<strong>对立统一</strong>：平滑是"压制变化"，锐化是"突出变化"。图像中灰度变化最剧烈处就是<strong>边缘</strong> —— 锐化的本质就是<strong>边缘增强</strong>。<br>
+<strong>数学工具</strong>：<strong>梯度</strong>。梯度方向是函数增长最快方向，梯度大小是增长速度。图像中梯度大处 = 灰度急剧变化 = 边缘。
+</div>
+
+<h3 class="subsection">梯度的定义</h3>
+
+<div class="formula">
+∇f = [∂f/∂x, ∂f/∂y]<br>
+|∇f| = √[(∂f/∂x)² + (∂f/∂y)²] &nbsp;&nbsp; <span style="color:var(--muted)">精确</span><br>
+|∇f| ≈ |∂f/∂x| + |∂f/∂y| &nbsp;&nbsp; <span style="color:var(--green)">近似（考试常用）</span>
+</div>
+
+<p>为什么近似？开平方运算量大，且对于比较大小来说，绝对值之和与平方和根的大小关系一致。</p>
+
+<p><strong>离散图像的偏导</strong>（差分近似）：</p>
+<ul>
+<li>∂f/∂x ≈ f(x+1, y) - f(x, y)（向右看一步，差多少）</li>
+<li>∂f/∂y ≈ f(x, y+1) - f(x, y)（向下看一步，差多少）</li>
+</ul>
+
+<h3 class="subsection">三种梯度算子</h3>
+
+<div class="diagram">
+<svg viewBox="0 0 800 320" width="800">
+  <!-- Roberts -->
+  <g transform="translate(20,30)">
+    <text x="120" y="-5" text-anchor="middle" fill="#3fb950" font-size="13" font-weight="bold">Roberts (2×2)</text>
+    <text x="120" y="12" text-anchor="middle" fill="#8b949e" font-size="10">交叉差分，对噪声敏感</text>
+    <rect x="0" y="20" width="240" height="120" fill="#0d1117" stroke="#30363d" rx="4"/>
+    <text x="60" y="55" text-anchor="middle" fill="#3fb950" font-size="13" font-family="monospace">Gx</text>
+    <text x="60" y="80" text-anchor="middle" fill="#3fb950" font-size="13" font-family="monospace">[ 1  0]</text>
+    <text x="60" y="100" text-anchor="middle" fill="#3fb950" font-size="13" font-family="monospace">[ 0 -1]</text>
+    <text x="180" y="55" text-anchor="middle" fill="#3fb950" font-size="13" font-family="monospace">Gy</text>
+    <text x="180" y="80" text-anchor="middle" fill="#3fb950" font-size="13" font-family="monospace">[0  1]</text>
+    <text x="180" y="100" text-anchor="middle" fill="#3fb950" font-size="13" font-family="monospace">[-1 0]</text>
+    <text x="120" y="160" text-anchor="middle" fill="#d29922" font-size="11">优点：计算量最小</text>
+    <text x="120" y="178" text-anchor="middle" fill="#f85149" font-size="11">缺点：无平滑成分，对噪声极敏感</text>
+  </g>
+
+  <!-- Sobel -->
+  <g transform="translate(280,30)">
+    <text x="120" y="-5" text-anchor="middle" fill="#58a6ff" font-size="13" font-weight="bold">Sobel (3×3) ★最常用</text>
+    <text x="120" y="12" text-anchor="middle" fill="#8b949e" font-size="10">加权差分 + 平滑</text>
+    <rect x="0" y="20" width="240" height="120" fill="#0d1117" stroke="#30363d" rx="4"/>
+    <text x="60" y="55" text-anchor="middle" fill="#58a6ff" font-size="12" font-family="monospace">Gx</text>
+    <text x="60" y="78" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="monospace">[-1 0 1]</text>
+    <text x="60" y="95" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="monospace">[-2 0 2]</text>
+    <text x="60" y="112" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="monospace">[-1 0 1]</text>
+    <text x="180" y="55" text-anchor="middle" fill="#58a6ff" font-size="12" font-family="monospace">Gy</text>
+    <text x="180" y="78" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="monospace">[-1 -2 -1]</text>
+    <text x="180" y="95" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="monospace">[ 0  0  0]</text>
+    <text x="180" y="112" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="monospace">[ 1  2  1]</text>
+    <text x="120" y="160" text-anchor="middle" fill="#3fb950" font-size="11">中间行权重 ±2（离中心最近）</text>
+    <text x="120" y="178" text-anchor="middle" fill="#3fb950" font-size="11">= 先平滑再差分，抗噪性好</text>
+  </g>
+
+  <!-- Prewitt -->
+  <g transform="translate(540,30)">
+    <text x="120" y="-5" text-anchor="middle" fill="#bc8cff" font-size="13" font-weight="bold">Prewitt (3×3)</text>
+    <text x="120" y="12" text-anchor="middle" fill="#8b949e" font-size="10">均匀差分 + 平滑</text>
+    <rect x="0" y="20" width="240" height="120" fill="#0d1117" stroke="#30363d" rx="4"/>
+    <text x="60" y="55" text-anchor="middle" fill="#bc8cff" font-size="12" font-family="monospace">Gx</text>
+    <text x="60" y="78" text-anchor="middle" fill="#bc8cff" font-size="11" font-family="monospace">[-1 0 1]</text>
+    <text x="60" y="95" text-anchor="middle" fill="#bc8cff" font-size="11" font-family="monospace">[-1 0 1]</text>
+    <text x="60" y="112" text-anchor="middle" fill="#bc8cff" font-size="11" font-family="monospace">[-1 0 1]</text>
+    <text x="180" y="55" text-anchor="middle" fill="#bc8cff" font-size="12" font-family="monospace">Gy</text>
+    <text x="180" y="78" text-anchor="middle" fill="#bc8cff" font-size="11" font-family="monospace">[-1 -1 -1]</text>
+    <text x="180" y="95" text-anchor="middle" fill="#bc8cff" font-size="11" font-family="monospace">[ 0  0  0]</text>
+    <text x="180" y="112" text-anchor="middle" fill="#bc8cff" font-size="11" font-family="monospace">[ 1  1  1]</text>
+    <text x="120" y="160" text-anchor="middle" fill="#d29922" font-size="11">平滑权重均匀 (1,1,1)</text>
+    <text x="120" y="178" text-anchor="middle" fill="#8b949e" font-size="11">效果略差于 Sobel，但更简单</text>
+  </g>
+</svg>
+<div class="caption">图 9.1：三种梯度算子的核结构对比</div>
+</div>
+
+<h3 class="subsection">手算梯度（分析题必考）</h3>
+
+<div class="diagram">
+<svg viewBox="0 0 700 280" width="700">
+  <text x="200" y="20" text-anchor="middle" fill="#8b949e" font-size="12">原图 3×3</text>
+  <g id="grad-in"></g>
+  <script>
+    (function(){
+      var g=document.getElementById('grad-in');
+      var vals=[[3,3,3],[3,8,8],[3,8,8]];
+      for(var i=0;i<3;i++)for(var j=0;j<3;j++){
+        var r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+        r.setAttribute('x',120+j*50);r.setAttribute('y',35+i*40);
+        r.setAttribute('width',50);r.setAttribute('height',40);
+        r.setAttribute('fill',vals[i][j]===3?'#1c2128':'#58a6ff');
+        r.setAttribute('opacity',vals[i][j]===3?'1':'0.6');
+        r.setAttribute('stroke','#8b949e');
+        g.appendChild(r);
+        var t=document.createElementNS('http://www.w3.org/2000/svg','text');
+        t.setAttribute('x',120+j*50+25);t.setAttribute('y',35+i*40+27);
+        t.setAttribute('text-anchor','middle');
+        t.setAttribute('fill',vals[i][j]===3?'#58a6ff':'#fff');
+        t.setAttribute('font-size','16');t.setAttribute('font-family','monospace');
+        t.textContent=vals[i][j];
+        g.appendChild(t);
+      }
+    })();
+  </script>
+
+  <!-- Gx 计算 -->
+  <g transform="translate(280,30)">
+    <text x="100" y="20" text-anchor="middle" fill="#3fb950" font-size="12" font-weight="bold">Gx (用 Sobel Gx 核)</text>
+    <rect width="200" height="100" fill="#0d1117" stroke="#30363d" rx="4"/>
+    <text x="10" y="42" fill="#8b949e" font-size="10" font-family="monospace">=(-1)×3+0×3+1×3</text>
+    <text x="10" y="58" fill="#8b949e" font-size="10" font-family="monospace"> +(-2)×3+0×8+2×8</text>
+    <text x="10" y="74" fill="#8b949e" font-size="10" font-family="monospace"> +(-1)×3+0×8+1×8</text>
+    <text x="10" y="92" fill="#3fb950" font-size="12" font-weight="bold" font-family="monospace">= -3+3-6+16-3+8 = 15</text>
+  </g>
+
+  <!-- Gy 计算 -->
+  <g transform="translate(490,30)">
+    <text x="100" y="20" text-anchor="middle" fill="#bc8cff" font-size="12" font-weight="bold">Gy (用 Sobel Gy 核)</text>
+    <rect width="200" height="100" fill="#0d1117" stroke="#30363d" rx="4"/>
+    <text x="10" y="42" fill="#8b949e" font-size="10" font-family="monospace">=(-1)×3+(-2)×3+(-1)×3</text>
+    <text x="10" y="58" fill="#8b949e" font-size="10" font-family="monospace"> +0×3+0×8+0×8</text>
+    <text x="10" y="74" fill="#8b949e" font-size="10" font-family="monospace"> +1×3+2×8+1×8</text>
+    <text x="10" y="92" fill="#bc8cff" font-size="12" font-weight="bold" font-family="monospace">= -3-6-3+3+16+8 = 15</text>
+  </g>
+
+  <!-- 结果 -->
+  <g transform="translate(280,150)">
+    <rect width="410" height="100" fill="#1c2128" stroke="#30363d" rx="4"/>
+    <text x="205" y="25" text-anchor="middle" fill="#d29922" font-size="13" font-weight="bold">梯度幅值</text>
+    <text x="205" y="55" text-anchor="middle" fill="#f85149" font-size="13" font-family="monospace">精确: |∇f| = √(15² + 15²) = √450 ≈ 21.2</text>
+    <text x="205" y="80" text-anchor="middle" fill="#3fb950" font-size="14" font-weight="bold" font-family="monospace">近似: |∇f| = |15| + |15| = 30</text>
+  </g>
+</svg>
+<div class="caption">图 9.2：Sobel 梯度手算完整流程</div>
+</div>
+
+<h3 class="subsection">梯度输出的三种方式</h3>
+
+<div class="compare">
+<div class="col">
+<h5>1. 直接输出幅值</h5>
+<p><code class="inline">g = |∇f|</code><br>边缘为亮线，平坦区域为黑<br>问题：原图灰度信息完全丢失</p>
+</div>
+<div class="col">
+<h5>2. 加阈值输出</h5>
+<p><code class="inline">|∇f| ≥ T → g = |∇f|</code><br><code class="inline">|∇f| &lt; T → g = f(x,y)</code><br>只突出显著边缘，保留背景</p>
+</div>
+</div>
+<p><strong>3. 给边缘指定灰度值</strong>：<code class="inline">|∇f| ≥ T → g = L_G</code>（如 255），<code class="inline">|∇f| &lt; T → g = f(x,y)</code>。边缘统一为某灰度值，便于后续处理。</p>
+
+<div class="callout warn">
+<strong>锐化的代价</strong>：梯度运算对噪声<strong>极度敏感</strong> —— 噪声本身就是灰度突变，梯度会把它当边缘提取出来。所以<strong>"先去噪再锐化"</strong>是标准流程。椒盐噪声图直接锐化只会让噪声更突出，必须先中值滤波去噪，再梯度锐化。
+</div>
+
+<div class="callout architect">
+<h4 style="color:var(--purple);margin-bottom:8px">🏛️ 现代技术栈全景</h4>
+<p><strong>USM (Unsharp Mask) 锐化</strong> —— Photoshop 锐化滤镜的工业级实现：<br>
+<code class="inline">Output = Original + k × (Original - Blurred)</code><br>
+"把模糊后丢失的细节加回来并放大"。比纯梯度锐化更自然 —— 只增强被模糊掉的细节，不放大随机噪声。三个参数：Amount(k)、Radius(高斯核大小)、Threshold(差异小于阈值则不锐化)。</p>
+<p><strong>拉普拉斯金字塔</strong> (Burt & Adelson 1983)：高斯金字塔逐层模糊+下采样，拉普拉斯金字塔 = 每层 - 上采样后的下一层（即"高频细节"）。业务：Photoshop Photomerge 全景拼接、HDR 融合、DeepDream 风格迁移、JPEG XL Squeeze 变换。</p>
+<p><strong>Canny 边缘检测</strong> (1986) —— 工业界最常用，工业 SOTA：高斯平滑 → Sobel 求梯度 → <strong>非极大值抑制 (NMS)</strong>（沿梯度方向只保留局部最大，把粗边缘"压细"） → <strong>双阈值滞后</strong>（高阈值标记强边缘，低阈值连接弱边缘）。OpenCV 一行：<code class="inline">cv2.Canny(img, 100, 200)</code>。业务：OCR 文字检测、车道线检测、二维码检测。</p>
+<p><strong>霍夫变换</strong>：图像空间的点 → 参数空间的曲线，峰值对应几何形状。业务：自动驾驶车道线（直线）、车牌定位（矩形）、瞳孔定位（圆）、文档倾斜矫正。</p>
+<p><strong>AI 边缘检测</strong>：HED (2015) 全卷积端到端预测 → RCF (2017) → BDCN (2019) → <strong>SAM 的边缘 mask</strong> (2023) 零样本边缘检测。业务：Photoshop "选择主体"一键抠图、iOS 人像模式实时虚化、医学影像器官自动勾画。</p>
+<p><strong>超分辨率 —— 锐化的极致形态</strong>：锐化"增强已有边缘"，超分"创造新边缘"。SRCNN (2014) → ESRGAN (2018) → Real-ESRGAN (2021) → Stable Diffusion 超分 (2023+)。业务：B 站 4K 修复、Topaz Video AI、NVIDIA DLSS / AMD FSR / Intel XeSS。</p>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- 第十章 -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch10">
+<h2 class="chapter-title"><span class="num">10</span> 形态学处理 <span class="sub">—— 用形状操作形状</span></h2>
+
+<div class="callout origin">
+<strong>词源</strong>："形态学" (Morphology) 来自生物学，原指研究生物形态结构的学科。<br>
+<strong>诞生</strong>：1960 年代法国数学家 Matheron 和 Serra 在研究地质矿产微观结构时，发明了用几何形状分析图像的数学工具。<br>
+<strong>核心洞察</strong>：很多图像分析任务（数矿粒、测颗粒大小）不需要知道每个像素的灰度值，只需知道"这个位置是不是目标"。<br>
+<strong>前提</strong>：<strong>先把图像二值化</strong>（前景=1，背景=0），然后只用集合运算来操作。
+</div>
+
+<h3 class="subsection">核心概念：结构元素</h3>
+
+<p><strong>结构元素</strong> (Structuring Element, SE) 是形态学操作的"探针"或"模板"，是一个小的二值矩阵，定义操作的"形状"和"大小"。</p>
+
+<div class="diagram">
+<svg viewBox="0 0 700 200" width="700">
+  <text x="120" y="20" text-anchor="middle" fill="#3fb950" font-size="12">3×3 方形</text>
+  <g transform="translate(60,30)">
+    [1,1,1]
+    [1,1,1]
+    [1,1,1]
+  </g>
+  <g id="se-square"></g>
+  <script>
+    (function(){
+      var g=document.getElementById('se-square');
+      for(var i=0;i<3;i++)for(var j=0;j<3;j++){
+        var r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+        r.setAttribute('x',60+j*30);r.setAttribute('y',30+i*30);
+        r.setAttribute('width',30);r.setAttribute('height',30);
+        r.setAttribute('fill','#3fb950');r.setAttribute('opacity','0.5');
+        r.setAttribute('stroke','#30363d');
+        g.appendChild(r);
+      }
+    })();
+  </script>
+
+  <text x="320" y="20" text-anchor="middle" fill="#bc8cff" font-size="12">十字形</text>
+  <g id="se-cross"></g>
+  <script>
+    (function(){
+      var g=document.getElementById('se-cross');
+      var pattern=[[0,1,0],[1,1,1],[0,1,0]];
+      for(var i=0;i<3;i++)for(var j=0;j<3;j++){
+        var r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+        r.setAttribute('x',260+j*30);r.setAttribute('y',30+i*30);
+        r.setAttribute('width',30);r.setAttribute('height',30);
+        r.setAttribute('fill',pattern[i][j]?'#bc8cff':'#1c2128');
+        r.setAttribute('opacity',pattern[i][j]?'0.5':'1');
+        r.setAttribute('stroke','#30363d');
+        g.appendChild(r);
+      }
+    })();
+  </script>
+
+  <text x="520" y="20" text-anchor="middle" fill="#f78166" font-size="12">圆形 (5×5 近似)</text>
+  <g id="se-circle"></g>
+  <script>
+    (function(){
+      var g=document.getElementById('se-circle');
+      var pattern=[[0,1,1,1,0],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[0,1,1,1,0]];
+      for(var i=0;i<5;i++)for(var j=0;j<5;j++){
+        var r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+        r.setAttribute('x',450+j*25);r.setAttribute('y',20+i*25);
+        r.setAttribute('width',25);r.setAttribute('height',25);
+        r.setAttribute('fill',pattern[i][j]?'#f78166':'#1c2128');
+        r.setAttribute('opacity',pattern[i][j]?'0.5':'1');
+        r.setAttribute('stroke','#30363d');
+        g.appendChild(r);
+      }
+    })();
+  </script>
+
+  <text x="350" y="160" text-anchor="middle" fill="#8b949e" font-size="11">结构元素的选择决定操作效果 —— 用 3×3 方形只能去 3×3 以内的小噪点</text>
+</svg>
+<div class="caption">图 10.1：三种常用结构元素</div>
+</div>
+
+<h3 class="subsection">腐蚀 vs 膨胀 —— 对偶操作</h3>
+
+<div class="compare">
+<div class="col bad">
+<h5>腐蚀 Erosion —— 严格审查</h5>
+<p><strong>规则</strong>：结构元素覆盖范围内<strong>全部为 1</strong> → 输出 1；有任何一个 0 → 输出 0。</p>
+<p><strong>效果</strong>：</p>
+<ul>
+<li>缩小白色区域，扩大黑色区域</li>
+<li>去除比 SE 小的白色噪点</li>
+<li>分离细线相连的物体</li>
+</ul>
+<p><strong>代价</strong>：所有物体边缘内缩一圈</p>
+</div>
+<div class="col good">
+<h5>膨胀 Dilation —— 宽松接纳</h5>
+<p><strong>规则</strong>：结构元素覆盖范围内<strong>有至少一个 1</strong> → 输出 1；全部为 0 → 输出 0。</p>
+<p><strong>效果</strong>：</p>
+<ul>
+<li>扩大白色区域，缩小黑色区域</li>
+<li>填充白色目标内比 SE 小的黑洞</li>
+<li>连接差一点就连上的物体</li>
+</ul>
+<p><strong>代价</strong>：所有物体边缘外扩一圈</p>
+</div>
+</div>
+
+<div class="diagram">
+<svg viewBox="0 0 700 280" width="700">
+  <text x="100" y="20" text-anchor="middle" fill="#8b949e" font-size="12">原图</text>
+  <g transform="translate(50,30)">
+    <rect width="100" height="100" fill="#000"/>
+    <circle cx="50" cy="50" r="35" fill="#fff"/>
+    <circle cx="20" cy="20" r="3" fill="#fff"/>
+    <circle cx="50" cy="50" r="3" fill="#000"/>
+  </g>
+  <text x="100" y="155" text-anchor="middle" fill="#8b949e" font-size="10">主体 + 小白点 + 小黑洞</text>
+
+  <path d="M 160 80 L 220 80" stroke="#f85149" stroke-width="2" marker-end="url(#ar10)"/>
+  <text x="190" y="70" text-anchor="middle" fill="#f85149" font-size="11">腐蚀</text>
+
+  <text x="290" y="20" text-anchor="middle" fill="#f85149" font-size="12">腐蚀结果</text>
+  <g transform="translate(240,30)">
+    <rect width="100" height="100" fill="#000"/>
+    <circle cx="50" cy="50" r="28" fill="#fff"/>
+  </g>
+  <text x="290" y="155" text-anchor="middle" fill="#3fb950" font-size="10">主体缩小，小白点消失</text>
+
+  <path d="M 360 80 L 420 80" stroke="#3fb950" stroke-width="2" marker-end="url(#ar10b)"/>
+  <text x="390" y="70" text-anchor="middle" fill="#3fb950" font-size="11">膨胀</text>
+
+  <text x="490" y="20" text-anchor="middle" fill="#3fb950" font-size="12">膨胀结果</text>
+  <g transform="translate(440,30)">
+    <rect width="100" height="100" fill="#000"/>
+    <circle cx="50" cy="50" r="42" fill="#fff"/>
+  </g>
+  <text x="490" y="155" text-anchor="middle" fill="#3fb950" font-size="10">主体扩大，黑洞被填满</text>
+
+  <defs>
+    <marker id="ar10" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#f85149"/></marker>
+    <marker id="ar10b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#3fb950"/></marker>
+  </defs>
+
+  <text x="600" y="50" fill="#8b949e" font-size="11">对偶关系：</text>
+  <text x="600" y="70" fill="#d29922" font-size="11">对前景腐蚀</text>
+  <text x="600" y="90" fill="#d29922" font-size="11">=</text>
+  <text x="600" y="110" fill="#d29922" font-size="11">对背景膨胀</text>
+</svg>
+<div class="caption">图 10.2：腐蚀与膨胀的效果对比 —— 对偶操作</div>
+</div>
+
+<h3 class="subsection">开启 vs 闭合 —— 顺序是考试最容易挖坑的地方</h3>
+
+<div class="compare">
+<div class="col">
+<h5>开启 Opening = 先腐蚀后膨胀</h5>
+<p><strong>原理</strong>：腐蚀先去掉小突起和细连接，膨胀把主物体恢复接近原大小。但被彻底去除的小突起，膨胀无法恢复。</p>
+<p><strong>效果</strong>：</p>
+<ul>
+<li>平滑物体轮廓，去除小突起/毛刺</li>
+<li>断开细窄连接</li>
+<li>去除比 SE 小的白色噪点</li>
+<li><strong>面积减小或不变</strong>（只减不增）</li>
+</ul>
+<p>记忆：开启"开"掉了小突出物 —— 像砂纸打磨毛刺</p>
+</div>
+<div class="col good">
+<h5>闭合 Closing = 先膨胀后腐蚀</h5>
+<p><strong>原理</strong>：膨胀先填充小孔洞和细窄断裂，腐蚀把主物体恢复接近原大小。但被填满的小孔洞，腐蚀无法重新打开。</p>
+<p><strong>效果</strong>：</p>
+<ul>
+<li>平滑物体轮廓，填充小孔洞</li>
+<li>连接窄断裂</li>
+<li>填充比 SE 小的黑色孔洞</li>
+<li><strong>面积增大或不变</strong>（只增不减）</li>
+</ul>
+<p>记忆：闭合"闭"上了小孔洞 —— 像水泥填补裂缝</p>
+</div>
+</div>
+
+<div class="callout warn">
+<strong>⚠️ 判断题陷阱</strong>：<br>
+❌ "开启运算和闭合运算互为逆运算" —— <strong>不互为逆</strong>！开启去除的毛刺，闭合不一定能恢复。<br>
+❌ "先腐蚀再膨胀就是闭合运算" —— 这是<strong>开启运算</strong>！闭合是<strong>先膨胀再腐蚀</strong>。<br>
+<strong>顺序是考试最容易挖坑的地方</strong>。
+</div>
+
+<div class="anchor">
+<strong>选择题技巧</strong>：<br>
+"去掉小毛刺" / "分离粘连物体" → <strong>开启</strong>（先腐蚀后膨胀）<br>
+"填充小孔洞" / "连接断裂" → <strong>闭合</strong>（先膨胀后腐蚀）
+</div>
+
+<h3 class="subsection">纹理的概念</h3>
+
+<p><strong>纹理</strong> = 图像中反复出现的局部模式及其排列规则。两个要素（缺一不可）：</p>
+<ol>
+<li><strong>纹理基元</strong> (Texel)：构成纹理的基本单元，如砖墙中的一块砖、草地上的一根草</li>
+<li><strong>排列规则</strong>：基元之间的空间关系 —— 整齐排列还是随机分布</li>
+</ol>
+
+<p><strong>分类</strong>：</p>
+<ul>
+<li><strong>自然纹理</strong>：基元和排列都有随机性（木纹、云彩、草地）</li>
+<li><strong>人工纹理</strong>：基元规则排列（砖墙、织物、棋盘格）</li>
+</ul>
+
+<div class="callout warn">
+❌ "纹理只与像素灰度值有关" —— 纹理还与像素的<strong>空间分布/排列关系</strong>有关，灰度值相同但排列不同的图像纹理不同。
+</div>
+
+<div class="callout architect">
+<h4 style="color:var(--purple);margin-bottom:8px">🏛️ 现代技术栈全景</h4>
+<p><strong>可微分形态学</strong>：传统腐蚀/膨胀是不可微的 max/min 操作。2019 年以来用 softmax 近似实现"Soft Erosion / Soft Dilation"，可反向传播，让神经网络端到端学习形态学操作。</p>
+<p><strong>形态学与 CNN 的结合</strong>：</p>
+<ul>
+<li><strong>Dilated/Atrous Convolution（空洞/膨胀卷积）</strong> —— 源自 Holschneider 1987 多小波理论，Yu & Koltun 2015 引入深度学习。在卷积核中注入空洞，感受野指数增长不增参数。DeepLab 语义分割的核心</li>
+<li><strong>Morphological CNNs</strong> —— 用形态学运算（max/min 替代加法和 ReLU）重构卷积层，参数更少效果更优</li>
+</ul>
+<p><strong>实例分割 —— 形态学的工业级延伸</strong>：</p>
+<ul>
+<li><strong>语义分割</strong>：每像素一个类别标签，不区分同类目标</li>
+<li><strong>实例分割</strong>：每目标一个独立 mask（Mask R-CNN, 2017）</li>
+<li><strong>全景分割</strong>：语义+实例的融合</li>
+<li><strong>SAM / SAM 2</strong> (Meta 2023/2024) —— 零样本分割，prompt 一下就分割。Photoshop "Generative Fill"、Canva 一键抠图、医学影像零样本勾画器官的底层</li>
+</ul>
+<p><strong>文档图像处理完整管线</strong>（OCR 工业级）：倾斜矫正（Canny+霍夫）→ 自适应阈值二值化（Sauvola）→ 开运算去噪（3×3）→ 闭运算填洞（5×5）→ 细化（Zhang-Suen）→ 字符分割 → CRNN/Transformer 识别。形态学预处理仍是标配。</p>
+<p><strong>视频业务</strong>：背景减除（GMM/Codebook）→ 形态学开闭后处理 → 监控入侵检测、车流量统计、人流计数。OpenCV：<code class="inline">cv2.createBackgroundSubtractorMOG2().apply(frame)</code> + morphologyEx。</p>
+<p><strong>神经风格迁移</strong> (Gatys 2015)：用预训练 VGG 提取特征，匹配内容特征和风格特征（Gram 矩阵）。Prisma/美图秀秀手机端实时风格迁移；Stable Diffusion + ControlNet (2023+) 用扩散模型做风格迁移质量远超传统。</p>
+<p><strong>分水岭算法</strong>：把图像看作地形，灰度值=海拔，注水汇聚成盆地，不同盆地交界处就是分割边界。原始会过分割，用标记符（Marker）指定种子点避免。业务：细胞分割、车牌字符分割、DEM 流域提取。</p>
+<p><strong>灰度形态学扩展</strong>：把二值形态学扩展到灰度图，用 max/min 替代 AND/OR。<strong>形态学梯度</strong> = 膨胀 - 腐蚀，本质是边缘强度图。<strong>Top-Hat</strong> = 原图 - 开运算（提取小亮细节）；<strong>Black-Hat</strong> = 闭运算 - 原图（提取小暗细节）。</p>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- 第十一章 -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch11">
+<h2 class="chapter-title"><span class="num">11</span> 图像分割 <span class="sub">—— 从像素到语义</span></h2>
+
+<div class="callout origin">
+<strong>需求</strong>：前面所有操作（灰度变换、平滑、锐化、形态学）都是对整幅图的"通用处理"。但实际任务往往需要<strong>找到图像中的特定目标</strong> —— 医学找肿瘤、自动驾驶找行人、工业检测找缺陷。需要先把图像分成若干有意义的区域 —— 这就是<strong>图像分割</strong>。<br>
+<strong>定义</strong>：将图像分成若干区域，使同一区域内像素具有相似特征（灰度、颜色、纹理），不同区域间有明显差异。
+</div>
+
+<h3 class="subsection">三种分割方法</h3>
+
+<div class="compare">
+<div class="col">
+<h5>1. 阈值分割（最简单最常用）</h5>
+<p>选阈值 T：<code class="inline">f(x,y) &gt; T</code> 为前景，否则背景。</p>
+<ul>
+<li><strong>全局阈值</strong>：整幅图用一个 T</li>
+<li><strong>自适应阈值</strong>：不同区域用不同 T（应对光照不均）</li>
+<li><strong>Otsu (大津法)</strong>：自动找使类间方差最大的阈值</li>
+</ul>
+</div>
+<div class="col">
+<h5>2. 边缘检测</h5>
+<p>用梯度（Sobel 等）找到边缘，再把边缘连成封闭曲线圈出区域。</p>
+<p><strong>问题</strong>：边缘往往不连续，需要后处理连接断裂。</p>
+</div>
+</div>
+<p><strong>3. 区域生长</strong>：从"种子点"出发，把与种子相似的邻域像素逐步纳入同一区域。像水从种子点"蔓延"出去，遇到不相似就停下。关键：种子怎么选？相似性准则怎么定？</p>
+
+<h3 class="subsection">分割结果的测量（分析题考点）</h3>
+
+<p>分割之后需要定量描述目标 —— 多大？什么形状？在哪？这些度量在医学（肿瘤大小）、工业（零件尺寸）、农业（果实分级）都有直接应用。所有计算基于二值图像：前景 f(x,y)=1，背景 f(x,y)=0。</p>
+
+<h4 class="minor">(1) 面积 Area</h4>
+<div class="formula">A = ΣΣ f(x,y) &nbsp;&nbsp;（数前景像素个数）</div>
+
+<h4 class="minor">(2) 周长 Perimeter</h4>
+<p>统计前景与背景的<strong>边界像素数</strong>。判定方法：前景像素中，其 4 邻域或 8 邻域内有背景像素的就是边界像素；或直接沿轮廓追踪统计。</p>
+
+<h4 class="minor">(3) 圆度 Circularity —— 形状有多"圆"</h4>
+<div class="formula">C = 4πA / P²</div>
+
+<div class="diagram">
+<svg viewBox="0 0 700 220" width="700">
+  <!-- 圆 -->
+  <g transform="translate(50,30)">
+    <circle cx="100" cy="80" r="60" fill="#3fb950" opacity="0.5" stroke="#3fb950"/>
+    <text x="100" y="170" text-anchor="middle" fill="#3fb950" font-size="13" font-weight="bold">圆</text>
+    <text x="100" y="190" text-anchor="middle" fill="#3fb950" font-size="12">C = 1</text>
+    <text x="100" y="208" text-anchor="middle" fill="#8b949e" font-size="10">4π·πr² / (2πr)² = 1</text>
+  </g>
+
+  <!-- 正方形 -->
+  <g transform="translate(250,30)">
+    <rect x="40" y="20" width="120" height="120" fill="#d29922" opacity="0.5" stroke="#d29922"/>
+    <text x="100" y="170" text-anchor="middle" fill="#d29922" font-size="13" font-weight="bold">正方形</text>
+    <text x="100" y="190" text-anchor="middle" fill="#d29922" font-size="12">C = π/4 ≈ 0.785</text>
+    <text x="100" y="208" text-anchor="middle" fill="#8b949e" font-size="10">4π·a² / (4a)² = π/4</text>
+  </g>
+
+  <!-- 细长条 -->
+  <g transform="translate(450,30)">
+    <rect x="20" y="70" width="160" height="20" fill="#f78166" opacity="0.5" stroke="#f78166"/>
+    <text x="100" y="120" text-anchor="middle" fill="#f78166" font-size="13" font-weight="bold">细长条</text>
+    <text x="100" y="170" text-anchor="middle" fill="#f78166" font-size="12">C → 0</text>
+    <text x="100" y="190" text-anchor="middle" fill="#8b949e" font-size="10">长宽比越大，C 越小</text>
+    <text x="100" y="208" text-anchor="middle" fill="#8b949e" font-size="10">值域 (0, 1]</text>
+  </g>
+</svg>
+<div class="caption">图 11.1：圆度公式的几何意义 —— 实际面积 / 最大可能面积</div>
+</div>
+
+<div class="callout principle">
+<strong>为什么是 4πA/P²</strong>：来自<strong>等周不等式</strong> —— 在所有周长为 P 的封闭曲线中，圆的面积最大（A_max = P²/4π）。所以 C = A / (P²/4π) = 4πA/P²，本质是"实际面积 / 最大可能面积"，值域 (0, 1]。
+</div>
+
+<h4 class="minor">(4) 矩形度 Rectangularity —— 形状有多"方"</h4>
+<div class="formula">R = A / (W × H)</div>
+<p>W、H 是目标区域的<strong>最小外接矩形</strong>的宽和高。矩形 R=1；圆形 R=π/4 ≈ 0.785；细长条 R 接近 1。</p>
+
+<h4 class="minor">(5) 质心 Centroid —— 目标的"重心"</h4>
+<div class="formula">
+x̄ = ΣΣ x·f(x,y) / A &nbsp;&nbsp;|&nbsp;&nbsp; ȳ = ΣΣ y·f(x,y) / A
+</div>
+<p>前景像素坐标的加权平均。质心是目标的"位置" —— 追踪运动目标时，每帧计算质心就得到运动轨迹。</p>
+
+<h3 class="subsection">分析题示例</h3>
+
+<div class="diagram">
+<svg viewBox="0 0 600 240" width="600">
+  <text x="200" y="20" text-anchor="middle" fill="#8b949e" font-size="12">5×5 十字形二值图</text>
+  <g id="cross-img"></g>
+  <script>
+    (function(){
+      var g=document.getElementById('cross-img');
+      var pattern=[[0,0,1,0,0],[0,0,1,0,0],[1,1,1,1,1],[0,0,1,0,0],[0,0,1,0,0]];
+      for(var i=0;i<5;i++)for(var j=0;j<5;j++){
+        var r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+        r.setAttribute('x',120+j*35);r.setAttribute('y',35+i*35);
+        r.setAttribute('width',35);r.setAttribute('height',35);
+        r.setAttribute('fill',pattern[i][j]?'#58a6ff':'#000');
+        r.setAttribute('opacity',pattern[i][j]?'0.7':'1');
+        r.setAttribute('stroke','#30363d');
+        g.appendChild(r);
+      }
+    })();
+  </script>
+
+  <g transform="translate(330,30)">
+    <rect width="250" height="170" fill="#1c2128" stroke="#30363d" rx="4"/>
+    <text x="125" y="25" text-anchor="middle" fill="#3fb950" font-size="13" font-weight="bold">计算结果</text>
+    <text x="15" y="55" fill="#58a6ff" font-size="12">面积 A = 9（9 个前景像素）</text>
+    <text x="15" y="80" fill="#d29922" font-size="12">周长 P = 12（边界像素数）</text>
+    <text x="15" y="105" fill="#f78166" font-size="12">外接矩形 W×H = 5×5</text>
+    <text x="15" y="130" fill="#bc8cff" font-size="12">矩形度 R = 9/25 = 0.36</text>
+    <text x="15" y="155" fill="#f85149" font-size="12">圆度 C = 4π·9/144 ≈ 0.785</text>
+  </g>
+</svg>
+<div class="caption">图 11.2：十字形二值图的分割测量示例</div>
+</div>
+
+<div class="callout architect">
+<h4 style="color:var(--purple);margin-bottom:8px">🏛️ 现代技术栈全景</h4>
+<p><strong>图像分割的 AI 革命</strong>：课本三种方法（阈值/边缘/区域生长）是 1980 年代技术，2024 年的分割已被深度学习彻底重塑：</p>
+<table>
+<tr><th>模型</th><th>年份</th><th>关键创新</th><th>业务影响</th></tr>
+<tr><td>FCN</td><td>2015</td><td>端到端卷积化分割</td><td>首次 DL 分割</td></tr>
+<tr><td>U-Net</td><td>2015</td><td>编码器-解码器+skip</td><td>医学影像金标准</td></tr>
+<tr><td>DeepLab v3+</td><td>2018</td><td>空洞卷积+ASPP</td><td>语义分割经典</td></tr>
+<tr><td>Mask R-CNN</td><td>2017</td><td>实例分割</td><td>自动驾驶/AR</td></tr>
+<tr><td>Swin-Unet</td><td>2021</td><td>Transformer 替代 CNN</td><td>高精度场景</td></tr>
+<tr><td><strong>SAM</strong></td><td>2023</td><td>零样本分割</td><td>通用分割工具</td></tr>
+<tr><td><strong>SAM 2</strong></td><td>2024</td><td>视频分割+追踪</td><td>视频编辑革命</td></tr>
+</table>
+<p><strong>SAM —— 2023 年分割的"ChatGPT 时刻"</strong>：Meta 2023 年 4 月发布，输入 prompt（点、框、文本）→ 输出对应目标的精确 mask。零样本：未训练过的目标也能分割。10 亿级 mask 数据集 SA-1B 训练。</p>
+<p><strong>业务冲击</strong>：Adobe Photoshop "Generative Fill" 底层用 SAM 系列做选区；Canva/Figma 一键抠图；医学影像零样本勾画器官节省医生 90% 时间；卫星图像批量分割建筑物、道路、农田；SAM 2 在整个视频中追踪目标。</p>
+<p><strong>Otsu 算法</strong>：遍历所有可能阈值 T，计算类间方差 σ²_B(T)，找使 σ²_B(T) 最大的 T。O(N) 复杂度。自适应阈值处理光照不均 —— 把图像分 N×N 小块每块单独 Otsu。业务：文档扫描（书本页面光照不均）。</p>
+<p><strong>区域生长的现代版</strong>：Flood Fill（Photoshop "魔法棒"工具本质，复杂度 O(N)）；Graph Cut（图割，最大流最小割算法，全局最优）；Random Walker（随机游走，更鲁棒）；CRF 作为 CNN 输出后处理（DeepLab 系列用过）。</p>
+<p><strong>分割质量度量</strong>：</p>
+<ul>
+<li><strong>IoU</strong> = 交集面积/并集面积，0-1 越大越好</li>
+<li><strong>mIoU</strong>：所有类别 IoU 平均，语义分割标准指标</li>
+<li><strong>Dice 系数</strong>：2|A∩B|/(|A|+|B|)，类似 F1，医学分割常用</li>
+<li><strong>Hausdorff Distance</strong>：两 mask 边界最大距离，对边缘敏感</li>
+</ul>
+<p><strong>目标检测 —— 分割的近亲</strong>：分割给每像素分类，检测给每目标画框。R-CNN (2014) → Fast/Faster R-CNN (2015) → YOLO (2016-2024，v8/v9/v10 当前主流) → DETR (2020，Transformer 无需 NMS) → Grounding DINO (2023，开放词汇检测)。</p>
+<p><strong>实战医学分割管线</strong>：DICOM 采集 → 窗宽窗位（灰度变换）+ BM3D/DnCNN 去噪 + 配准 → 旋转/翻转/弹性形变数据增强 → U-Net/Swin-Unet 推理 → 阈值化+形态学开闭+最大连通域后处理 → 几何度量（面积/周长/圆度/质心，与课本知识完全一致）→ 3D 重建 → 报告写入 PACS。深度学习再强，后处理和度量仍需传统知识。</p>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- 第十二章 -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch12">
+<h2 class="chapter-title"><span class="num">12</span> 按题型突破 <span class="sub">—— 考试全景攻略</span></h2>
+
+<h3 class="subsection">选择题（5 题）</h3>
+<p>核心是<strong>概念辨析</strong>，常见出题套路：</p>
+
+<table>
+<tr><th>知识点</th><th>典型陷阱</th></tr>
+<tr><td>颜色模型</td><td>"印刷用哪个"→ <strong>CMYK</strong> 不是 CMY；"人眼感知"→ HSV/HSI</td></tr>
+<tr><td>颜色表</td><td>"8 位位图颜色表多少项"→ <strong>256</strong>；"24 位位图有无颜色表"→ <strong>无</strong>；存储顺序 → <strong>BGR</strong></td></tr>
+<tr><td>图像合成</td><td>"渐变融合"→ <strong>线性混合</strong> g=αf₁+(1-α)f₂；"选择性合成"→ <strong>掩膜</strong></td></tr>
+<tr><td>开启闭合</td><td>"去毛刺"→ <strong>开启</strong>；"填孔洞"→ <strong>闭合</strong>；问操作顺序 → 开启<strong>先腐蚀后膨胀</strong></td></tr>
+</table>
+
+<h3 class="subsection">判断题（5 题）</h3>
+<p><strong>核心策略：警惕绝对化表述</strong>。"一定""都必须""只能""完全"往往是错的。</p>
+
+<table>
+<tr><th>知识点</th><th>✅ 正确方向</th><th>❌ 错误方向</th></tr>
+<tr><td>几何变换</td><td>齐次坐标统一表示变换</td><td>旋转不需要插值</td></tr>
+<tr><td>灰度变换</td><td>γ 必须大于 0；a 可以为负</td><td>反色是 256-f</td></tr>
+<tr><td>邻域平均</td><td>是线性滤波；会模糊边缘</td><td>能保留边缘</td></tr>
+<tr><td>中值滤波</td><td>是非线性滤波；对椒盐噪声好</td><td>对所有噪声都好</td></tr>
+<tr><td>开启闭合</td><td>开启去毛刺，闭合填孔洞</td><td>互为逆运算</td></tr>
+<tr><td>纹理</td><td>由基元+排列规则组成</td><td>只和灰度有关</td></tr>
+</table>
+
+<h3 class="subsection">简答题（3 题）</h3>
+
+<p><strong>答题模板</strong>：定义 → 方法/步骤 → 特点/应用</p>
+
+<div class="callout principle">
+<h4 style="color:var(--accent);margin-bottom:6px">题 1：像素灰度值</h4>
+灰度值表示像素的亮度信息，是一个标量。8 位灰度图中范围 0~255，0 为纯黑，255 为纯白，共 256 个灰度级。彩色图像每个像素有 R、G、B 三个通道，各 0~255，像素深度 24 位。灰度图像像素深度 8 位，存储空间 = 宽×高×8/8 字节。
+</div>
+
+<div class="callout principle">
+<h4 style="color:var(--accent);margin-bottom:6px">题 2：几何变换</h4>
+几何变换是对图像中像素的空间位置进行变换的操作，包括平移、缩放、旋转和镜像。为统一表示所有变换（尤其是平移），引入<strong>齐次坐标</strong> —— 将 (x,y) 扩展为 (x,y,1)，使平移、缩放、旋转都能用 3×3 矩阵乘法表示。多个变换可通过矩阵相乘合并为复合变换。变换后坐标通常不是整数，需要插值：最近邻插值速度快但有锯齿，双线性插值效果较好，双三次插值最平滑但计算量大。
+</div>
+
+<div class="callout principle">
+<h4 style="color:var(--accent);margin-bottom:6px">题 3：中值滤波法</h4>
+中值滤波是一种<strong>非线性</strong>平滑滤波方法。操作步骤：①在图像上逐像素滑动窗口（如 3×3）；②将窗口内所有像素值按大小排序；③取排序结果的中间值作为当前像素的输出值。特点：对椒盐噪声去除效果优异，能较好地保留图像边缘信息，不易造成边缘模糊。缺点是计算量较大（需要排序），且窗口太大会丢失细节。
+</div>
+
+<h3 class="subsection">编程题（10 空：卷积操作）</h3>
+
+<p>见第八章代码框架和填空预测表。核心记忆：</p>
+
+<div class="anchor">
+<ol>
+<li>填充计算：<code class="inline">ph = kh // 2</code></li>
+<li>零填充：<code class="inline">np.zeros((h+2*ph, w+2*pw))</code></li>
+<li>原图入位：<code class="inline">padded[ph:ph+h, pw:pw+w] = image</code></li>
+<li>提取窗口：<code class="inline">region = padded[i:i+kh, j:j+kw]</code></li>
+<li>卷积计算：<code class="inline">np.sum(region * kernel)</code></li>
+<li>裁剪：<code class="inline">np.clip(output, 0, 255)</code></li>
+<li>类型转换：<code class="inline">.astype(np.uint8)</code></li>
+</ol>
+</div>
+
+<h3 class="subsection">分析题（5 题）</h3>
+
+<table>
+<tr><th>小题</th><th>考点</th><th>答题要点</th></tr>
+<tr><td>1</td><td>6 种降质图像</td><td>判断降质类型 + 选处理方法：暗→γ&lt;1幂次/对数；亮→γ&gt;1；低对比度→线性拉伸；加性噪声→均值滤波；椒盐→中值滤波；模糊→梯度锐化</td></tr>
+<tr><td>2</td><td>非线性灰度变换</td><td>幂次变换 g=c·f^γ；γ&lt;1 变亮（拉伸低灰度），γ&gt;1 变暗（拉伸高灰度）；γ&gt;0</td></tr>
+<tr><td>3</td><td>邻域平均 vs 中值滤波</td><td>均值滤波线性、模糊边缘、适于高斯噪声；中值滤波非线性、保留边缘、适于椒盐噪声</td></tr>
+<tr><td>4</td><td>梯度法/梯度计算</td><td>手算梯度：差分→求 Gx 和 Gy→算幅值 √(Gx²+Gy²) 或 |Gx|+|Gy|</td></tr>
+<tr><td>5</td><td>分割测量</td><td>面积=像素数；周长=边界像素数；圆度=4πA/P²；矩形度=A/(W×H)；质心=坐标加权平均</td></tr>
+</table>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- 第十三章 -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch13">
+<h2 class="chapter-title"><span class="num">13</span> 终极记忆清单 <span class="sub">—— 考前必看</span></h2>
+
+<h3 class="subsection">必须记住的数字</h3>
+
+<div class="anchor">
+<ul>
+<li>8 位灰度：<strong>0~255</strong>（256 级）</li>
+<li>反色：<strong style="color:var(--red);font-size:18px">255</strong> - f(x,y)（<strong>不是 256！</strong>）</li>
+<li>RGB→CMY：C=255-R, M=255-G, Y=255-B</li>
+<li>1 位位图颜色表 <strong>2</strong> 项，4 位 <strong>16</strong> 项，8 位 <strong>256</strong> 项，24 位 <strong>0</strong> 项</li>
+<li>圆度公式：C = 4πA/P²</li>
+</ul>
+</div>
+
+<h3 class="subsection">必须记住的公式</h3>
+
+<div class="formula">
+线性变换：g = a·f + b<br>
+幂次变换：g = c·f^γ（<strong>γ &gt; 0</strong>）<br>
+对数变换：g = c·log(1+f)<br>
+反色变换：g = <strong style="color:var(--red)">255</strong> - f<br>
+线性混合：g = α·f₁ + (1-α)·f₂<br>
+圆度：C = 4πA/P²
+</div>
+
+<h3 class="subsection">必须记住的对比</h3>
+
+<div class="compare">
+<div class="col">
+<h5>形态学</h5>
+<ul>
+<li>开启 = 先腐蚀后膨胀 → 去毛刺</li>
+<li>闭合 = 先膨胀后腐蚀 → 填孔洞</li>
+</ul>
+</div>
+<div class="col">
+<h5>滤波</h5>
+<ul>
+<li>邻域平均 → 线性，模糊边缘</li>
+<li>中值滤波 → 非线性，保留边缘</li>
+</ul>
+</div>
+</div>
+
+<div class="compare">
+<div class="col">
+<h5>幂次变换</h5>
+<ul>
+<li>γ&lt;1 → 变亮（拉伸低灰度）</li>
+<li>γ&gt;1 → 变暗（拉伸高灰度）</li>
+</ul>
+</div>
+<div class="col">
+<h5>线性变换</h5>
+<ul>
+<li>a&gt;1 → 增对比度</li>
+<li>0&lt;a&lt;1 → 减对比度</li>
+<li>a&lt;0 → 反相</li>
+</ul>
+</div>
+</div>
+
+<h3 class="subsection">最容易丢分的 8 个细节</h3>
+
+<div class="callout warn">
+<ol>
+<li><strong>反色是 255 - f(x,y)，不是 256</strong></li>
+<li>线性变换中 a 可以为负数，b 可以为负数</li>
+<li>幂次变换中 γ <strong>必须大于 0</strong></li>
+<li>中值滤波是<strong>非线性</strong>滤波</li>
+<li>BMP 颜色表按 <strong>BGR</strong> 顺序存储，不是 RGB</li>
+<li>开启运算先腐蚀后膨胀，闭合运算先膨胀后腐蚀 —— <strong>顺序不能反</strong></li>
+<li>卷积操作中核需要<strong>翻转 180°</strong>（对称核除外）</li>
+<li>梯度近似：|∇f| ≈ |∂f/∂x| + |∂f/∂y|（不是直接相减取绝对值）</li>
+</ol>
+</div>
+
+<h3 class="subsection">一张图记住全书</h3>
+
+<div class="diagram">
+<svg viewBox="0 0 800 480" width="800">
+  <defs>
+    <linearGradient id="finalgrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#58a6ff" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#bc8cff" stop-opacity="0.1"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="800" height="480" fill="url(#finalgrad)" rx="8"/>
+
+  <text x="400" y="30" text-anchor="middle" fill="#58a6ff" font-size="18" font-weight="bold">数字图像处理知识地图</text>
+
+  <!-- 底层表示 -->
+  <g transform="translate(40,60)">
+    <rect width="180" height="80" fill="#1c2128" stroke="#58a6ff" rx="6"/>
+    <text x="90" y="25" text-anchor="middle" fill="#58a6ff" font-size="13" font-weight="bold">第 1-4 章 底层表示</text>
+    <text x="90" y="45" text-anchor="middle" fill="#8b949e" font-size="11">像素 / 灰度 / 颜色模型</text>
+    <text x="90" y="62" text-anchor="middle" fill="#8b949e" font-size="11">BMP 颜色表 / 图像合成</text>
+  </g>
+
+  <!-- 像素值映射 -->
+  <g transform="translate(310,60)">
+    <rect width="180" height="80" fill="#1c2128" stroke="#3fb950" rx="6"/>
+    <text x="90" y="25" text-anchor="middle" fill="#3fb950" font-size="13" font-weight="bold">第 5-6 章 像素映射</text>
+    <text x="90" y="45" text-anchor="middle" fill="#8b949e" font-size="11">几何变换 / 齐次坐标</text>
+    <text x="90" y="62" text-anchor="middle" fill="#8b949e" font-size="11">灰度变换 / γ 校正</text>
+  </g>
+
+  <!-- 邻域操作 -->
+  <g transform="translate(580,60)">
+    <rect width="180" height="80" fill="#1c2128" stroke="#f78166" rx="6"/>
+    <text x="90" y="25" text-anchor="middle" fill="#f78166" font-size="13" font-weight="bold">第 7-9 章 邻域操作</text>
+    <text x="90" y="45" text-anchor="middle" fill="#8b949e" font-size="11">平滑 / 卷积 / 锐化</text>
+    <text x="90" y="62" text-anchor="middle" fill="#8b949e" font-size="11">均值 / 中值 / 梯度</text>
+  </g>
+
+  <!-- 形态与分割 -->
+  <g transform="translate(175,200)">
+    <rect width="180" height="80" fill="#1c2128" stroke="#bc8cff" rx="6"/>
+    <text x="90" y="25" text-anchor="middle" fill="#bc8cff" font-size="13" font-weight="bold">第 10-11 章 形态与分割</text>
+    <text x="90" y="45" text-anchor="middle" fill="#8b949e" font-size="11">腐蚀 / 膨胀 / 开闭</text>
+    <text x="90" y="62" text-anchor="middle" fill="#8b949e" font-size="11">分割 / 测量 / 圆度</text>
+  </g>
+
+  <!-- 考试攻略 -->
+  <g transform="translate(445,200)">
+    <rect width="180" height="80" fill="#1c2128" stroke="#d29922" rx="6"/>
+    <text x="90" y="25" text-anchor="middle" fill="#d29922" font-size="13" font-weight="bold">第 12-13 章 考试攻略</text>
+    <text x="90" y="45" text-anchor="middle" fill="#8b949e" font-size="11">选择 / 判断 / 简答</text>
+    <text x="90" y="62" text-anchor="middle" fill="#8b949e" font-size="11">编程 / 分析 / 终极清单</text>
+  </g>
+
+  <!-- 连接线 -->
+  <path d="M 130 140 L 220 200" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <path d="M 400 140 L 310 200" stroke="#3fb950" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <path d="M 400 140 L 490 200" stroke="#3fb950" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <path d="M 670 140 L 580 200" stroke="#f78166" stroke-width="1.5" stroke-dasharray="3 2"/>
+
+  <!-- 核心公式区 -->
+  <g transform="translate(100,320)">
+    <rect width="600" height="140" fill="#0d1117" stroke="#30363d" rx="6"/>
+    <text x="300" y="25" text-anchor="middle" fill="#d29922" font-size="14" font-weight="bold">核心公式速查</text>
+    <text x="20" y="55" fill="#58a6ff" font-size="11" font-family="monospace">线性变换: g = a·f + b</text>
+    <text x="220" y="55" fill="#3fb950" font-size="11" font-family="monospace">幂次: g = c·f^γ (γ&gt;0)</text>
+    <text x="420" y="55" fill="#f78166" font-size="11" font-family="monospace">反色: g = 255 - f</text>
+    <text x="20" y="80" fill="#bc8cff" font-size="11" font-family="monospace">混合: g = α·f₁+(1-α)·f₂</text>
+    <text x="220" y="80" fill="#d29922" font-size="11" font-family="monospace">梯度: |∇f|≈|∂f/∂x|+|∂f/∂y|</text>
+    <text x="420" y="80" fill="#f85149" font-size="11" font-family="monospace">圆度: C=4πA/P²</text>
+    <text x="300" y="115" text-anchor="middle" fill="#8b949e" font-size="11">开启 = 先腐蚀后膨胀 | 闭合 = 先膨胀后腐蚀</text>
+    <text x="300" y="132" text-anchor="middle" fill="#8b949e" font-size="11">邻域平均 = 线性 | 中值滤波 = 非线性</text>
+  </g>
+</svg>
+<div class="caption">图 13.1：全书知识地图 —— 5 大模块 + 核心公式速查</div>
+</div>
+
+<div style="text-align:center;margin:40px 0 20px 0;padding:20px;background:linear-gradient(135deg,rgba(88,166,255,0.1),rgba(188,140,255,0.1));border-radius:8px;border:1px solid var(--accent)">
+<h3 style="color:var(--accent);margin-bottom:8px">🎯 期末考试加油！</h3>
+<p style="color:var(--muted)">理解 &gt; 死记 | 框架 &gt; 细节 | 业务 &gt; 理论</p>
+<p style="color:var(--green);margin-top:8px;font-size:13px">每一个传统技术点都连着现代技术栈的某个真实业务 —— 站在全景看知识点，考试只是顺手</p>
+</div>
+
+</section>
+
+<script>
+// 侧边栏导航激活态
+(function(){
+  var links = document.querySelectorAll('nav.sidebar a');
+  var sections = document.querySelectorAll('section.chapter');
+  function update(){
+    var scrollY = window.scrollY;
+    var current = '';
+    sections.forEach(function(s){
+      if(scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    links.forEach(function(a){
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  }
+  window.addEventListener('scroll', update);
+  update();
+})();
+</script>
+
+</main>
+</body>
+</html>
