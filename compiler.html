@@ -566,51 +566,95 @@ kbd{
 
 <h3 id="ch3-3">3.3 NFA → DFA:NFA 的确定化<span class="tag must">子集构造法 必考</span></h3>
 
-<h4>3.3.1 三个核心概念</h4>
+<h4>3.3.1 一个核心公式</h4>
+<div class="callout primary">
+  <div class="callout-title">🔑 全节就记住这一句</div>
+  <p>对 DFA 的某个状态集合 <code>I</code>,输入字符 <code>a</code> 后到达的新状态:</p>
+  <pre style="margin-top:8px; text-align:center; background:transparent; border:none;"><code style="font-size:16px; color:#0969da; font-weight:700;">I<sub>a</sub> = ε-closure( move(I, a) )</code></pre>
+  <p>拆开看两步:</p>
+  <ul style="margin:6px 0 0 18px;">
+    <li><code>move(I, a)</code>:I 中所有状态<strong>吃一个字符 a</strong> 能直接到的状态集</li>
+    <li><code>ε-closure(...)</code>:把上面结果<strong>沿 ε 边再扩散</strong>出去(连同自己)</li>
+  </ul>
+  <p>就这样,反复套这个公式,把 DFA 一个状态一个状态地"打"出来。</p>
+</div>
+
+<h4>3.3.2 打表法五步走</h4>
 <div class="algo-box">
-  <div class="algo-box-title">📐 子集构造三件套</div>
-  <ol>
-    <li><strong>ε-closure(q)</strong>:状态 q 通过 ε 转移能到达的所有状态(<strong>包含 q 本身</strong>)。不动点迭代求。</li>
-    <li><strong>move(I, a)</strong>:状态集 I 通过输入字符 a 能直接到达的状态集。</li>
-    <li><strong>Ia = ε-closure(move(I, a))</strong>:状态集 I 通过 a 能到达的所有状态(再 ε 闭包)。</li>
+  <div class="algo-box-title">📐 执行步骤(打表法)</div>
+  <div class="step"><div class="step-num">1</div><div class="step-body"><strong>找起点</strong>:求 NFA 初态 <code>q0</code> 的 ε-闭包,作为 DFA 的初始状态(设为 <code>A</code>)。</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body"><strong>填表格</strong>:
+    <ul>
+      <li>取出一个未处理的 DFA 状态(比如 <code>A</code>)</li>
+      <li>对于字母表里的每一个字符(比如 <code>a</code> 和 <code>b</code>),分别套上面的核心公式</li>
+      <li>如果算出来的新集合以前没出现过,就给它起个新名字(<code>B</code>、<code>C</code>...),加入待处理队列</li>
+    </ul>
+  </div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body"><strong>循环</strong>:重复步骤 2,直到没有新集合产生为止。</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body"><strong>找终点</strong>:看看 <code>A</code>、<code>B</code>、<code>C</code>... 这些集合里,只要<strong>包含原 NFA 终态</strong>的,统统标记为 DFA 的接受状态(终态)。</div></div>
+  <div class="step"><div class="step-num">5</div><div class="step-body"><strong>整理</strong>:把所有状态和转移画成一张表,就是 DFA 的状态转换表。</div></div>
+</div>
+
+<div class="callout warn">
+  <div class="callout-title">⚠️ 两个易错点</div>
+  <ol style="margin:6px 0 0 18px;">
+    <li>ε-closure <strong>一定包含起点本身</strong>(不能漏)</li>
+    <li>每出现一个新状态,都要对<strong>每个字符</strong>算一遍,不能漏字符</li>
   </ol>
 </div>
 
-<h4>3.3.2 子集构造算法</h4>
-<div class="algo-box">
-  <div class="algo-box-title">⚙️ 算法步骤</div>
-  <pre style="background:transparent; border:none; padding:0; margin:0;"><code>1. 求初态 I0 = ε-closure(q0)
-2. 把 I0 加入未标记集合 C = {I0}
-3. while C 中有未标记的子集 I:
-     标记 I
-     for 每个输入字符 a:
-         U = ε-closure(move(I, a))
-         if U 不在 C 中: 把 U 加入 C
-         建立转移 δ(I, a) = U
-4. C 中所有包含 NFA 终态的子集 = DFA 终态</code></pre>
-</div>
-
 <h4>3.3.3 完整示例<span class="tag must">必练</span></h4>
-<p><strong>题目</strong>:已知正规式 <code>(a|b)*abb</code> 的 NFA,求等价 DFA。</p>
+<p><strong>题目</strong>:已知正规式 <code>(a|b)*abb</code> 的 NFA(状态 0~10,初态 0,终态 10),求等价 DFA。</p>
 
 <div class="callout primary">
-  <div class="callout-title">📐 子集构造过程</div>
-  <pre style="margin-top:8px;"><code>1. I0 = ε-closure(0) = {0,1,2,4,7}
-2. 从 I0 看 a: move(I0,a) = {3,8}
-   ε-closure({3,8}) = {1,2,3,4,6,7,8} = I1
-3. 从 I0 看 b: move(I0,b) = {5}
-   ε-closure({5}) = {1,2,4,5,6,7} = I2
-4. 从 I1 看 a: ε-closure(move(I1,a)) = I1 (自环)
-5. 从 I1 看 b: move(I1,b) = {5,9}
-   ε-closure({5,9}) = {1,2,4,5,6,7,9} = I3
-6. 从 I2 看 a: 同 I1
-7. 从 I2 看 b: 同 I2
-8. 从 I3 看 a: 同 I1
-9. 从 I3 看 b: move(I3,b) = {5,9,10}
-   ε-closure({5,9,10}) = {1,2,4,5,6,7,9,10} = I4 (终态,含 10)
-10. 从 I4 看 a: 同 I1
-11. 从 I4 看 b: 同 I2</code></pre>
+  <div class="callout-title">📝 打表过程</div>
+  <p><strong>第 1 步 找起点</strong>:</p>
+  <pre style="margin-top:6px;"><code>A = ε-closure(0) = {0,1,2,4,7}</code></pre>
+
+  <p><strong>第 2-3 步 填表 + 循环</strong>:对每个新状态,套公式 <code>I<sub>a</sub> = ε-closure(move(I, a))</code></p>
+  <pre style="margin-top:6px;"><code>处理 A:
+  A 看字符 a: move(A, a) = {3,8},  ε-闭包 = {1,2,3,4,6,7,8} → 新状态,命名 B
+  A 看字符 b: move(A, b) = {5},    ε-闭包 = {1,2,4,5,6,7}   → 新状态,命名 C
+
+处理 B:
+  B 看字符 a: ε-闭包(move(B, a)) = {1,2,3,4,6,7,8} = B (老状态,自环)
+  B 看字符 b: move(B, b) = {5,9}, ε-闭包 = {1,2,4,5,6,7,9} → 新状态,命名 D
+
+处理 C:
+  C 看字符 a: 同 B
+  C 看字符 b: ε-闭包(move(C, b)) = {1,2,4,5,6,7} = C (自环)
+
+处理 D:
+  D 看字符 a: 同 B
+  D 看字符 b: move(D, b) = {5,9,10}, ε-闭包 = {1,2,4,5,6,7,9,10} → 新状态,命名 E
+
+处理 E:
+  E 看字符 a: 同 B
+  E 看字符 b: 同 C
+
+无新状态产生,结束。</code></pre>
+
+  <p><strong>第 4 步 找终点</strong>:原 NFA 终态是 10,看哪个集合含 10?</p>
+  <pre style="margin-top:6px;"><code>A={0,1,2,4,7}           ✗
+B={1,2,3,4,6,7,8}       ✗
+C={1,2,4,5,6,7}         ✗
+D={1,2,4,5,6,7,9}       ✗
+E={1,2,4,5,6,7,9,10}    ✓ 含 10!E 是 DFA 终态</code></pre>
 </div>
+
+<p><strong>第 5 步 整理 → DFA 状态表</strong>:</p>
+<table>
+<thead><tr><th>DFA 状态</th><th>包含的 NFA 状态集</th><th>输入 a</th><th>输入 b</th></tr></thead>
+<tbody>
+<tr><td>→ A</td><td>{0,1,2,4,7}</td><td>B</td><td>C</td></tr>
+<tr><td>B</td><td>{1,2,3,4,6,7,8}</td><td>B</td><td>D</td></tr>
+<tr><td>C</td><td>{1,2,4,5,6,7}</td><td>B</td><td>C</td></tr>
+<tr><td>D</td><td>{1,2,4,5,6,7,9}</td><td>B</td><td><strong>E</strong></td></tr>
+<tr><td>* E</td><td>{1,2,4,5,6,7,9,10}</td><td>B</td><td>C</td></tr>
+</tbody>
+</table>
+<p><span class="hl-primary">→</span> 表示初态,<span class="hl-danger">*</span> 表示终态。这张表就是最终的 DFA!</p>
+
 
 <p><strong>DFA 状态表</strong>:</p>
 <table>
@@ -2530,22 +2574,55 @@ MOV  x, R1       ; x := R1</code></pre>
 </div>
 
 <h3 id="ch10-1">10.1 综合题 1:NFA → DFA → 最小化<span class="tag points">12 分</span></h3>
+
+<div class="callout primary">
+  <div class="callout-title">🔑 一句话记忆</div>
+  <p>整个题就一个公式反复用:<code>I<sub>a</sub> = ε-closure(move(I, a))</code></p>
+  <p>分两阶段:<strong>① 子集构造</strong>(NFA → DFA)+ <strong>② Hopcroft 最小化</strong>(DFA → 最小 DFA)。</p>
+</div>
+
+<h4>第一阶段:子集构造(打表法)</h4>
 <div class="algo-box">
-  <div class="algo-box-title">📐 5 步标准流程</div>
-  <div class="step"><div class="step-num">1</div><div class="step-body"><strong>求 ε-closure(q0)</strong> 作为 DFA 初态 I0(注意:ε-closure 一定包含 q0 自己)</div></div>
-  <div class="step"><div class="step-num">2</div><div class="step-body"><strong>子集构造(核心)</strong>:对每个未处理的状态集 I,对每个输入字符 a,求 <code>Ia = ε-closure(move(I, a))</code>;新状态集加入队列,直到无新状态产生</div></div>
-  <div class="step"><div class="step-num">3</div><div class="step-body"><strong>建状态转换表</strong>:行=状态集,列=输入字符;标注初态(→)和终态(*)</div></div>
-  <div class="step"><div class="step-num">4</div><div class="step-body"><strong>定终态</strong>:包含 NFA 任一终态的状态集 = DFA 终态</div></div>
-  <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Hopcroft 最小化</strong>:初始划分 Π = {终态集, 非终态集};反复对每个组,看每个输入字符,转移到不同组的拆开;直到 Π 不再变化;每组选一代表,重命名</div></div>
+  <div class="algo-box-title">📐 执行步骤(打表法)</div>
+  <div class="step"><div class="step-num">1</div><div class="step-body"><strong>找起点</strong>:求 NFA 初态 <code>q0</code> 的 ε-闭包,作为 DFA 的初始状态(设为 <code>A</code>)。</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body"><strong>填表格</strong>:取出一个未处理的 DFA 状态(比如 <code>A</code>),对字母表里每个字符(<code>a</code>、<code>b</code>),分别套公式 <code>I<sub>a</sub> = ε-closure(move(I, a))</code>。算出的新集合若是第一次出现,起个新名字(<code>B</code>、<code>C</code>...),加入待处理队列。</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body"><strong>循环</strong>:重复步骤 2,直到没有新集合产生为止。</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body"><strong>找终点</strong>:看 <code>A, B, C...</code> 这些集合里,只要<strong>包含原 NFA 终态</strong>的,统统标记为 DFA 的接受状态。</div></div>
+</div>
+
+<div class="callout warn">
+  <div class="callout-title">⚠️ 易错点</div>
+  <ul style="margin:6px 0 0 18px;">
+    <li>ε-closure <strong>一定包含起点本身</strong>(漏写就全错)</li>
+    <li>每个新状态都要对<strong>每个字符</strong>算一遍,不能漏字符</li>
+    <li>终态判断:看集合里<strong>有没有 NFA 终态</strong>,不是看集合大小</li>
+  </ul>
+</div>
+
+<h4>第二阶段:Hopcroft 最小化</h4>
+<div class="algo-box">
+  <div class="algo-box-title">📐 执行步骤(划分法)</div>
+  <div class="step"><div class="step-num">1</div><div class="step-body"><strong>初始划分</strong>:把所有状态分成两组:<code>Π = {终态组, 非终态组}</code></div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body"><strong>尝试拆分</strong>:对每个组,检查组内每个状态。对每个输入字符,看它们<strong>转移到哪个组</strong>:
+    <ul>
+      <li>如果组内所有状态对每个字符都<strong>转移到同一个组</strong> → 这个组不用拆</li>
+      <li>如果有状态<strong>转移到不同组</strong> → 按转移目标把这些状态拆成子组</li>
+    </ul>
+  </div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body"><strong>循环</strong>:重复步骤 2,直到所有组都拆不动为止(Π 不再变化)。</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body"><strong>合并</strong>:每组选一个代表状态,合并等价状态,重命名,得到最小 DFA。</div></div>
 </div>
 
 <div class="callout danger">
-  <div class="callout-title">⚠️ 易错点 TOP3</div>
-  <ol style="margin:6px 0 0 18px;">
-    <li>ε-closure 忘了包含自己</li>
-    <li>子集构造漏算某个字符(每个状态集对每个字符都要算)</li>
-    <li>最小化时,看"转移到不同状态"而非"转移到不同组"</li>
-  </ol>
+  <div class="callout-title">⚠️ 最小化最大坑点</div>
+  <p>判断两个状态是否等价,看的是<strong>"转移到不同组"</strong>,<strong>不是"转移到不同状态"</strong>!</p>
+  <p>举例:状态 X 和 Y,输入 a 后 X 转到 B、Y 也转到 B(同一个组),即使 X、Y 名字不同,只要转移目标在同一组,它们就可能等价。</p>
+</div>
+
+<div class="callout accent">
+  <div class="callout-title">✅ 自检技巧</div>
+  最小化后,DFA 状态数应该 ≤ 原状态数。若新状态数更多,肯定错。<br>
+  合理的最小 DFA 状态数通常是原 DFA 状态数的 60%~80%。
 </div>
 <div class="callout accent">
   <div class="callout-title">✅ 自检技巧</div>
