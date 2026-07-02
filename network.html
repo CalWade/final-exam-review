@@ -441,9 +441,18 @@
     background: #f3f4f6;
     padding: 6px 10px;
     border-left: 3px solid #6b7280;
-    margin: 6px 0;
+    margin: 6px 0 2px;
     font-size: 13px;
     color: #1f2937;
+  }
+  .exam-box .q-zh {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #fef9c3;
+    padding: 6px 10px;
+    border-left: 3px solid #ca8a04;
+    margin: 0 0 6px;
+    font-size: 13.5px;
+    color: #713f12;
   }
   .exam-box .ans {
     color: #059669;
@@ -526,7 +535,8 @@
 
   <div class="exam-box">
     <div class="q-en"><strong>Q (简答)</strong>: Describe the layers of the Internet protocol stack and list one protocol in each layer.</div>
-    <div><strong>答案</strong>: 5 层（Application / Transport / Network / Link / Physical），每层举例 HTTP、TCP、IP、Ethernet、10Base-T。<br>
+    <div class="q-zh"><strong>题目翻译</strong>：请描述互联网协议栈的各层，并列举每层的一个协议。</div>
+    <div><strong>答案</strong>：从上到下 5 层：① 应用层（Application）—— HTTP；② 传输层（Transport）—— TCP；③ 网络层（Network）—— IP；④ 链路层（Link）—— Ethernet；⑤ 物理层（Physical）—— 10Base-T。<br>
     <span class="kw">关键词</span> <span class="kw">protocol stack</span> <span class="kw">layer</span> <span class="kw">application</span> <span class="kw">transport</span> <span class="kw">network</span> <span class="kw">link</span> <span class="kw">physical</span></div>
   </div>
 
@@ -646,7 +656,8 @@
 
   <div class="exam-box">
     <div class="q-en"><strong>Q (单选)</strong>: Which of the following is a guided transmission medium?</div>
-    <div><strong>答案</strong>: <span class="ans">A. Twisted-pair cable</span>（双绞线）<br>
+    <div class="q-zh"><strong>题目翻译</strong>：下列哪一项是导引型传输介质？</div>
+    <div><strong>答案</strong>：<span class="ans">A. 双绞线（Twisted-pair cable）</span><br>
     导引型 = 有线 = 双绞线/同轴/光纤；非导引型 = 无线 = WiFi/卫星/微波。<br>
     <span class="kw">关键词</span> <span class="kw">guided</span> <span class="kw">unguided</span> <span class="kw">twisted-pair</span> <span class="kw">medium</span></div>
   </div>
@@ -716,7 +727,8 @@
 
   <div class="exam-box">
     <div class="q-en"><strong>Q (单选)</strong>: For packet-switched network, L=6Mbits, R=3Mbps, the transmission delay from A to B is?</div>
-    <div><strong>答案</strong>: <span class="ans">A. 2 秒</span> &nbsp; 公式 d_trans = L/R = 6M/3M = 2s<br>
+    <div class="q-zh"><strong>题目翻译</strong>：在分组交换网络中，数据长度 L=6Mbits，链路带宽 R=3Mbps，从 A 到 B 的传输时延是多少？</div>
+    <div><strong>答案</strong>：<span class="ans">A. 2 秒</span> &nbsp; 公式 d_trans = L/R = 6M/3M = 2s<br>
     <span class="kw">关键词</span> <span class="kw">transmission delay</span> <span class="kw">packet-switched</span> <span class="kw">L/R</span></div>
   </div>
 
@@ -819,10 +831,17 @@
 
   <div class="exam-box">
     <div class="q-en"><strong>Q1 (单选·套二)</strong>: Which of the following does not belong to an end system?</div>
-    <div><strong>答案</strong>: <span class="ans">D. Router</span> — 路由器是网络核心中间节点，不是端系统。PC / Server / Laptop 才是端系统。</div>
-    <div class="q-en"><strong>Q2 (判断)</strong>: Packet switched networks allow more users than circuit-switched networks. &nbsp; <span class="ans">T (正确)</span></div>
-    <div class="q-en"><strong>Q3 (判断)</strong>: In client-server structure, direct communication between clients is not required. &nbsp; <span class="ans">T (正确)</span></div>
-    <div class="q-en"><strong>Q4 (判断)</strong>: Using P2P distribution, the server does not need to upload a complete file. &nbsp; <span class="ans">F (错误)</span> — 服务器必须至少上传完整文件一次。</div>
+    <div class="q-zh"><strong>题目翻译</strong>：下列哪一项不属于端系统？</div>
+    <div><strong>答案</strong>：<span class="ans">D. 路由器（Router）</span> — 路由器是网络核心中间节点，不是端系统。PC / Server / Laptop 才是端系统。</div>
+    <div class="q-en"><strong>Q2 (判断)</strong>: Packet switched networks allow more users than circuit-switched networks.</div>
+    <div class="q-zh"><strong>题目翻译</strong>：分组交换网络比电路交换网络允许更多用户使用。</div>
+    <div><strong>答案</strong>：<span class="ans">正确 (T)</span> — 分组交换采用统计多路复用，用户按需共享带宽。</div>
+    <div class="q-en"><strong>Q3 (判断)</strong>: In client-server structure, direct communication between clients is not required.</div>
+    <div class="q-zh"><strong>题目翻译</strong>：在客户/服务器架构中，客户端之间不需要直接通信。</div>
+    <div><strong>答案</strong>：<span class="ans">正确 (T)</span> — C/S 架构客户端只与服务器通信，P2P 才有客户端直接通信。</div>
+    <div class="q-en"><strong>Q4 (判断)</strong>: Using P2P distribution, the server does not need to upload a complete file.</div>
+    <div class="q-zh"><strong>题目翻译</strong>：使用 P2P 分发时，服务器不需要上传完整文件。</div>
+    <div><strong>答案</strong>：<span class="ans">错误 (F)</span> — 服务器（或初始种子）必须至少把完整文件每个 chunk 上传一次，否则其他节点无法拼出完整文件。</div>
     <div><span class="kw">关键词</span> <span class="kw">end system</span> <span class="kw">host</span> <span class="kw">router</span> <span class="kw">packet-switched</span> <span class="kw">circuit-switched</span> <span class="kw">client-server</span> <span class="kw">P2P</span></div>
   </div>
 
@@ -960,9 +979,11 @@
 
   <div class="exam-box">
     <div class="q-en"><strong>Q1 (单选)</strong>: Non-persistent connection HTTP, how long does it take to send an object?</div>
-    <div><strong>答案</strong>: <span class="ans">B. 2RTT + transmit time</span></div>
+    <div class="q-zh"><strong>题目翻译</strong>：非持久连接的 HTTP，发送一个对象需要多长时间？</div>
+    <div><strong>答案</strong>：<span class="ans">B. 2RTT + 传输时间（transmit time）</span></div>
     <div class="q-en"><strong>Q2 (简答)</strong>: Describe the process of accessing a web page with a non-persistent HTTP.</div>
-    <div><strong>答案</strong>: ① TCP 三次握手（1 RTT）→ ② HTTP 请求 + 响应（1 RTT + 传输时间）→ ③ 连接关闭。总耗时 2RTT + transmit time。<br>
+    <div class="q-zh"><strong>题目翻译</strong>：请描述使用非持久 HTTP 访问网页的过程。</div>
+    <div><strong>答案</strong>：① 客户端向服务器 80 端口发起 TCP 连接；② 三次握手建立连接（耗时 1 RTT）；③ 客户端发送 HTTP 请求；④ 服务器返回 HTTP 响应（耗时 1 RTT + 文件传输时间）；⑤ 服务器或客户端关闭 TCP 连接。总耗时 2RTT + 传输时间。<br>
     <span class="kw">关键词</span> <span class="kw">non-persistent</span> <span class="kw">RTT</span> <span class="kw">TCP handshake</span> <span class="kw">transmission delay</span></div>
   </div>
 
@@ -1066,9 +1087,12 @@
   <h2><span class="kp-num">6</span> HTTP 持久连接访问网页的过程 <span class="exam-hit">🎯 真题命中</span></h2>
 
   <div class="exam-box">
-    <div class="q-en"><strong>Q1 (判断)</strong>: Web cache can reduce link traffic, but cannot reduce access time. &nbsp; <span class="ans">F (错误)</span></div>
+    <div class="q-en"><strong>Q1 (判断)</strong>: Web cache can reduce link traffic, but cannot reduce access time.</div>
+    <div class="q-zh"><strong>题目翻译</strong>：Web 缓存可以减少链路流量，但不能减少访问时间。</div>
+    <div><strong>答案</strong>：<span class="ans">错误 (F)</span> — Web 缓存既减少链路流量，又显著减少访问响应时间（从近距离缓存节点获取）。</div>
     <div class="q-en"><strong>Q2 (简答·套二)</strong>: Briefly describe the purpose of using proxy server and what are the benefits?</div>
-    <div><strong>答案</strong>: 目的：代理服务器代表原始服务器满足 HTTP 请求，缓存对象副本。<br>好处：① 缩短响应时间；② 减少链路带宽；③ 减轻服务器负载。</div>
+    <div class="q-zh"><strong>题目翻译</strong>：请简述使用代理服务器的目的及好处。</div>
+    <div><strong>答案</strong>：目的——代理服务器代表原始服务器满足客户端 HTTP 请求，保存最近请求对象的副本。好处：① 缩短响应时间（就近获取）；② 减少链路带宽需求；③ 减轻原始服务器负载。</div>
     <div><span class="kw">关键词</span> <span class="kw">persistent</span> <span class="kw">web cache</span> <span class="kw">proxy server</span> <span class="kw">response time</span></div>
   </div>
 
@@ -1351,9 +1375,15 @@
   <h2><span class="kp-num">9&amp;11</span> TCP 与 UDP 协议对比 <span class="exam-hit">🎯 真题命中（高频）</span></h2>
 
   <div class="exam-box">
-    <div class="q-en"><strong>Q1 (单选)</strong>: What is used to identify a process? &nbsp; <span class="ans">B. IP + Port</span></div>
-    <div class="q-en"><strong>Q2 (单选)</strong>: Which of the following applications use UDP? &nbsp; <span class="ans">D. SNMP</span> (DNS / DHCP / SNMP / RTP / NTP 都是 UDP)</div>
-    <div class="q-en"><strong>Q3 (单选·套二)</strong>: For FTP which of the following statements is false? &nbsp; <span class="ans">C. FTP using UDP</span> (FTP 用 TCP，端口 21 控制/20 数据，带外控制)</div>
+    <div class="q-en"><strong>Q1 (单选)</strong>: What is used to identify a process?</div>
+    <div class="q-zh"><strong>题目翻译</strong>：用什么来标识一个进程？</div>
+    <div><strong>答案</strong>：<span class="ans">B. IP + Port（IP 地址 + 端口号）</span></div>
+    <div class="q-en"><strong>Q2 (单选)</strong>: Which of the following applications use UDP?</div>
+    <div class="q-zh"><strong>题目翻译</strong>：下列哪个应用使用 UDP？</div>
+    <div><strong>答案</strong>：<span class="ans">D. SNMP（简单网络管理协议）</span> — DNS / DHCP / SNMP / RTP / NTP 都用 UDP；SMTP / FTP / HTTP 用 TCP。</div>
+    <div class="q-en"><strong>Q3 (单选·套二)</strong>: For FTP which of the following statements is false?</div>
+    <div class="q-zh"><strong>题目翻译</strong>：关于 FTP 协议，下列哪个说法是错误的？</div>
+    <div><strong>答案</strong>：<span class="ans">C. FTP 使用 UDP（错误说法）</span> — FTP 用 TCP 保证可靠传输；端口 21 控制 / 20 数据；带外控制（out-of-band）。</div>
     <div><span class="kw">关键词</span> <span class="kw">process</span> <span class="kw">port</span> <span class="kw">socket</span> <span class="kw">UDP</span> <span class="kw">SNMP</span> <span class="kw">FTP</span> <span class="kw">out-of-band</span></div>
   </div>
 
@@ -1458,9 +1488,12 @@
   <h2><span class="kp-num">10</span> GBN（回退 N 步）与选择重传（SR） <span class="exam-hit">🎯 真题命中</span></h2>
 
   <div class="exam-box">
-    <div class="q-en"><strong>Q1 (判断)</strong>: For go-back N, ack(n) represents that n and previous packets of n have been received correctly. &nbsp; <span class="ans">T (正确)</span> — 累积确认 (Cumulative ACK)</div>
+    <div class="q-en"><strong>Q1 (判断)</strong>: For go-back N, ack(n) represents that n and previous packets of n have been received correctly.</div>
+    <div class="q-zh"><strong>题目翻译</strong>：对于回退 N 步协议，ACK(n) 表示序号 n 及之前的所有分组已被正确接收。</div>
+    <div><strong>答案</strong>：<span class="ans">正确 (T)</span> — GBN 采用累积确认（Cumulative ACK）机制。</div>
     <div class="q-en"><strong>Q2 (简答·套二)</strong>: Please briefly describe selective repeat (SR).</div>
-    <div><strong>答案</strong>: SR 仅重传出错分组；接收方逐个单独 ACK；发送方每分组独立定时器；接收方缓存失序分组；窗口 ≤ 序号空间一半。</div>
+    <div class="q-zh"><strong>题目翻译</strong>：请简述选择重传协议（SR）。</div>
+    <div><strong>答案</strong>：SR 让发送方仅重传怀疑出错或丢失的分组，避免不必要重传。① 接收方对每个正确接收的分组单独确认（Individual ACK）；② 发送方为每个分组维护独立定时器；③ 接收方缓存失序分组，待缺失分组到齐后按序交付；④ 发送窗口和接收窗口尺寸 ≤ 序号空间一半。</div>
     <div><span class="kw">关键词</span> <span class="kw">go-back-N</span> <span class="kw">cumulative ACK</span> <span class="kw">selective repeat</span> <span class="kw">individual ACK</span> <span class="kw">window size</span></div>
   </div>
 
@@ -1605,7 +1638,8 @@
 
   <div class="exam-box">
     <div class="q-en"><strong>Q (判断)</strong>: For the receiver of TCP, when a packet arrives in sequence and all previous packets have responded to an ACK, the receiver immediately replies to the ACK for that packet.</div>
-    <div><strong>答案</strong>: <span class="ans">F (错误)</span> — TCP 使用延迟确认 (Delayed ACK)，按序到达不会立即回复，而是延迟 ≤ 500ms 期望捎带或合并。<br>
+    <div class="q-zh"><strong>题目翻译</strong>：对于 TCP 接收方，当一个分组按序到达且之前的所有分组都已回复 ACK 时，接收方会立即回复该分组的 ACK。</div>
+    <div><strong>答案</strong>：<span class="ans">错误 (F)</span> — TCP 使用延迟确认（Delayed ACK），按序到达不会立即回复，而是延迟 ≤ 500ms 期望捎带或合并确认。<br>
     <span class="kw">关键词</span> <span class="kw">delayed ACK</span> <span class="kw">piggybacking</span> <span class="kw">in sequence</span> <span class="kw">flow control</span></div>
   </div>
 
@@ -1850,8 +1884,10 @@ net.ipv4.ip_local_port_range = 10000 65535
   <h2><span class="kp-num">14</span> 网络层功能 <span class="exam-hit">🎯 真题命中</span></h2>
 
   <div class="exam-box">
-    <div class="q-en"><strong>Q (单选)</strong>: What message is the application PING sending? &nbsp; <span class="ans">C. ICMP request message</span></div>
-    <div>PING 工作在网络层，发送 ICMP Echo Request，等待 ICMP Echo Reply。<br>
+    <div class="q-en"><strong>Q (单选)</strong>: What message is the application PING sending?</div>
+    <div class="q-zh"><strong>题目翻译</strong>：PING 应用程序发送的是什么报文？</div>
+    <div><strong>答案</strong>：<span class="ans">C. ICMP 请求报文（ICMP Echo Request）</span><br>
+    PING 工作在网络层，发送 ICMP Echo Request，等待对方返回 ICMP Echo Reply。<br>
     <span class="kw">关键词</span> <span class="kw">PING</span> <span class="kw">ICMP</span> <span class="kw">echo request</span> <span class="kw">echo reply</span></div>
   </div>
 
@@ -1924,9 +1960,12 @@ net.ipv4.ip_local_port_range = 10000 65535
   <h2><span class="kp-num">15</span> NAT 动机及原理 <span class="exam-hit">🎯 真题命中（高频）</span></h2>
 
   <div class="exam-box">
-    <div class="q-en"><strong>Q1 (判断)</strong>: NAT allows the internal machine to access the external server, but does not allow the external machine to access the internal server. &nbsp; <span class="ans">T (正确)</span></div>
+    <div class="q-en"><strong>Q1 (判断)</strong>: NAT allows the internal machine to access the external server, but does not allow the external machine to access the internal server.</div>
+    <div class="q-zh"><strong>题目翻译</strong>：NAT 允许内部机器访问外部服务器，但不允许外部机器访问内部服务器。</div>
+    <div><strong>答案</strong>：<span class="ans">正确 (T)</span> — NAT 隐藏内部网络，内部主动外发会建立映射，外部无法主动发起连接（除非配置静态端口转发）。</div>
     <div class="q-en"><strong>Q2 (简答)</strong>: Describe the process of implementing NAT on the router.</div>
-    <div><strong>答案</strong>: ① 出站：替换 (源IP, 源端口) → (公网IP, 新端口)，写 NAT 表；② 入站：查 NAT 表，替换 (目标公网IP, 目标端口) → (内网IP, 内网端口)。</div>
+    <div class="q-zh"><strong>题目翻译</strong>：请描述在路由器上实现 NAT 的过程。</div>
+    <div><strong>答案</strong>：① 出站（Outbound）：内部主机发数据到外部时，NAT 路由器将（源内网 IP，源端口）替换为（路由器公网 IP，新端口），并记录到 NAT 转换表；② 入站（Inbound）：外部响应返回时，NAT 路由器根据目标端口号查 NAT 表，将（目标公网 IP，目标端口）替换回（内网 IP，内网端口），转发给内部主机。</div>
     <div><span class="kw">关键词</span> <span class="kw">NAT</span> <span class="kw">outbound</span> <span class="kw">inbound</span> <span class="kw">translation table</span> <span class="kw">port</span></div>
   </div>
 
@@ -2109,7 +2148,8 @@ net.ipv4.ip_local_port_range = 10000 65535
 
   <div class="exam-box">
     <div class="q-en"><strong>Q (单选)</strong>: Which of the following types does not belong to the router's switching fabrics?</div>
-    <div><strong>答案</strong>: <span class="ans">C. CPU</span> — 交换结构三种：Memory（内存）、Bus（总线）、Crossbar（纵横交叉矩阵）。CPU 不属于交换结构分类。</div>
+    <div class="q-zh"><strong>题目翻译</strong>：下列哪一项不属于路由器的交换结构类型？</div>
+    <div><strong>答案</strong>: <span class="ans">C. CPU</span> — 交换结构三种：基于内存（Memory）、基于总线（Bus）、基于纵横交叉矩阵（Crossbar）。CPU 不属于交换结构分类。</div>
     <div><span class="kw">关键词</span> <span class="kw">switching fabric</span> <span class="kw">memory</span> <span class="kw">bus</span> <span class="kw">crossbar</span></div>
   </div>
 
@@ -2286,7 +2326,8 @@ net.ipv4.ip_local_port_range = 10000 65535
 
   <div class="exam-box">
     <div class="q-en"><strong>Q (简答)</strong>: Please briefly describe DHCP work process.</div>
-    <div><strong>答案</strong>: DORA 四步：① <strong>D</strong>iscover 客户端广播；② <strong>O</strong>ffer 服务器回应；③ <strong>R</strong>equest 客户端选择；④ <strong>A</strong>CK 服务器确认。</div>
+    <div class="q-zh"><strong>题目翻译</strong>：请简述 DHCP 的工作流程。</div>
+    <div><strong>答案</strong>：DORA 四步：① <strong>D</strong>iscover（发现）—— 客户端广播寻找 DHCP 服务器；② <strong>O</strong>ffer（提供）—— 服务器回复可用 IP 及配置；③ <strong>R</strong>equest（请求）—— 客户端广播请求选定 IP；④ <strong>A</strong>CK（确认）—— 服务器确认分配，客户端可使用该 IP。</div>
     <div><span class="kw">关键词</span> <span class="kw">DHCP</span> <span class="kw">DORA</span> <span class="kw">discover</span> <span class="kw">offer</span> <span class="kw">request</span> <span class="kw">ACK</span> <span class="kw">broadcast</span></div>
   </div>
 
@@ -2387,7 +2428,8 @@ net.ipv4.ip_local_port_range = 10000 65535
 
   <div class="exam-box">
     <div class="q-en"><strong>Q (简答·综合题3-1)</strong>: Try to list at least five services provided by the link layer.</div>
-    <div><strong>答案</strong>: ① Framing 成帧；② Link Access / MAC 链路接入；③ Reliable Delivery 可靠交付；④ Error Detection 差错检测；⑤ Error Correction 差错纠正；⑥ Flow Control 流量控制。</div>
+    <div class="q-zh"><strong>题目翻译</strong>：请至少列出链路层提供的五种服务。</div>
+    <div><strong>答案</strong>：① 成帧（Framing）；② 链路接入 / 媒体访问控制（Link Access / MAC）；③ 可靠交付（Reliable Delivery）；④ 差错检测（Error Detection）；⑤ 差错纠正（Error Correction）；⑥ 流量控制（Flow Control）。</div>
     <div><span class="kw">关键词</span> <span class="kw">framing</span> <span class="kw">MAC</span> <span class="kw">reliable delivery</span> <span class="kw">error detection</span> <span class="kw">error correction</span> <span class="kw">flow control</span></div>
   </div>
 
@@ -2448,9 +2490,15 @@ net.ipv4.ip_local_port_range = 10000 65535
   <h2><span class="kp-num">21</span> 差错检测：CRC 与 Internet Checksum <span class="exam-hit">🎯 真题命中（高频计算题）</span></h2>
 
   <div class="exam-box">
-    <div class="q-en"><strong>Q1 (单选·套一)</strong>: What is the checksum of E663 and D555? &nbsp; <span class="ans">D. BBB9</span> (回卷和)</div>
-    <div class="q-en"><strong>Q2 (单选·套二)</strong>: What is the checksum of E666 and D555? &nbsp; <span class="ans">D. BBBC</span> (回卷和)</div>
-    <div class="q-en"><strong>Q3 (综合题3-2)</strong>: D=1011011, G=1001, give the CRC code. &nbsp; <span class="ans">R = 011</span></div>
+    <div class="q-en"><strong>Q1 (单选·套一)</strong>: What is the checksum of E663 and D555?</div>
+    <div class="q-zh"><strong>题目翻译</strong>：E663 和 D555 的校验和是多少？</div>
+    <div><strong>答案</strong>：<span class="ans">D. BBB9</span>（回卷求和结果；标准取反得 4446 但选项为中间值）</div>
+    <div class="q-en"><strong>Q2 (单选·套二)</strong>: What is the checksum of E666 and D555?</div>
+    <div class="q-zh"><strong>题目翻译</strong>：E666 和 D555 的校验和是多少？</div>
+    <div><strong>答案</strong>：<span class="ans">D. BBBC</span>（回卷求和结果；标准取反得 4443）</div>
+    <div class="q-en"><strong>Q3 (综合题3-2)</strong>: D=1011011, G=1001, give the CRC code.</div>
+    <div class="q-zh"><strong>题目翻译</strong>：数据 D=1011011，生成多项式 G=1001，求 CRC 校验码。</div>
+    <div><strong>答案</strong>：<span class="ans">R = 011</span>（数据后补 3 个 0，模 2 除法得余数）</div>
     <div>算法：十六进制加法 → 进位回卷 → 取反得最终校验和。<br>
     <span class="kw">关键词</span> <span class="kw">checksum</span> <span class="kw">one's complement sum</span> <span class="kw">wrap-around</span> <span class="kw">CRC</span> <span class="kw">generator</span> <span class="kw">mod-2 division</span> <span class="kw">XOR</span></div>
   </div>
@@ -2645,9 +2693,12 @@ net.ipv4.ip_local_port_range = 10000 65535
   <h2><span class="kp-num">22</span> 5 种随机访问协议 <span class="exam-hit">🎯 真题命中</span></h2>
 
   <div class="exam-box">
-    <div class="q-en"><strong>Q1 (判断)</strong>: Slotted ALOHA requires each node in the network to be synchronized on the clock. &nbsp; <span class="ans">T (正确)</span></div>
+    <div class="q-en"><strong>Q1 (判断)</strong>: Slotted ALOHA requires each node in the network to be synchronized on the clock.</div>
+    <div class="q-zh"><strong>题目翻译</strong>：时隙 ALOHA 要求网络中每个节点在时钟上同步。</div>
+    <div><strong>答案</strong>：<span class="ans">正确 (T)</span> — 时隙 ALOHA 把时间划分为等长时隙，所有节点只能在每个时隙开始时刻发送，必须全网时钟同步。</div>
     <div class="q-en"><strong>Q2 (简答·套二)</strong>: What are the random access protocols? And describe it briefly.</div>
-    <div><strong>答案</strong>: 5 种——纯 ALOHA / 时隙 ALOHA / CSMA / CSMA/CD / CSMA/CA。节点以信道全速率发送，无主从协调，冲突后随机延迟重传。</div>
+    <div class="q-zh"><strong>题目翻译</strong>：什么是随机接入协议？请简述其工作原理。</div>
+    <div><strong>答案</strong>：5 种——纯 ALOHA / 时隙 ALOHA / CSMA / CSMA/CD / CSMA/CA。工作原理：节点有数据时以信道全速率发送，无主从协调也无预先协调；若两个或多个节点同时发送发生冲突，则各自等待一个随机延迟（如指数退避）后重传，直到成功。</div>
     <div><span class="kw">关键词</span> <span class="kw">random access</span> <span class="kw">slotted ALOHA</span> <span class="kw">synchronization</span> <span class="kw">collision</span> <span class="kw">exponential backoff</span></div>
   </div>
 
@@ -2728,7 +2779,8 @@ net.ipv4.ip_local_port_range = 10000 65535
 
   <div class="exam-box">
     <div class="q-en"><strong>Q (简答)</strong>: Please briefly describe work process for Ethernet CSMA/CD algorithm.</div>
-    <div><strong>答案</strong>: ① <strong>CS 载波监听</strong>：发送前侦听信道；② <strong>CD 冲突检测</strong>：边发边听，发现冲突立即停发；③ <strong>Jamming</strong>：发拥挤信号；④ <strong>Exponential Backoff</strong>：随机退避后重传。</div>
+    <div class="q-zh"><strong>题目翻译</strong>：请简述以太网 CSMA/CD 算法的工作流程。</div>
+    <div><strong>答案</strong>：① <strong>载波监听（CS）</strong>：发送前先侦听信道，忙则等待，空闲则发送；② <strong>冲突检测（CD）</strong>：边发送边监听，发现信号电压异常（冲突）立即停止发送；③ <strong>发送拥挤信号（Jamming）</strong>：发短小干扰信号通知所有节点；④ <strong>指数退避（Exponential Backoff）</strong>：随机等待一段时间（退避时间随冲突次数指数增长）后回到第一步重传。</div>
     <div><span class="kw">关键词</span> <span class="kw">CSMA/CD</span> <span class="kw">carrier sense</span> <span class="kw">collision detection</span> <span class="kw">jamming</span> <span class="kw">exponential backoff</span></div>
   </div>
 
@@ -2824,8 +2876,12 @@ net.ipv4.ip_local_port_range = 10000 65535
   <h2><span class="kp-num">24</span> MAC 地址及 ARP 协议 <span class="exam-hit">🎯 真题命中（高频）</span></h2>
 
   <div class="exam-box">
-    <div class="q-en"><strong>Q1 (单选)</strong>: What is used to identify a node at the link layer? &nbsp; <span class="ans">C. MAC</span></div>
-    <div class="q-en"><strong>Q2 (单选)</strong>: The function of the ARP protocol is &nbsp; <span class="ans">B. IP address map MAC address</span></div>
+    <div class="q-en"><strong>Q1 (单选)</strong>: What is used to identify a node at the link layer?</div>
+    <div class="q-zh"><strong>题目翻译</strong>：在数据链路层用什么来标识一个节点？</div>
+    <div><strong>答案</strong>：<span class="ans">C. MAC 地址</span> — 链路层用 MAC（物理）地址唯一标识设备；IP 是网络层，Port 是传输层。</div>
+    <div class="q-en"><strong>Q2 (单选)</strong>: The function of the ARP protocol is</div>
+    <div class="q-zh"><strong>题目翻译</strong>：ARP 协议的作用是</div>
+    <div><strong>答案</strong>：<span class="ans">B. IP 地址映射到 MAC 地址</span> — ARP 通过广播请求获取目标 IP 对应的 MAC 地址。</div>
     <div><span class="kw">关键词</span> <span class="kw">MAC address</span> <span class="kw">link layer</span> <span class="kw">ARP</span> <span class="kw">IP to MAC</span> <span class="kw">mapping</span></div>
   </div>
 
@@ -3005,15 +3061,18 @@ net.ipv4.ip_local_port_range = 10000 65535
   <h2><span class="kp-num">26</span> TCP 拥塞控制 <span class="exam-hit">🎯 真题命中（综合大题）</span></h2>
 
   <div class="exam-box">
-    <div class="q-en"><strong>Q1 (判断)</strong>: In a TCP transmission, assumption is that the cache in the router is infinite, then the network is not congested. &nbsp; <span class="ans">F (错误)</span></div>
-    <div class="q-en"><strong>Q2 (综合题2)</strong>: TCP Reno 拥塞窗口图表分析（5 小问）</div>
-    <div><strong>答案要点</strong>:
+    <div class="q-en"><strong>Q1 (判断)</strong>: In a TCP transmission, assumption is that the cache in the router is infinite, then the network is not congested.</div>
+    <div class="q-zh"><strong>题目翻译</strong>：在 TCP 传输中，假设路由器中的缓存无限大，则网络不会拥塞。</div>
+    <div><strong>答案</strong>：<span class="ans">错误 (F)</span> — 缓存无限大虽不会因丢包判定拥塞，但数据包会无限排队，排队延迟趋向无穷大，本身就是严重拥塞表现，且会导致 TCP 频繁超时重传。</div>
+    <div class="q-en"><strong>Q2 (综合题2)</strong>: TCP Reno congestion window chart analysis (5 sub-questions).</div>
+    <div class="q-zh"><strong>题目翻译</strong>：分析 TCP Reno 拥塞窗口随时间变化的图表（共 5 小问）。</div>
+    <div><strong>答案要点</strong>：
       <ul>
-        <li>① 第9轮后丢包检测方式：<span class="ans">Timeout</span>（窗口骤降到 1）</li>
-        <li>② 第19轮后丢包检测方式：<span class="ans">Triple duplicate ACK</span>（窗口减半到 18）</li>
-        <li>③ 初始 Threshold：<span class="ans">64</span>（窗口到 64 后从指数变线性）</li>
-        <li>④ 第10轮 Threshold：<span class="ans">33</span>（66/2）</li>
-        <li>⑤ 第54/第50个报文段发送轮次：<span class="ans">第6轮</span>（累计 1+2+4+8+16+32=63，第6轮含 32~63）</li>
+        <li>① 第 9 轮后丢包检测方式：<span class="ans">超时（Timeout）</span> — 窗口骤降到 1</li>
+        <li>② 第 19 轮后丢包检测方式：<span class="ans">三次重复 ACK（Triple duplicate ACK）</span> — 窗口减半到 18</li>
+        <li>③ 初始 Threshold：<span class="ans">64</span> — 窗口到 64 后从指数增长变线性</li>
+        <li>④ 第 10 轮 Threshold：<span class="ans">33</span> — 66/2</li>
+        <li>⑤ 第 54 / 第 50 个报文段发送轮次：<span class="ans">第 6 轮</span> — 累计 1+2+4+8+16+32=63，第 6 轮含第 32~63 个</li>
       </ul>
     </div>
     <div><span class="kw">关键词</span> <span class="kw">TCP Reno</span> <span class="kw">congestion window</span> <span class="kw">ssthresh</span> <span class="kw">slow start</span> <span class="kw">triple duplicate ACK</span> <span class="kw">timeout</span> <span class="kw">fast recovery</span></div>
@@ -3137,9 +3196,12 @@ net.ipv4.ip_local_port_range = 10000 65535
   <h2><span class="kp-num">27</span> 链路状态算法（Dijkstra 算法） <span class="exam-hit">🎯 真题命中（综合大题 + 判断）</span></h2>
 
   <div class="exam-box">
-    <div class="q-en"><strong>Q1 (判断)</strong>: OSPF protocol is the intra-AS routing protocol. &nbsp; <span class="ans">T (正确)</span></div>
-    <div class="q-en"><strong>Q2 (综合题1)</strong>: 根据拓扑图用 Dijkstra 算法计算从节点 x 到所有其他节点的最短路径，填路由表 (Destination, Next Node, Cost)。</div>
-    <div><strong>答案</strong>: 路由表 7 行，Next Node 全为 W；S=8, t=6, u=4, V=2, W=1, y=3, Z=8。</div>
+    <div class="q-en"><strong>Q1 (判断)</strong>: OSPF protocol is the intra-AS routing protocol.</div>
+    <div class="q-zh"><strong>题目翻译</strong>：OSPF 协议是自治系统内部的路由协议。</div>
+    <div><strong>答案</strong>：<span class="ans">正确 (T)</span> — OSPF 是链路状态类型的内部网关协议（IGP），用 Dijkstra 计算最短路径，部署在单个 AS 内部。</div>
+    <div class="q-en"><strong>Q2 (综合题1)</strong>: Use Dijkstra algorithm to compute shortest paths from node x to all other nodes. Fill the routing table (Destination, Next Node, Cost).</div>
+    <div class="q-zh"><strong>题目翻译</strong>：根据拓扑图用 Dijkstra 算法计算从节点 x 到所有其他节点的最短路径，填路由表（目标、下一跳、代价）。</div>
+    <div><strong>答案</strong>：路由表 7 行，下一跳（Next Node）全部为 W；S=8, t=6, u=4, V=2, W=1, y=3, Z=8。</div>
     <div><span class="kw">关键词</span> <span class="kw">Dijkstra</span> <span class="kw">shortest path</span> <span class="kw">link state</span> <span class="kw">OSPF</span> <span class="kw">intra-AS</span> <span class="kw">IGP</span> <span class="kw">routing table</span></div>
   </div>
 
@@ -3234,13 +3296,14 @@ net.ipv4.ip_local_port_range = 10000 65535
 
   <div class="exam-box">
     <div class="q-en"><strong>Q (综合题·套二)</strong>: A group company has 20 subcompany, and the superior gives a 172.17.0.0/16 network segment, how to allocate?</div>
-    <div><strong>答案</strong>:
+    <div class="q-zh"><strong>题目翻译</strong>：一个集团有 20 个子公司，上级分配了 172.17.0.0/16 网段，如何划分子网？</div>
+    <div><strong>答案</strong>：
       <ul>
-        <li>① 子网位数：<span class="ans">5 bits</span> (2^5=32 ≥ 20)</li>
-        <li>② 子网掩码：<span class="ans">255.255.248.0 (/21)</span></li>
-        <li>③ 第一个子公司：<span class="ans">172.17.0.0/21</span></li>
-        <li>④ 第二个子公司：<span class="ans">172.17.8.0/21</span>（步长 2^3=8）</li>
-        <li>⑤ 剩余子网数：<span class="ans">12 个</span> (32-20)</li>
+        <li>① 子网占据位数：<span class="ans">5 位</span>（2^5=32 ≥ 20）</li>
+        <li>② 子公司子网掩码：<span class="ans">255.255.248.0（/21）</span></li>
+        <li>③ 第一个子公司网络地址：<span class="ans">172.17.0.0/21</span></li>
+        <li>④ 第二个子公司网络地址：<span class="ans">172.17.8.0/21</span>（步长 2^3=8）</li>
+        <li>⑤ 集团剩余子网数：<span class="ans">12 个</span>（32-20）</li>
       </ul>
     </div>
     <div><span class="kw">关键词</span> <span class="kw">subnet</span> <span class="kw">subnet mask</span> <span class="kw">borrow bits</span> <span class="kw">CIDR</span> <span class="kw">/21</span> <span class="kw">block size</span></div>
@@ -3470,75 +3533,75 @@ net.ipv4.ip_local_port_range = 10000 65535
 
   <h4>📘 Part I · 单项选择（10 题）</h4>
   <table style="width:100%">
-    <tr><th style="width:5%">题号</th><th style="width:55%">英文原题</th><th style="width:10%">答案</th><th style="width:30%">对应知识点</th></tr>
-    <tr><td>1</td><td>For packet-switched network, L=6Mbits, R=3Mbps, the transmission delay from A to B is</td><td><span class="ans">A. 2</span></td><td><a href="#kp3">KP3 节点的四种时延</a></td></tr>
-    <tr><td>2</td><td>Which of the following is a guided transmission medium?</td><td><span class="ans">A. Twisted-pair</span></td><td><a href="#kp2">KP2 物理链路类型</a></td></tr>
-    <tr><td>3</td><td>What is used to identify a process?</td><td><span class="ans">B. IP + Port</span></td><td><a href="#kp9">KP9 TCP/UDP 协议</a></td></tr>
-    <tr><td>4</td><td>Non-persistent connection HTTP, how long does it take to send an object?</td><td><span class="ans">B. 2RTT + transmit time</span></td><td><a href="#kp5">KP5 HTTP 非持久连接</a></td></tr>
-    <tr><td>5</td><td>What is used to identify a node at the link layer?</td><td><span class="ans">C. MAC</span></td><td><a href="#kp24">KP24 MAC/ARP</a></td></tr>
-    <tr><td>6</td><td>Which of the following applications use UDP?</td><td><span class="ans">D. SNMP</span></td><td><a href="#kp9">KP9 TCP/UDP 协议</a></td></tr>
-    <tr><td>7</td><td>What is the checksum of E663 and D555?</td><td><span class="ans">D. BBB9</span></td><td><a href="#kp21">KP21 差错检测</a></td></tr>
-    <tr><td>8</td><td>Which does not belong to the router's switching fabrics?</td><td><span class="ans">C. CPU</span></td><td><a href="#kp17">KP17 路由器结构</a></td></tr>
-    <tr><td>9</td><td>What message is the application PING sending?</td><td><span class="ans">C. ICMP request</span></td><td><a href="#kp14">KP14 网络层功能</a></td></tr>
-    <tr><td>10</td><td>The function of the ARP protocol is</td><td><span class="ans">B. IP → MAC</span></td><td><a href="#kp24">KP24 MAC/ARP</a></td></tr>
+    <tr><th style="width:4%">题号</th><th style="width:32%">英文原题</th><th style="width:32%">中文翻译</th><th style="width:14%">答案</th><th style="width:18%">对应知识点</th></tr>
+    <tr><td>1</td><td>For packet-switched network, L=6Mbits, R=3Mbps, the transmission delay from A to B is</td><td>分组交换网络中，L=6Mbits，R=3Mbps，A 到 B 的传输时延是</td><td><span class="ans">A. 2 秒</span></td><td><a href="#kp3">KP3 节点的四种时延</a></td></tr>
+    <tr><td>2</td><td>Which of the following is a guided transmission medium?</td><td>下列哪项是导引型传输介质？</td><td><span class="ans">A. 双绞线</span></td><td><a href="#kp2">KP2 物理链路类型</a></td></tr>
+    <tr><td>3</td><td>What is used to identify a process?</td><td>用什么来标识一个进程？</td><td><span class="ans">B. IP + 端口</span></td><td><a href="#kp9">KP9 TCP/UDP 协议</a></td></tr>
+    <tr><td>4</td><td>Non-persistent connection HTTP, how long does it take to send an object?</td><td>非持久连接 HTTP，发送一个对象需要多长时间？</td><td><span class="ans">B. 2RTT + 传输时间</span></td><td><a href="#kp5">KP5 HTTP 非持久连接</a></td></tr>
+    <tr><td>5</td><td>What is used to identify a node at the link layer?</td><td>链路层用什么标识节点？</td><td><span class="ans">C. MAC 地址</span></td><td><a href="#kp24">KP24 MAC/ARP</a></td></tr>
+    <tr><td>6</td><td>Which of the following applications use UDP?</td><td>下列哪个应用使用 UDP？</td><td><span class="ans">D. SNMP</span></td><td><a href="#kp9">KP9 TCP/UDP 协议</a></td></tr>
+    <tr><td>7</td><td>What is the checksum of E663 and D555?</td><td>E663 和 D555 的校验和是多少？</td><td><span class="ans">D. BBB9</span></td><td><a href="#kp21">KP21 差错检测</a></td></tr>
+    <tr><td>8</td><td>Which does not belong to the router's switching fabrics?</td><td>哪项不属于路由器的交换结构？</td><td><span class="ans">C. CPU</span></td><td><a href="#kp17">KP17 路由器结构</a></td></tr>
+    <tr><td>9</td><td>What message is the application PING sending?</td><td>PING 应用发送什么报文？</td><td><span class="ans">C. ICMP 请求</span></td><td><a href="#kp14">KP14 网络层功能</a></td></tr>
+    <tr><td>10</td><td>The function of the ARP protocol is</td><td>ARP 协议的作用是</td><td><span class="ans">B. IP → MAC</span></td><td><a href="#kp24">KP24 MAC/ARP</a></td></tr>
   </table>
 
   <h4>📗 Part II · 判断题（10 题）</h4>
   <table style="width:100%">
-    <tr><th style="width:5%">题号</th><th style="width:65%">英文原题</th><th style="width:10%">答案</th><th style="width:20%">对应知识点</th></tr>
-    <tr><td>1</td><td>Packet switched networks allow more users than circuit-switched networks.</td><td><span class="ans">T</span></td><td><a href="#kp4">KP4 端系统</a></td></tr>
-    <tr><td>2</td><td>In client-server structure, direct communication between clients is not required.</td><td><span class="ans">T</span></td><td><a href="#kp4">KP4 端系统</a></td></tr>
-    <tr><td>3</td><td>Web cache can reduce link traffic, but cannot reduce access time.</td><td><span class="ans">F</span></td><td><a href="#kp6">KP6 HTTP 持久连接</a></td></tr>
-    <tr><td>4</td><td>Using P2P distribution, the server does not need to upload a complete file.</td><td><span class="ans">F</span></td><td><a href="#kp4">KP4 端系统</a></td></tr>
-    <tr><td>5</td><td>For go-back N, ack(n) represents that n and previous packets of n have been received correctly.</td><td><span class="ans">T</span></td><td><a href="#kp10">KP10 GBN/SR</a></td></tr>
-    <tr><td>6</td><td>TCP receiver: when a packet arrives in sequence and all previous packets have been ACKed, the receiver immediately replies ACK.</td><td><span class="ans">F</span></td><td><a href="#kp12">KP12 TCP 流控</a></td></tr>
-    <tr><td>7</td><td>In TCP, if router cache is infinite, the network is not congested.</td><td><span class="ans">F</span></td><td><a href="#kp26">KP26 拥塞控制</a></td></tr>
-    <tr><td>8</td><td>NAT allows internal machine to access external server, but does not allow external to access internal.</td><td><span class="ans">T</span></td><td><a href="#kp15">KP15 NAT</a></td></tr>
-    <tr><td>9</td><td>Slotted ALOHA requires each node to be synchronized on the clock.</td><td><span class="ans">T</span></td><td><a href="#kp22">KP22 随机访问</a></td></tr>
-    <tr><td>10</td><td>OSPF protocol is the intra-AS routing protocol.</td><td><span class="ans">T</span></td><td><a href="#kp27">KP27 Dijkstra</a></td></tr>
+    <tr><th style="width:4%">题号</th><th style="width:38%">英文原题</th><th style="width:38%">中文翻译</th><th style="width:8%">答案</th><th style="width:12%">对应知识点</th></tr>
+    <tr><td>1</td><td>Packet switched networks allow more users than circuit-switched networks.</td><td>分组交换比电路交换允许更多用户使用网络。</td><td><span class="ans">正确 (T)</span></td><td><a href="#kp4">KP4 端系统</a></td></tr>
+    <tr><td>2</td><td>In client-server structure, direct communication between clients is not required.</td><td>C/S 架构中客户端之间不需要直接通信。</td><td><span class="ans">正确 (T)</span></td><td><a href="#kp4">KP4 端系统</a></td></tr>
+    <tr><td>3</td><td>Web cache can reduce link traffic, but cannot reduce access time.</td><td>Web 缓存能减少链路流量，但不能减少访问时间。</td><td><span class="ans">错误 (F)</span></td><td><a href="#kp6">KP6 HTTP 持久连接</a></td></tr>
+    <tr><td>4</td><td>Using P2P distribution, the server does not need to upload a complete file.</td><td>P2P 分发时服务器不需要上传完整文件。</td><td><span class="ans">错误 (F)</span></td><td><a href="#kp4">KP4 端系统</a></td></tr>
+    <tr><td>5</td><td>For go-back N, ack(n) represents that n and previous packets of n have been received correctly.</td><td>GBN 中 ACK(n) 表示 n 及之前的分组已正确接收。</td><td><span class="ans">正确 (T)</span></td><td><a href="#kp10">KP10 GBN/SR</a></td></tr>
+    <tr><td>6</td><td>TCP receiver: when a packet arrives in sequence and all previous packets have been ACKed, the receiver immediately replies ACK.</td><td>TCP 接收方按序收到且之前都已 ACK 时立即回复 ACK。</td><td><span class="ans">错误 (F)</span></td><td><a href="#kp12">KP12 TCP 流控</a></td></tr>
+    <tr><td>7</td><td>In TCP, if router cache is infinite, the network is not congested.</td><td>TCP 中若路由器缓存无限大则网络不拥塞。</td><td><span class="ans">错误 (F)</span></td><td><a href="#kp26">KP26 拥塞控制</a></td></tr>
+    <tr><td>8</td><td>NAT allows internal machine to access external server, but does not allow external to access internal.</td><td>NAT 允许内部访问外部，不允许外部访问内部。</td><td><span class="ans">正确 (T)</span></td><td><a href="#kp15">KP15 NAT</a></td></tr>
+    <tr><td>9</td><td>Slotted ALOHA requires each node to be synchronized on the clock.</td><td>时隙 ALOHA 要求每个节点时钟同步。</td><td><span class="ans">正确 (T)</span></td><td><a href="#kp22">KP22 随机访问</a></td></tr>
+    <tr><td>10</td><td>OSPF protocol is the intra-AS routing protocol.</td><td>OSPF 是自治系统内部路由协议。</td><td><span class="ans">正确 (T)</span></td><td><a href="#kp27">KP27 Dijkstra</a></td></tr>
   </table>
 
   <h4>📙 Part III · 简答题（5 题）</h4>
   <table style="width:100%">
-    <tr><th style="width:5%">题号</th><th style="width:65%">英文原题</th><th style="width:30%">对应知识点</th></tr>
-    <tr><td>1</td><td>Describe the layers of the Internet protocol stack and list one protocol in each layer.</td><td><a href="#kp1">KP1 OSI 模型</a></td></tr>
-    <tr><td>2</td><td>Describe the process of implementing NAT on the router.</td><td><a href="#kp15">KP15 NAT</a></td></tr>
-    <tr><td>3</td><td>Describe the process of accessing a web page with a non-persistent HTTP.</td><td><a href="#kp5">KP5 HTTP 非持久</a></td></tr>
-    <tr><td>4</td><td>Please briefly describe DHCP work process.</td><td><a href="#kp19">KP19 DHCP</a></td></tr>
-    <tr><td>5</td><td>Please briefly describe work process for Ethernet CSMA/CD algorithm.</td><td><a href="#kp23">KP23 CSMA/CD</a></td></tr>
+    <tr><th style="width:4%">题号</th><th style="width:46%">英文原题</th><th style="width:46%">中文翻译</th><th style="width:4%">跳转</th></tr>
+    <tr><td>1</td><td>Describe the layers of the Internet protocol stack and list one protocol in each layer.</td><td>描述互联网协议栈的各层并列举每层一个协议。</td><td><a href="#kp1">KP1</a></td></tr>
+    <tr><td>2</td><td>Describe the process of implementing NAT on the router.</td><td>描述在路由器上实现 NAT 的过程。</td><td><a href="#kp15">KP15</a></td></tr>
+    <tr><td>3</td><td>Describe the process of accessing a web page with a non-persistent HTTP.</td><td>描述使用非持久 HTTP 访问网页的过程。</td><td><a href="#kp5">KP5</a></td></tr>
+    <tr><td>4</td><td>Please briefly describe DHCP work process.</td><td>请简述 DHCP 的工作流程。</td><td><a href="#kp19">KP19</a></td></tr>
+    <tr><td>5</td><td>Please briefly describe work process for Ethernet CSMA/CD algorithm.</td><td>请简述以太网 CSMA/CD 算法的工作流程。</td><td><a href="#kp23">KP23</a></td></tr>
   </table>
 
   <h4>📕 Part IV · 综合计算题（3 大题）</h4>
   <table style="width:100%">
-    <tr><th style="width:5%">题号</th><th style="width:65%">英文原题</th><th style="width:30%">对应知识点</th></tr>
-    <tr><td>1</td><td>Use Dijkstra algorithm to compute shortest paths from node x to all others. Fill the routing table (Destination, Next Node, Cost).</td><td><a href="#kp27">KP27 Dijkstra</a></td></tr>
-    <tr><td>2</td><td>Analyze TCP Reno congestion window chart. 5 sub-questions: timeout vs triple dup ACK, threshold values, which round sends 54th segment.</td><td><a href="#kp26">KP26 拥塞控制</a></td></tr>
-    <tr><td>3</td><td>(1) List 5 services of link layer; (2) CRC computation: D=1011011, G=1001.</td><td><a href="#kp20">KP20 链路层</a> + <a href="#kp21">KP21 CRC</a></td></tr>
+    <tr><th style="width:4%">题号</th><th style="width:46%">英文原题</th><th style="width:46%">中文翻译</th><th style="width:4%">跳转</th></tr>
+    <tr><td>1</td><td>Use Dijkstra algorithm to compute shortest paths from node x to all others. Fill the routing table (Destination, Next Node, Cost).</td><td>用 Dijkstra 算法计算从 x 到所有其他节点的最短路径，填路由表（目标、下一跳、代价）。</td><td><a href="#kp27">KP27</a></td></tr>
+    <tr><td>2</td><td>Analyze TCP Reno congestion window chart. 5 sub-questions: timeout vs triple dup ACK, threshold values, which round sends 54th segment.</td><td>分析 TCP Reno 拥塞窗口图表（5 小问）：超时 vs 三次重复 ACK、阈值、第 54 报文段所在轮次。</td><td><a href="#kp26">KP26</a></td></tr>
+    <tr><td>3</td><td>(1) List 5 services of link layer; (2) CRC computation: D=1011011, G=1001.</td><td>(1) 列出链路层 5 种服务；(2) CRC 计算：D=1011011，G=1001。</td><td><a href="#kp20">KP20</a>+<a href="#kp21">KP21</a></td></tr>
   </table>
 
   <h3 style="color:var(--accent);border-bottom:2px solid var(--accent);padding-bottom:6px;margin-top:32px">第二套试卷（独有新题）</h3>
 
   <h4>📘 Part I · 单项选择（独有题）</h4>
   <table style="width:100%">
-    <tr><th style="width:5%">题号</th><th style="width:55%">英文原题</th><th style="width:10%">答案</th><th style="width:30%">对应知识点</th></tr>
-    <tr><td>1</td><td>Which of the following does not belong to an end system?</td><td><span class="ans">D. Router</span></td><td><a href="#kp4">KP4 端系统</a></td></tr>
-    <tr><td>5</td><td>For FTP which of the following statements is false?</td><td><span class="ans">C. FTP using UDP</span></td><td><a href="#kp9">KP9 TCP/UDP</a></td></tr>
-    <tr><td>7</td><td>What is the checksum of E666 and D555?</td><td><span class="ans">D. BBBC</span></td><td><a href="#kp21">KP21 差错检测</a></td></tr>
+    <tr><th style="width:4%">题号</th><th style="width:32%">英文原题</th><th style="width:32%">中文翻译</th><th style="width:14%">答案</th><th style="width:18%">对应知识点</th></tr>
+    <tr><td>1</td><td>Which of the following does not belong to an end system?</td><td>下列哪项不属于端系统？</td><td><span class="ans">D. 路由器</span></td><td><a href="#kp4">KP4 端系统</a></td></tr>
+    <tr><td>5</td><td>For FTP which of the following statements is false?</td><td>关于 FTP 下列哪个说法是错误的？</td><td><span class="ans">C. FTP 用 UDP</span></td><td><a href="#kp9">KP9 TCP/UDP</a></td></tr>
+    <tr><td>7</td><td>What is the checksum of E666 and D555?</td><td>E666 和 D555 的校验和是多少？</td><td><span class="ans">D. BBBC</span></td><td><a href="#kp21">KP21 差错检测</a></td></tr>
   </table>
 
   <h4>📙 Part III · 简答题（独有题）</h4>
   <table style="width:100%">
-    <tr><th style="width:5%">题号</th><th style="width:65%">英文原题</th><th style="width:30%">对应知识点</th></tr>
-    <tr><td>1</td><td>Please briefly describe selective repeat.</td><td><a href="#kp10">KP10 GBN/SR</a></td></tr>
-    <tr><td>2</td><td>Briefly describe the purpose of using proxy server and benefits.</td><td><a href="#kp6">KP6 HTTP 持久</a></td></tr>
-    <tr><td>4</td><td>What are the random access protocols? And describe it briefly.</td><td><a href="#kp22">KP22 随机访问</a></td></tr>
+    <tr><th style="width:4%">题号</th><th style="width:46%">英文原题</th><th style="width:46%">中文翻译</th><th style="width:4%">跳转</th></tr>
+    <tr><td>1</td><td>Please briefly describe selective repeat.</td><td>请简述选择重传协议（SR）。</td><td><a href="#kp10">KP10</a></td></tr>
+    <tr><td>2</td><td>Briefly describe the purpose of using proxy server and benefits.</td><td>简述使用代理服务器的目的及好处。</td><td><a href="#kp6">KP6</a></td></tr>
+    <tr><td>4</td><td>What are the random access protocols? And describe it briefly.</td><td>什么是随机接入协议？请简述其工作原理。</td><td><a href="#kp22">KP22</a></td></tr>
   </table>
 
   <h4>📕 Part IV · 综合计算题（独有题）</h4>
   <table style="width:100%">
-    <tr><th style="width:5%">题号</th><th style="width:65%">英文原题</th><th style="width:30%">对应知识点</th></tr>
-    <tr><td>1</td><td>20 subcompany, 172.17.0.0/16. 5 sub-questions: subnet bits, mask, first/second subnet, remaining count.</td><td><a href="#kp28">KP28 子网划分</a></td></tr>
-    <tr><td>3</td><td>TCP Reno chart: which round sends the 50th segment.</td><td><a href="#kp26">KP26 拥塞控制</a></td></tr>
+    <tr><th style="width:4%">题号</th><th style="width:46%">英文原题</th><th style="width:46%">中文翻译</th><th style="width:4%">跳转</th></tr>
+    <tr><td>1</td><td>20 subcompany, 172.17.0.0/16. 5 sub-questions: subnet bits, mask, first/second subnet, remaining count.</td><td>20 个子公司，172.17.0.0/16 网段，5 小问：子网位数、掩码、第一/第二个子网、剩余数量。</td><td><a href="#kp28">KP28</a></td></tr>
+    <tr><td>3</td><td>TCP Reno chart: which round sends the 50th segment.</td><td>TCP Reno 图表：第 50 个报文段在哪一轮发送。</td><td><a href="#kp26">KP26</a></td></tr>
   </table>
 
   <h3 style="color:var(--anchor);border-bottom:2px solid var(--anchor);padding-bottom:6px;margin-top:32px">🔑 高频英文关键词速记（按字母）</h3>
