@@ -454,6 +454,26 @@
     font-size: 13.5px;
     color: #713f12;
   }
+  .exam-box .opts {
+    background: #f0f9ff;
+    padding: 6px 10px;
+    border-left: 3px solid #0284c7;
+    margin: 0 0 6px;
+    font-size: 13px;
+    color: #0c4a6e;
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  .exam-box .opts::before {
+    content: "选项";
+    display: inline-block;
+    background: #0284c7;
+    color: white;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-right: 8px;
+  }
   .exam-box .ans {
     color: #059669;
     font-weight: 700;
@@ -657,6 +677,7 @@
   <div class="exam-box">
     <div class="q-en"><strong>Q (单选)</strong>: Which of the following is a guided transmission medium?</div>
     <div class="q-zh"><strong>题目翻译</strong>：下列哪一项是导引型传输介质？</div>
+    <div class="opts">A. Twisted-pair cable（双绞线）　B. WiFi　C. Satellite（卫星）　D. Microwave（微波）</div>
     <div><strong>答案</strong>：<span class="ans">A. 双绞线（Twisted-pair cable）</span><br>
     导引型 = 有线 = 双绞线/同轴/光纤；非导引型 = 无线 = WiFi/卫星/微波。<br>
     <span class="kw">关键词</span> <span class="kw">guided</span> <span class="kw">unguided</span> <span class="kw">twisted-pair</span> <span class="kw">medium</span></div>
@@ -728,6 +749,7 @@
   <div class="exam-box">
     <div class="q-en"><strong>Q (单选)</strong>: For packet-switched network, L=6Mbits, R=3Mbps, the transmission delay from A to B is?</div>
     <div class="q-zh"><strong>题目翻译</strong>：在分组交换网络中，数据长度 L=6Mbits，链路带宽 R=3Mbps，从 A 到 B 的传输时延是多少？</div>
+    <div class="opts">A. 2　B. 6　C. 8　D. 9</div>
     <div><strong>答案</strong>：<span class="ans">A. 2 秒</span> &nbsp; 公式 d_trans = L/R = 6M/3M = 2s<br>
     <span class="kw">关键词</span> <span class="kw">transmission delay</span> <span class="kw">packet-switched</span> <span class="kw">L/R</span></div>
   </div>
@@ -832,6 +854,7 @@
   <div class="exam-box">
     <div class="q-en"><strong>Q1 (单选·套二)</strong>: Which of the following does not belong to an end system?</div>
     <div class="q-zh"><strong>题目翻译</strong>：下列哪一项不属于端系统？</div>
+    <div class="opts">A. PC　B. Server（服务器）　C. Laptop（笔记本）　D. Router（路由器）</div>
     <div><strong>答案</strong>：<span class="ans">D. 路由器（Router）</span> — 路由器是网络核心中间节点，不是端系统。PC / Server / Laptop 才是端系统。</div>
     <div class="q-en"><strong>Q2 (判断)</strong>: Packet switched networks allow more users than circuit-switched networks.</div>
     <div class="q-zh"><strong>题目翻译</strong>：分组交换网络比电路交换网络允许更多用户使用。</div>
@@ -980,6 +1003,7 @@
   <div class="exam-box">
     <div class="q-en"><strong>Q1 (单选)</strong>: Non-persistent connection HTTP, how long does it take to send an object?</div>
     <div class="q-zh"><strong>题目翻译</strong>：非持久连接的 HTTP，发送一个对象需要多长时间？</div>
+    <div class="opts">A. 1RTT + transmit time　B. 2RTT + transmit time　C. 3RTT + transmit time　D. 4RTT + transmit time</div>
     <div><strong>答案</strong>：<span class="ans">B. 2RTT + 传输时间（transmit time）</span></div>
     <div class="q-en"><strong>Q2 (简答)</strong>: Describe the process of accessing a web page with a non-persistent HTTP.</div>
     <div class="q-zh"><strong>题目翻译</strong>：请描述使用非持久 HTTP 访问网页的过程。</div>
@@ -1377,12 +1401,15 @@
   <div class="exam-box">
     <div class="q-en"><strong>Q1 (单选)</strong>: What is used to identify a process?</div>
     <div class="q-zh"><strong>题目翻译</strong>：用什么来标识一个进程？</div>
+    <div class="opts">A. MAC、IP　B. IP、Port　C. URL、IP　D. URL、MAC</div>
     <div><strong>答案</strong>：<span class="ans">B. IP + Port（IP 地址 + 端口号）</span></div>
     <div class="q-en"><strong>Q2 (单选)</strong>: Which of the following applications use UDP?</div>
     <div class="q-zh"><strong>题目翻译</strong>：下列哪个应用使用 UDP？</div>
+    <div class="opts">A. Email（SMTP）　B. FTP　C. HTTP　D. SNMP</div>
     <div><strong>答案</strong>：<span class="ans">D. SNMP（简单网络管理协议）</span> — DNS / DHCP / SNMP / RTP / NTP 都用 UDP；SMTP / FTP / HTTP 用 TCP。</div>
     <div class="q-en"><strong>Q3 (单选·套二)</strong>: For FTP which of the following statements is false?</div>
     <div class="q-zh"><strong>题目翻译</strong>：关于 FTP 协议，下列哪个说法是错误的？</div>
+    <div class="opts">A. FTP 控制连接端口是 21　B. FTP 数据连接端口是 20　C. FTP 使用 UDP　D. FTP 控制连接是带外（out of band）</div>
     <div><strong>答案</strong>：<span class="ans">C. FTP 使用 UDP（错误说法）</span> — FTP 用 TCP 保证可靠传输；端口 21 控制 / 20 数据；带外控制（out-of-band）。</div>
     <div><span class="kw">关键词</span> <span class="kw">process</span> <span class="kw">port</span> <span class="kw">socket</span> <span class="kw">UDP</span> <span class="kw">SNMP</span> <span class="kw">FTP</span> <span class="kw">out-of-band</span></div>
   </div>
@@ -1886,6 +1913,7 @@ net.ipv4.ip_local_port_range = 10000 65535
   <div class="exam-box">
     <div class="q-en"><strong>Q (单选)</strong>: What message is the application PING sending?</div>
     <div class="q-zh"><strong>题目翻译</strong>：PING 应用程序发送的是什么报文？</div>
+    <div class="opts">A. TCP 请求报文　B. TCP 响应报文　C. ICMP 请求报文　D. ICMP 响应报文</div>
     <div><strong>答案</strong>：<span class="ans">C. ICMP 请求报文（ICMP Echo Request）</span><br>
     PING 工作在网络层，发送 ICMP Echo Request，等待对方返回 ICMP Echo Reply。<br>
     <span class="kw">关键词</span> <span class="kw">PING</span> <span class="kw">ICMP</span> <span class="kw">echo request</span> <span class="kw">echo reply</span></div>
@@ -2149,6 +2177,7 @@ net.ipv4.ip_local_port_range = 10000 65535
   <div class="exam-box">
     <div class="q-en"><strong>Q (单选)</strong>: Which of the following types does not belong to the router's switching fabrics?</div>
     <div class="q-zh"><strong>题目翻译</strong>：下列哪一项不属于路由器的交换结构类型？</div>
+    <div class="opts">A. Memory（内存）　B. Bus（总线）　C. CPU　D. Crossbar（纵横交叉矩阵）</div>
     <div><strong>答案</strong>: <span class="ans">C. CPU</span> — 交换结构三种：基于内存（Memory）、基于总线（Bus）、基于纵横交叉矩阵（Crossbar）。CPU 不属于交换结构分类。</div>
     <div><span class="kw">关键词</span> <span class="kw">switching fabric</span> <span class="kw">memory</span> <span class="kw">bus</span> <span class="kw">crossbar</span></div>
   </div>
@@ -2492,9 +2521,11 @@ net.ipv4.ip_local_port_range = 10000 65535
   <div class="exam-box">
     <div class="q-en"><strong>Q1 (单选·套一)</strong>: What is the checksum of E663 and D555?</div>
     <div class="q-zh"><strong>题目翻译</strong>：E663 和 D555 的校验和是多少？</div>
+    <div class="opts">A. 4448　B. 4118　C. BBB8　D. BBB9</div>
     <div><strong>答案</strong>：<span class="ans">D. BBB9</span>（回卷求和结果；标准取反得 4446 但选项为中间值）</div>
     <div class="q-en"><strong>Q2 (单选·套二)</strong>: What is the checksum of E666 and D555?</div>
     <div class="q-zh"><strong>题目翻译</strong>：E666 和 D555 的校验和是多少？</div>
+    <div class="opts">A. 4443　B. 4444　C. BBBB　D. BBBC</div>
     <div><strong>答案</strong>：<span class="ans">D. BBBC</span>（回卷求和结果；标准取反得 4443）</div>
     <div class="q-en"><strong>Q3 (综合题3-2)</strong>: D=1011011, G=1001, give the CRC code.</div>
     <div class="q-zh"><strong>题目翻译</strong>：数据 D=1011011，生成多项式 G=1001，求 CRC 校验码。</div>
@@ -2878,9 +2909,11 @@ net.ipv4.ip_local_port_range = 10000 65535
   <div class="exam-box">
     <div class="q-en"><strong>Q1 (单选)</strong>: What is used to identify a node at the link layer?</div>
     <div class="q-zh"><strong>题目翻译</strong>：在数据链路层用什么来标识一个节点？</div>
+    <div class="opts">A. IP　B. Port　C. MAC　D. URL</div>
     <div><strong>答案</strong>：<span class="ans">C. MAC 地址</span> — 链路层用 MAC（物理）地址唯一标识设备；IP 是网络层，Port 是传输层。</div>
     <div class="q-en"><strong>Q2 (单选)</strong>: The function of the ARP protocol is</div>
     <div class="q-zh"><strong>题目翻译</strong>：ARP 协议的作用是</div>
+    <div class="opts">A. 端口号映射到 IP 地址　B. IP 地址映射到 MAC 地址　C. 广播 IP 地址　D. IP 地址映射到端口号</div>
     <div><strong>答案</strong>：<span class="ans">B. IP 地址映射到 MAC 地址</span> — ARP 通过广播请求获取目标 IP 对应的 MAC 地址。</div>
     <div><span class="kw">关键词</span> <span class="kw">MAC address</span> <span class="kw">link layer</span> <span class="kw">ARP</span> <span class="kw">IP to MAC</span> <span class="kw">mapping</span></div>
   </div>
@@ -3533,17 +3566,17 @@ net.ipv4.ip_local_port_range = 10000 65535
 
   <h4>📘 Part I · 单项选择（10 题）</h4>
   <table style="width:100%">
-    <tr><th style="width:4%">题号</th><th style="width:32%">英文原题</th><th style="width:32%">中文翻译</th><th style="width:14%">答案</th><th style="width:18%">对应知识点</th></tr>
-    <tr><td>1</td><td>For packet-switched network, L=6Mbits, R=3Mbps, the transmission delay from A to B is</td><td>分组交换网络中，L=6Mbits，R=3Mbps，A 到 B 的传输时延是</td><td><span class="ans">A. 2 秒</span></td><td><a href="#kp3">KP3 节点的四种时延</a></td></tr>
-    <tr><td>2</td><td>Which of the following is a guided transmission medium?</td><td>下列哪项是导引型传输介质？</td><td><span class="ans">A. 双绞线</span></td><td><a href="#kp2">KP2 物理链路类型</a></td></tr>
-    <tr><td>3</td><td>What is used to identify a process?</td><td>用什么来标识一个进程？</td><td><span class="ans">B. IP + 端口</span></td><td><a href="#kp9">KP9 TCP/UDP 协议</a></td></tr>
-    <tr><td>4</td><td>Non-persistent connection HTTP, how long does it take to send an object?</td><td>非持久连接 HTTP，发送一个对象需要多长时间？</td><td><span class="ans">B. 2RTT + 传输时间</span></td><td><a href="#kp5">KP5 HTTP 非持久连接</a></td></tr>
-    <tr><td>5</td><td>What is used to identify a node at the link layer?</td><td>链路层用什么标识节点？</td><td><span class="ans">C. MAC 地址</span></td><td><a href="#kp24">KP24 MAC/ARP</a></td></tr>
-    <tr><td>6</td><td>Which of the following applications use UDP?</td><td>下列哪个应用使用 UDP？</td><td><span class="ans">D. SNMP</span></td><td><a href="#kp9">KP9 TCP/UDP 协议</a></td></tr>
-    <tr><td>7</td><td>What is the checksum of E663 and D555?</td><td>E663 和 D555 的校验和是多少？</td><td><span class="ans">D. BBB9</span></td><td><a href="#kp21">KP21 差错检测</a></td></tr>
-    <tr><td>8</td><td>Which does not belong to the router's switching fabrics?</td><td>哪项不属于路由器的交换结构？</td><td><span class="ans">C. CPU</span></td><td><a href="#kp17">KP17 路由器结构</a></td></tr>
-    <tr><td>9</td><td>What message is the application PING sending?</td><td>PING 应用发送什么报文？</td><td><span class="ans">C. ICMP 请求</span></td><td><a href="#kp14">KP14 网络层功能</a></td></tr>
-    <tr><td>10</td><td>The function of the ARP protocol is</td><td>ARP 协议的作用是</td><td><span class="ans">B. IP → MAC</span></td><td><a href="#kp24">KP24 MAC/ARP</a></td></tr>
+    <tr><th style="width:3%">题号</th><th style="width:24%">英文原题</th><th style="width:24%">中文翻译</th><th style="width:32%">选项</th><th style="width:9%">答案</th><th style="width:8%">知识点</th></tr>
+    <tr><td>1</td><td>For packet-switched network, L=6Mbits, R=3Mbps, the transmission delay from A to B is</td><td>分组交换网络中，L=6Mbits，R=3Mbps，A 到 B 的传输时延是</td><td>A. 2　B. 6　C. 8　D. 9</td><td><span class="ans">A. 2 秒</span></td><td><a href="#kp3">KP3</a></td></tr>
+    <tr><td>2</td><td>Which of the following is a guided transmission medium?</td><td>下列哪项是导引型传输介质？</td><td>A. 双绞线　B. WiFi　C. 卫星　D. 微波</td><td><span class="ans">A. 双绞线</span></td><td><a href="#kp2">KP2</a></td></tr>
+    <tr><td>3</td><td>What is used to identify a process?</td><td>用什么来标识一个进程？</td><td>A. MAC、IP　B. IP、Port　C. URL、IP　D. URL、MAC</td><td><span class="ans">B. IP + 端口</span></td><td><a href="#kp9">KP9</a></td></tr>
+    <tr><td>4</td><td>Non-persistent connection HTTP, how long does it take to send an object?</td><td>非持久连接 HTTP，发送一个对象需要多长时间？</td><td>A. 1RTT+transmit　B. 2RTT+transmit　C. 3RTT+transmit　D. 4RTT+transmit</td><td><span class="ans">B. 2RTT + 传输</span></td><td><a href="#kp5">KP5</a></td></tr>
+    <tr><td>5</td><td>What is used to identify a node at the link layer?</td><td>链路层用什么标识节点？</td><td>A. IP　B. Port　C. MAC　D. URL</td><td><span class="ans">C. MAC 地址</span></td><td><a href="#kp24">KP24</a></td></tr>
+    <tr><td>6</td><td>Which of the following applications use UDP?</td><td>下列哪个应用使用 UDP？</td><td>A. Email　B. FTP　C. HTTP　D. SNMP</td><td><span class="ans">D. SNMP</span></td><td><a href="#kp9">KP9</a></td></tr>
+    <tr><td>7</td><td>What is the checksum of E663 and D555?</td><td>E663 和 D555 的校验和是多少？</td><td>A. 4448　B. 4118　C. BBB8　D. BBB9</td><td><span class="ans">D. BBB9</span></td><td><a href="#kp21">KP21</a></td></tr>
+    <tr><td>8</td><td>Which does not belong to the router's switching fabrics?</td><td>哪项不属于路由器的交换结构？</td><td>A. 内存　B. 总线　C. CPU　D. 纵横矩阵</td><td><span class="ans">C. CPU</span></td><td><a href="#kp17">KP17</a></td></tr>
+    <tr><td>9</td><td>What message is the application PING sending?</td><td>PING 应用发送什么报文？</td><td>A. TCP 请求　B. TCP 响应　C. ICMP 请求　D. ICMP 响应</td><td><span class="ans">C. ICMP 请求</span></td><td><a href="#kp14">KP14</a></td></tr>
+    <tr><td>10</td><td>The function of the ARP protocol is</td><td>ARP 协议的作用是</td><td>A. 端口→IP　B. IP→MAC　C. 广播 IP　D. IP→端口</td><td><span class="ans">B. IP→MAC</span></td><td><a href="#kp24">KP24</a></td></tr>
   </table>
 
   <h4>📗 Part II · 判断题（10 题）</h4>
@@ -3583,10 +3616,10 @@ net.ipv4.ip_local_port_range = 10000 65535
 
   <h4>📘 Part I · 单项选择（独有题）</h4>
   <table style="width:100%">
-    <tr><th style="width:4%">题号</th><th style="width:32%">英文原题</th><th style="width:32%">中文翻译</th><th style="width:14%">答案</th><th style="width:18%">对应知识点</th></tr>
-    <tr><td>1</td><td>Which of the following does not belong to an end system?</td><td>下列哪项不属于端系统？</td><td><span class="ans">D. 路由器</span></td><td><a href="#kp4">KP4 端系统</a></td></tr>
-    <tr><td>5</td><td>For FTP which of the following statements is false?</td><td>关于 FTP 下列哪个说法是错误的？</td><td><span class="ans">C. FTP 用 UDP</span></td><td><a href="#kp9">KP9 TCP/UDP</a></td></tr>
-    <tr><td>7</td><td>What is the checksum of E666 and D555?</td><td>E666 和 D555 的校验和是多少？</td><td><span class="ans">D. BBBC</span></td><td><a href="#kp21">KP21 差错检测</a></td></tr>
+    <tr><th style="width:3%">题号</th><th style="width:24%">英文原题</th><th style="width:24%">中文翻译</th><th style="width:32%">选项</th><th style="width:9%">答案</th><th style="width:8%">知识点</th></tr>
+    <tr><td>1</td><td>Which of the following does not belong to an end system?</td><td>下列哪项不属于端系统？</td><td>A. PC　B. Server　C. Laptop　D. Router</td><td><span class="ans">D. 路由器</span></td><td><a href="#kp4">KP4</a></td></tr>
+    <tr><td>5</td><td>For FTP which of the following statements is false?</td><td>关于 FTP 下列哪个说法是错误的？</td><td>A. 控制端口 21　B. 数据端口 20　C. FTP 用 UDP　D. 带外控制</td><td><span class="ans">C. FTP 用 UDP</span></td><td><a href="#kp9">KP9</a></td></tr>
+    <tr><td>7</td><td>What is the checksum of E666 and D555?</td><td>E666 和 D555 的校验和是多少？</td><td>A. 4443　B. 4444　C. BBBB　D. BBBC</td><td><span class="ans">D. BBBC</span></td><td><a href="#kp21">KP21</a></td></tr>
   </table>
 
   <h4>📙 Part III · 简答题（独有题）</h4>
